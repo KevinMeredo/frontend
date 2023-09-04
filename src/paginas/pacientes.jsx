@@ -46,7 +46,7 @@ export function Pacientes() {
                     numeros.map((n, i) => (
                       <li className={`page-item ${paginaAtual === n ? 'active' : ''}`} key={i}> 
                         <a href='#' className='page-link'
-                        onClick={changePage(i)}>{n}</a>
+                        onClick={() => changePage(i)}>{n}</a>
                       </li>
                     ))
                   }
@@ -65,12 +65,13 @@ export function Pacientes() {
     function  nextPage(){
       if(paginaAtual !== paginaN){
         setPaginaAtual(paginaAtual + 1)
+        console.log(paginaAtual)
       }
     }
     function  changePage(id){
-      //if(paginaAtual !== id){
-      //  setPaginaAtual(id)
-      //}
+      if(paginaAtual !== id + 1){
+        setPaginaAtual(id + 1)
+      }
     }
   }
   
