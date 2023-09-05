@@ -1,4 +1,4 @@
-import { Form, Button, Col, Row, Container } from 'react-bootstrap';
+import { Form, Button, Col, Row } from 'react-bootstrap';
 import { useForm } from 'react-hook-form';
 import './styles.css';
 
@@ -128,19 +128,6 @@ export function Cadastro(){
                             {errors.senha && <Form.Control.Feedback type="invalid">{errors.senha.message}</Form.Control.Feedback>}
                         </Form.Group>
                     </Row>
-                    <Form.Group as={Col} className="mb-5">
-                        <Form.Check type="checkbox" label="Condordo com os termos de serviço." 
-                        name="checkbox"
-                        id="checkbox"
-                        defaultChecked 
-                        {...register('checkbox', {
-                          required: {
-                              value: true,
-                              message: 'Concorde para registrar-se'
-                          },
-                      })}
-                        />
-                    </Form.Group>
                     <Row className=' display-flex justify-content-center align-items-center w-100'>
                       <Button className='w-50 position' type="submit">Cadastrar</Button>
                     </Row>
