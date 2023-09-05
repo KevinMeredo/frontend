@@ -1,0 +1,19 @@
+.login-registro-card{
+    max-width: 800px;
+    flex-direction: column;
+    justify-content: center;
+    display: flex;
+}
+.coluna60 {
+    width: 60%;
+}
+.coluna40 {
+    width: 40%;
+}
+.reticencias {
+    width: 80%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin: 1.2px;
+}

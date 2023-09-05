@@ -1,9 +1,9 @@
-import Dados from '../MOCK_DATA.json'
+import Dados from '../Medicos_dados.json'
 import '../App.css';
 import 'bootstrap/dist/css/bootstrap.min.css'
 import { useState } from 'react';
 
-export function Pacientes() {
+export function Medicos() {
     const [paginaAtual, setPaginaAtual] = useState(1);
     const registrosPorPagina = 5;
     const ultimoIndice = paginaAtual * registrosPorPagina;
@@ -19,7 +19,7 @@ export function Pacientes() {
               <tr>
                <th>Nome</th>
                <th>CPF</th>
-               <th>RG</th>
+               <th>CRM</th>
                <th>Data de Nasc</th>
                <th>Naturalidade</th>
               </tr>
@@ -30,8 +30,8 @@ export function Pacientes() {
                     <tr key={i}> 
                         <td>{d.Nome}</td>
                         <td>{d.CPF}</td>
-                        <td>{d.RG}</td>
-                        <td>{d.Data_Nasc}</td>
+                        <td>{d.CRM}</td>
+                        <td>{d.dataNasc}</td>
                         <td>{d.Naturalidade}</td>
                     </tr>
                 ))}
