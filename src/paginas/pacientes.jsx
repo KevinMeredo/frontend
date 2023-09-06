@@ -2,6 +2,7 @@ import Dados from '../MOCK_DATA.json'
 import '../App.css';
 import 'bootstrap/dist/css/bootstrap.min.css'
 import { useState } from 'react';
+import { Nav } from '../componentes/Nav';
 
 export function Pacientes() {
     const [paginaAtual, setPaginaAtual] = useState(1);
@@ -13,7 +14,7 @@ export function Pacientes() {
     const numeros = [...Array(paginaN+1).keys()].slice(1);
     return (
       <div className="App">
-  
+        <Nav></Nav>
         <table className='table'>
             <thead>
               <tr>

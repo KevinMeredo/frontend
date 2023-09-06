@@ -8,17 +8,6 @@ import { Medicos } from './paginas/medicos';
 export default function App() {
   return (
       <BrowserRouter >
-
-        <nav>
-          <ul>
-            <li>
-              <Link to="/Pacientes">Pacientes</Link>
-            </li>
-            <li>
-              <Link to="/Medicos">Medicos</Link>
-            </li>
-          </ul>
-        </nav>
         <Routes className='d-flex justify-content-center'>
           
           <Route exact path='/Pacientes' element={<Pacientes />} />
