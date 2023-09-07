@@ -1,6 +1,7 @@
 import { Form, Button, Col, Row } from 'react-bootstrap';
 import { useForm } from 'react-hook-form';
 import './styles.css';
+import 'bootstrap/dist/css/bootstrap.min.css'
 
 export function Cadastro(){
     

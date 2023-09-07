@@ -13,6 +13,7 @@ import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import AdbIcon from '@mui/icons-material/Adb';
 import { Link } from 'react-router-dom';
+import '../App.css'
 
 const pages = ['Pacientes', 'Medicos', 'Agenda', 'Painel'];
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
@@ -121,7 +122,7 @@ export function Nav() {
                 onClick={handleCloseNavMenu}
                 sx={{ my: 2, color: 'white', display: 'block' }}
               >
-                <Link to={`/${page}`}>{page}</Link>
+                <Link className='navOpcao' to={`/${page}`}>{page}</Link>
               </Button>
             ))}
           </Box>

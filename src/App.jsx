@@ -1,17 +1,16 @@
 import { BrowserRouter, Route, Routes, Link } from 'react-router-dom';
-import { Pacientes } from './paginas/pacientes';
 import { Agenda } from './paginas/agenda'
 import { Cadastro } from './paginas/cadastro';
 import { Login } from './paginas/login';
 import { RecuperaSenha } from './paginas/recuperaSenha';
-import { Medicos } from './paginas/medicos';
+import { PacientesMui } from './paginas/pacientesMui';
+import { MedicosMui } from './paginas/medicosMui';
 export default function App() {
   return (
       <BrowserRouter >
-        <Routes className='d-flex justify-content-center'>
-          
-          <Route exact path='/Pacientes' element={<Pacientes />} />
-          <Route exact path='/Medicos' element={<Medicos />} />
+        <Routes >
+          <Route exact path='/Pacientes' element={<PacientesMui />} />
+          <Route exact path='/Medicos' element={<MedicosMui />} />
           <Route exact path='/Agenda' element={<Agenda />} />
           <Route exact path='/Cadastro' element={<Cadastro />} />
           <Route exact path='/Login' element={<Login />} />

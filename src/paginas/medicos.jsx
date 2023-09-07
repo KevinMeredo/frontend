@@ -1,5 +1,6 @@
 import Dados from '../Medicos_dados.json'
 import '../App.css';
+import 'bootstrap/dist/css/bootstrap.min.css'
 import { useState } from 'react';
 import { Nav } from '../componentes/Nav';
 
