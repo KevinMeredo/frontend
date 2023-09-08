@@ -1,4 +1,4 @@
-import { BrowserRouter, Route, Routes, Link } from 'react-router-dom';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { Agenda } from './paginas/agenda'
 import { Cadastro } from './paginas/cadastro';
 import { Login } from './paginas/login';
