@@ -5,6 +5,7 @@ import { Login } from './paginas/login';
 import { RecuperaSenha } from './paginas/recuperaSenha';
 import { PacientesMui } from './paginas/pacientesMui';
 import { MedicosMui } from './paginas/medicosMui';
+import { Painel } from './paginas/painel';
 export default function App() {
   return (
       <BrowserRouter >
@@ -14,6 +15,7 @@ export default function App() {
           <Route exact path='/Agenda' element={<Agenda />} />
           <Route exact path='/Cadastro' element={<Cadastro />} />
           <Route exact path='/Login' element={<Login />} />
+          <Route exact path='/Painel' element={<Painel />} />
           <Route exact path='/RecuperaSenha' element={<RecuperaSenha />} />
         </Routes>
       </BrowserRouter>

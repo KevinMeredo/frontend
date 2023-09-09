@@ -91,7 +91,7 @@ export function Nav() {
             >
               {pages.map((page) => (
                 <MenuItem key={page} onClick={handleCloseNavMenu}>
-                  <Link to={`/${page}`}>{page}</Link>
+                  <Button href={`/${page}`}>{page}</Button>
                 </MenuItem>
               ))}
             </Menu>
@@ -119,10 +119,11 @@ export function Nav() {
             {pages.map((page) => (
               <Button
                 key={page}
+                href={`/${page}`}
                 onClick={handleCloseNavMenu}
                 sx={{ my: 2, color: 'white', display: 'block' }}
               >
-                <Link className='navOpcao' to={`/${page}`}>{page}</Link>
+                {page}
               </Button>
             ))}
           </Box>
