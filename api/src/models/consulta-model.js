@@ -4,12 +4,12 @@ class ConsultaModel extends Model {
     static init(database) {
         super.init({
             CRM: DataTypes.TEXT,
-            CPF: DataTypes.TEXT,
+            RG: DataTypes.TEXT,
             tipo: DataTypes.TEXT,
             status: DataTypes.TEXT,
             urgencia: DataTypes.TEXT,
+            observacao: DataTypes.TEXT,
             dia: DataTypes.DATE,    
-            observacao: DataTypes.TEXT
         }, {
             tableName: 'consulta',
             modelName: 'ConsultaModel',

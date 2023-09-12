@@ -1,4 +1,6 @@
 const { Model, DataTypes } = require("sequelize");
+const { ConsultaModel } = require("./consulta-model");
+const { MedicoModel } = require("./medico-model")
 
 class PacienteModel extends Model {
     static init(database) {
@@ -17,5 +19,10 @@ class PacienteModel extends Model {
         });
     }
 }
+
+/*PacienteModel.hasMany(ConsultaModel, { foreignKey: PacienteModel.CPF})
+MedicoModel.hasMany(ConsultaModel, { foreignKey: MedicoModel.CRM})
+ConsultaModel.belongsTo(MedicoModel, { foreignKey: MedicoModel.CRM})
+ConsultaModel.belongsTo(PacienteModel, { foreignKey: PacienteModel.CPF})*/
 
 module.exports = { PacienteModel };
