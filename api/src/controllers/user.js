@@ -7,7 +7,7 @@ class UserController {
     async register(request, response) {
         const httpHelper = new HttpHelper(response);
         try {
-            const { email, senha, CPF, nome } = request.body;
+            const { email, senha, CPF, nome, nascimento } = request.body;
             if (!email || !senha || !CPF ||!nome) return httpHelper.badRequest('Nome, CPF, E-mail e senha são obrigatórios!');
             const userAlreadyExists = await UserModel.findOne({ where: { email } });
             if (userAlreadyExists) return httpHelper.badRequest('E-mail de usuário já cadastrado!');
@@ -19,7 +19,8 @@ class UserController {
                 email,
                 senha: passwordHashed,
                 CPF,
-                nome
+                nome,
+                nascimento
             });
             if (!user) return httpHelper.badRequest('Houve um erro ao criar usuário');
             const accessToken = jwt.sign(

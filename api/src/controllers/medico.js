@@ -1,22 +1,23 @@
 const { HttpHelper } = require('../utils/http-helper');
 const { MedicoModel } = require('../models/medico-model');
+const { ConsultaModel } = require('../models/consulta-model');
 
 class MedicoController {
     async create(request, response) {
         const httpHelper = new HttpHelper(response);
         try {
             const { CPF, CRM, nascimento, nome, naturalidade, email } = request.body;
-            if (!CPF) return httpHelper.badRequest('Parâmetros inválidos!');
+            if (!CPF) return httpHelper.badRequest('CPF inválido!');
 
-            if (!CRM)  return httpHelper.badRequest('Parâmetros inválidos!');
+            if (!CRM)  return httpHelper.badRequest('CRM inválido!');
 
-            if (!nascimento)  return httpHelper.badRequest('Parâmetros inválidos!');
+            if (!nascimento)  return httpHelper.badRequest('Data de nascimento inválido!');
 
-            if (!nome)  return httpHelper.badRequest('Parâmetros inválidos!');
+            if (!nome)  return httpHelper.badRequest('Nome inválido!');
 
-            if (!naturalidade)  return httpHelper.badRequest('Parâmetros inválidos!');
+            if (!naturalidade)  return httpHelper.badRequest('Naturalidade inválida!');
 
-            if (!email)  return httpHelper.badRequest('Parâmetros inválidos!');
+            if (!email)  return httpHelper.badRequest('Email inválido!');
 
             const medico = await MedicoModel.create({
                 CPF, CRM, nascimento, nome, email, naturalidade
@@ -44,9 +45,11 @@ class MedicoController {
             if (!id) return httpHelper.badRequest('Parâmetros inválidos!');
             const medicoExiste = await MedicoModel.findOne({ where: { id } });
             if (!medicoExiste) return httpHelper.notFound('Medico não encontrado!');
+            const temConsulta = await ConsultaModel.findOne({where: {CRM_Medico: medicoExiste.CRM }})
+            if (temConsulta) return httpHelper.notFound('Não pode deletar Médico com consultas registradas!');
             await MedicoModel.destroy({ where: { id } });
             return httpHelper.ok({
-                message: 'Medico deletada com sucesso!'
+                message: 'Medico deletado com sucesso!'
             })
         } catch (error) {
             return httpHelper.internalError(error);

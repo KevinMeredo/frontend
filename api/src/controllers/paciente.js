@@ -1,22 +1,23 @@
 const { HttpHelper } = require('../utils/http-helper');
 const { PacienteModel } = require('../models/paciente-model');
+const { ConsultaModel } = require('../models/consulta-model')
 
 class PacienteController {
     async create(request, response) {
         const httpHelper = new HttpHelper(response);
         try {
             const { CPF, RG, nascimento, nome, naturalidade, email } = request.body;
-            if (!CPF) return httpHelper.badRequest('Parâmetros inválidos!');
+            if (!CPF) return httpHelper.badRequest('CPF inválido!');
 
-            if (!RG)  return httpHelper.badRequest('Parâmetros inválidos!');
+            if (!RG)  return httpHelper.badRequest('RG inválido!');
 
-            if (!nascimento)  return httpHelper.badRequest('Parâmetros inválidos!');
+            if (!nascimento)  return httpHelper.badRequest('Data de nascimento inválido!');
 
-            if (!nome)  return httpHelper.badRequest('Parâmetros inválidos!');
+            if (!nome)  return httpHelper.badRequest('Nome inválido!');
 
-            if (!naturalidade)  return httpHelper.badRequest('Parâmetros inválidos!');
+            if (!naturalidade)  return httpHelper.badRequest('Naturalida inválida!');
 
-            if (!email)  return httpHelper.badRequest('Parâmetros inválidos!');
+            if (!email)  return httpHelper.badRequest('Email inválido!');
 
             const paciente = await PacienteModel.create({
                 CPF, RG, nascimento, nome, email, naturalidade
@@ -44,6 +45,8 @@ class PacienteController {
             if (!id) return httpHelper.badRequest('Parâmetros inválidos!');
             const pacienteExiste = await PacienteModel.findOne({ where: { id } });
             if (!pacienteExiste) return httpHelper.notFound('Paciente não encontrado!');
+            const temConsulta = await ConsultaModel.findOne({where: {CPF_Paciente: pacienteExiste.CPF }})
+            if (temConsulta) return httpHelper.notFound('Não pode deletar paciente com consultas registradas!');
             await PacienteModel.destroy({ where: { id } });
             return httpHelper.ok({
                 message: 'Paciente deletado com sucesso!'
