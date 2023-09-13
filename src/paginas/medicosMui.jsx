@@ -1,5 +1,6 @@
 import * as React from 'react';
 import '../App.css'
+import Button  from '@mui/material/Button';
 import Table from '@mui/material/Table';
 import TableHead from '@mui/material/TableHead';
 import TableBody from '@mui/material/TableBody';
@@ -9,9 +10,26 @@ import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import FormEdit from '../componentes/FormEdit'
+import Buscar from '../componentes/Buscar'
+import Grid from '@mui/material/Grid'
+import { createSvgIcon } from '@mui/material/utils';
 
 import Dados from '../Medicos_dados.json'
 import { Nav } from '../componentes/Nav';
+
+const PlusIcon = createSvgIcon(
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    fill="none"
+    viewBox="0 0 24 24"
+    strokeWidth={1.5}
+    stroke="currentColor"
+  >
+    <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+  </svg>,
+  'Plus',
+);
+
 const rows = []
 for(let obj in Dados){
   if(Dados.hasOwnProperty(obj)){
@@ -57,6 +75,16 @@ export function MedicosMui() {
   return (
     <Paper sx={{ width: '100%', overflow: 'hidden' }}>
       <Nav></Nav>
+      <Grid
+        container
+        direction="row"
+        justifyContent="space-evenly"
+        alignItems="center"
+      >
+        <Buscar coluna= 'CRM'></Buscar>
+        <Button sx={{ gap: 2 }} variant="contained"> <PlusIcon />  Adicionar Medico</Button>
+      </Grid>
+        
       <TableContainer sx={{ maxHeight: 440 }}>
         <Table stickyHeader aria-label="sticky table">
           <TableHead>
@@ -88,7 +116,10 @@ export function MedicosMui() {
                         </TableCell>
                       );
                     })}
-                    <FormEdit></FormEdit>
+                    <TableCell>
+                      <FormEdit></FormEdit>
+                    </TableCell>
+
                   </TableRow>
                 );
               })}

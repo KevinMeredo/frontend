@@ -63,3 +63,6 @@ table{
  .navOpcao {
   color:#fff;
  }
+ td {
+  align-items: center;
+ }

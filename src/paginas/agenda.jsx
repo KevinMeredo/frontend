@@ -7,17 +7,33 @@ import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableRow from '@mui/material/TableRow';
+import Grid from '@mui/material/Grid';
 import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { createSvgIcon } from '@mui/material';
+import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 
 import * as React from 'react';
 import '../App.css'
 
 import { useEffect, useState } from "react";
 import Dados from '../Consultas_dados.json'
+import Buscar from '../componentes/Buscar';
 
+const PlusIcon = createSvgIcon(
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      viewBox="0 0 24 24"
+      strokeWidth={1.5}
+      stroke="currentColor"
+    >
+      <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+    </svg>,
+    'Plus',
+  );
 
 export function Agenda(){
     
@@ -53,7 +69,15 @@ export function Agenda(){
         <>
 
             <Nav classname="App-header"></Nav>
-            <Paper sx={{ width: '30%', overflow: 'hidden' }}>           
+            <Paper elevation={0} sx={{ overflow: 'hidden' }}> 
+            <Grid 
+                gap={4}
+                container
+                direction="row"
+                justifyContent="space-evenly"
+                alignItems="center"
+            >          
+                <Buscar coluna='Paciente'></Buscar>
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <DemoContainer components={['DatePicker']}>
                         <DatePicker
@@ -65,107 +89,91 @@ export function Agenda(){
                         />
                     </DemoContainer>
                 </LocalizationProvider>
+                <Button sx={{ gap: 2 }} variant="contained">Dr. não sei o que<ArrowDropDownIcon/></Button>
+                <Button sx={{ gap: 2 }} variant="contained"> <PlusIcon />  Adicionar Agendamento</Button>
+            </Grid>
             </Paper>
             <TableContainer sx={{ maxHeight: 440 }}>
                 <Table stickyHeader aria-label="sticky table">
                     <TableHead>
                         <TableRow>
-                            <TableCell> Domingo</TableCell>
-                            <TableCell> Segunda</TableCell>
-                            <TableCell> Terça</TableCell>
-                            <TableCell> Quarta</TableCell>
-                            <TableCell> Quinta</TableCell>
-                            <TableCell> Sexta</TableCell>
-                            <TableCell> Sábado</TableCell>
+                            <TableCell align = 'center'> Domingo</TableCell>
+                            <TableCell align = 'center'> Segunda</TableCell>
+                            <TableCell align = 'center'> Terça</TableCell>
+                            <TableCell align = 'center'> Quarta</TableCell>
+                            <TableCell align = 'center'> Quinta</TableCell>
+                            <TableCell align = 'center'> Sexta</TableCell>
+                            <TableCell align = 'center'> Sábado</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                            <TableCell>
+                            <TableCell align = 'center'>
                             {consultas.map((consulta) => {
                                return (
-                                <TableRow
+                                <Paper elevation={0}
                                 key={consulta.id}
-
                                 >
-                                {consulta.Dia == diasDaSemana[0] && <Button size='medium' variant="contained">{consulta.Dia}</Button>}
-                                </TableRow>
+                                {consulta.Dia === diasDaSemana[0] && <Button size='medium' variant="contained">{consulta.Dia}</Button>}
+                                </Paper>
                                 )
                             })}
                             </TableCell>
-                            <TableCell>
+                            <TableCell  align = 'center'>
                             {consultas.map((consulta) => {
                                 return (
-                                <TableRow
-                                key={consulta.id}
-
-                                >
-                                {consulta.Dia == diasDaSemana[1] && <Button variant="contained">{consulta.Dia}</Button>}
-                                </TableRow>
+                                <Paper elevation={0} key={consulta.id}>
+                                    {consulta.Dia === diasDaSemana[1] && <Button variant="contained">{consulta.Dia}</Button>}
+                                </Paper>
                                 )
                             })}
                             </TableCell>
-                            <TableCell>
+                            <TableCell  align = 'center'>
                                  {consultas.map((consulta) => {
 
                                return (
-                                <TableRow
-                                key={consulta.id}
-
-                                >
-                                {consulta.Dia == diasDaSemana[2] && <Button variant="contained">{consulta.Dia}</Button>}
-                                </TableRow>
+                                <Paper elevation={0} key={consulta.id}>
+                                    {consulta.Dia === diasDaSemana[2] && <Button variant="contained">{consulta.Dia}</Button>}
+                                </Paper>
                                 )
                             })}
                             </TableCell>
-                            <TableCell>
+                            <TableCell  align = 'center'>
                             {consultas.map((consulta) => {
 
                                 return (
-                                <TableRow
-                                key={consulta.id}
-
-                                >
-                                {consulta.Dia == diasDaSemana[3] && <Button variant="contained">{consulta.Dia}</Button>}
-                                </TableRow>
+                                <Paper elevation={0} key={consulta.id}>
+                                    {consulta.Dia === diasDaSemana[3] && <Button variant="contained">{consulta.Dia}</Button>}
+                                </Paper>
                                 )
                             })}
                             </TableCell>
-                            <TableCell>
+                            <TableCell  align = 'center'>
                             {consultas.map((consulta) => {
 
                                 return (
-                                <TableRow
-                                key={consulta.id}
-
-                                >
-                                {consulta.Dia == diasDaSemana[4] && <Button variant="contained">{consulta.Dia}</Button>}
-                                </TableRow>
+                                <Paper elevation={0} key={consulta.id}>
+                                    {consulta.Dia === diasDaSemana[4] && <Button variant="contained">{consulta.Dia}</Button>}
+                                </Paper>
                                 )
                             })}
                             </TableCell>
-                            <TableCell>
+                            <TableCell  align = 'center'>
                             {consultas.map((consulta) => {
 
                                 return (
-                                <TableRow
-                                key={consulta.id}
-
-                                >
-                                {consulta.Dia == diasDaSemana[5] && <Button variant="contained">{consulta.Dia}</Button>}
-                                </TableRow>
+                                <Paper elevation={0} key={consulta.id}>
+                                    {consulta.Dia === diasDaSemana[5] && <Button variant="contained">{consulta.Dia}</Button>}
+                                </Paper>
                                 )
                             })}
                             </TableCell>
-                            <TableCell>
+                            <TableCell  align = 'center'>
                             {consultas.map((consulta) => {
 
                             return (
-                                <TableRow
-                                key={consulta.id}
-
-                                >
-                                {consulta.Dia == diasDaSemana[6] && <Button variant="contained">{consulta.Dia}</Button>}
-                                </TableRow>
+                                <Paper elevation={0} key={consulta.id}>
+                                    {consulta.Dia === diasDaSemana[6] && <Button variant="contained">{consulta.Dia}</Button>}
+                                </Paper>
                                 )
                             })}
                             </TableCell>     
