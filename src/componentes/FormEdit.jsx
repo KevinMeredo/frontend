@@ -4,10 +4,10 @@ import TextField from '@mui/material/TextField';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 
-export default function FormDialog() {
+
+export default function FormDialog(props) {
   const [open, setOpen] = React.useState(false);
 
   const handleClickOpen = () => {
@@ -20,52 +20,26 @@ export default function FormDialog() {
 
   return (
     <div>
-      <Button variant="outlined" onClick={handleClickOpen}>
-        Editar
+      <Button variant="contained" onClick={handleClickOpen}>
+        {props.texto}
       </Button>
       <Dialog open={open} onClose={handleClose}>
-        <DialogTitle>Editar</DialogTitle>
+        <DialogTitle>{props.texto}</DialogTitle>
         <DialogContent>
-          <TextField
-            autoFocus
-            margin="dense"
-            id="Nome"
-            label="Nome"
-            fullWidth
-            variant="standard"
-          />
-          <TextField
-            autoFocus
-            margin="dense"
-            id="CPF"
-            label="CPF"
-            fullWidth
-            variant="standard"
-          />
-            <TextField
-            autoFocus
-            margin="dense"
-            id="CRM/RG"
-            label="CRM/RG"
-            fullWidth
-            variant="standard"
-          />
-          <TextField
-            autoFocus
-            margin="dense"
-            id="DataNas"
-            label="Data de Nascimento"
-            fullWidth
-            variant="standard"
-          />
-          <TextField
-            autoFocus
-            margin="dense"
-            id="Naturalidade"
-            label="Naturalidade"
-            fullWidth
-            variant="standard"
-          />
+          {props.chaves && props.chaves.map((key) => {
+            console.log(key)
+            return (
+              <TextField
+                autoFocus
+                margin='dense'
+                id={key}
+                label={key}
+                fullWidth
+                variant='standard'
+              ></TextField>
+            )
+
+          })}
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose}>Cancelar</Button>

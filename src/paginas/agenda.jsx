@@ -14,6 +14,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { createSvgIcon } from '@mui/material';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
+import FormEdit from '../componentes/FormEdit'
 
 import * as React from 'react';
 import '../App.css'
@@ -45,7 +46,6 @@ export function Agenda(){
     
     async function  setConsultasSemana(diasDaSemana){
         setDiasDaSemana(diasDaSemana)
-        console.log(diasDaSemana)
         await setConsultas(
             Dados.filter(
             function(Dados){ 
@@ -59,7 +59,6 @@ export function Agenda(){
         let diaDaSemana = dia.$d.getDay()
         dia.$d.setDate(dia.$d.getDate() - diaDaSemana -1 )
         for(let i = 0; i<7;i++){
-            console.log(diasDaSemana)
             dia.$d.setDate(dia.$d.getDate() + 1)
             diasDaSemana.push(dia.$d.toLocaleDateString(undefined, opcoes))
         }
@@ -113,7 +112,7 @@ export function Agenda(){
                                 <Paper elevation={0}
                                 key={consulta.id}
                                 >
-                                {consulta.Dia === diasDaSemana[0] && <Button size='medium' variant="contained">{consulta.Dia}</Button>}
+                                {consulta.Dia === diasDaSemana[0] && <FormEdit chaves = {Object.keys(consulta)} texto= {consulta.Dia}></FormEdit>}
                                 </Paper>
                                 )
                             })}
@@ -122,7 +121,7 @@ export function Agenda(){
                             {consultas.map((consulta) => {
                                 return (
                                 <Paper elevation={0} key={consulta.id}>
-                                    {consulta.Dia === diasDaSemana[1] && <Button variant="contained">{consulta.Dia}</Button>}
+                                    {consulta.Dia === diasDaSemana[1] && <FormEdit chaves = {Object.keys(consulta)} texto= {consulta.Dia}></FormEdit>}
                                 </Paper>
                                 )
                             })}
@@ -132,7 +131,7 @@ export function Agenda(){
 
                                return (
                                 <Paper elevation={0} key={consulta.id}>
-                                    {consulta.Dia === diasDaSemana[2] && <Button variant="contained">{consulta.Dia}</Button>}
+                                    {consulta.Dia === diasDaSemana[2] && <FormEdit chaves = {Object.keys(consulta)} texto= {consulta.Dia}></FormEdit>}
                                 </Paper>
                                 )
                             })}
@@ -142,7 +141,7 @@ export function Agenda(){
 
                                 return (
                                 <Paper elevation={0} key={consulta.id}>
-                                    {consulta.Dia === diasDaSemana[3] && <Button variant="contained">{consulta.Dia}</Button>}
+                                    {consulta.Dia === diasDaSemana[3] && <FormEdit chaves = {Object.keys(consulta)} texto= {consulta.Dia}></FormEdit>}
                                 </Paper>
                                 )
                             })}
@@ -152,7 +151,7 @@ export function Agenda(){
 
                                 return (
                                 <Paper elevation={0} key={consulta.id}>
-                                    {consulta.Dia === diasDaSemana[4] && <Button variant="contained">{consulta.Dia}</Button>}
+                                    {consulta.Dia === diasDaSemana[4] && <FormEdit chaves = {Object.keys(consulta)} texto= {consulta.Dia}></FormEdit>}
                                 </Paper>
                                 )
                             })}
@@ -162,7 +161,7 @@ export function Agenda(){
 
                                 return (
                                 <Paper elevation={0} key={consulta.id}>
-                                    {consulta.Dia === diasDaSemana[5] && <Button variant="contained">{consulta.Dia}</Button>}
+                                    {consulta.Dia === diasDaSemana[5] && <FormEdit chaves = {Object.keys(consulta)} texto= {consulta.Dia}></FormEdit>}
                                 </Paper>
                                 )
                             })}
@@ -172,7 +171,7 @@ export function Agenda(){
 
                             return (
                                 <Paper elevation={0} key={consulta.id}>
-                                    {consulta.Dia === diasDaSemana[6] && <Button variant="contained">{consulta.Dia}</Button>}
+                                    {consulta.Dia === diasDaSemana[6] && <FormEdit chaves = {Object.keys(consulta)} texto= {consulta.Dia}></FormEdit>}
                                 </Paper>
                                 )
                             })}

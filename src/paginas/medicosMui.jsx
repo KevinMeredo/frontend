@@ -47,7 +47,7 @@ const columns = [
   },
   {
     id: 'dataNasc',
-    label: 'Data de Nasc',
+    label: 'Data de Nascimento',
     minWidth: 100,
     align: 'left',
   },
@@ -117,7 +117,7 @@ export function MedicosMui() {
                       );
                     })}
                     <TableCell>
-                      <FormEdit></FormEdit>
+                      <FormEdit texto = 'Editar' chaves = {Object.keys(row)}></FormEdit>
                     </TableCell>
 
                   </TableRow>

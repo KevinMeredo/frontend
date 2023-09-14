@@ -47,7 +47,7 @@ const columns = [
   },
   {
     id: 'Data_Nasc',
-    label: 'Data de Nasc',
+    label: 'Data de Nascimento',
     minWidth: 100,
     align: 'left',
   },
@@ -115,7 +115,7 @@ export function PacientesMui() {
                         </TableCell>
                       );
                     })}
-                    <FormEdit></FormEdit>
+                    <FormEdit texto='Editar' chaves = {Object.keys(row)}></FormEdit>
                   </TableRow>
                 );
               })}
