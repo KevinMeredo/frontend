@@ -82,7 +82,7 @@ export function MedicosMui() {
         alignItems="center"
       >
         <Buscar coluna= 'CRM'></Buscar>
-        <Button sx={{ gap: 2 }} variant="contained"> <PlusIcon />  Adicionar Medico</Button>
+        <FormEdit icone = {<PlusIcon />} chaves={Object.keys(Dados[0])} texto='Adicionar Medico'> </FormEdit>
       </Grid>
         
       <TableContainer sx={{ maxHeight: 440 }}>

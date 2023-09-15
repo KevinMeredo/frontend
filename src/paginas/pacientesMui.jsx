@@ -82,7 +82,7 @@ export function PacientesMui() {
         alignItems="center"
       >
         <Buscar coluna= 'CRF'></Buscar>
-        <Button sx={{ gap: 2 }} variant="contained"> <PlusIcon />  Adicionar Paciente</Button>
+        <FormEdit icone = {<PlusIcon />} chaves={Object.keys(Dados[0])} texto='Adicionar Paciente'> </FormEdit>
       </Grid>
       <TableContainer sx={{ maxHeight: 440 }}>
         <Table stickyHeader aria-label="sticky table">

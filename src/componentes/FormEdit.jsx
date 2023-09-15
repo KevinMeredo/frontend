@@ -20,7 +20,8 @@ export default function FormDialog(props) {
 
   return (
     <div>
-      <Button variant="contained" onClick={handleClickOpen}>
+      <Button sx={{ gap: 2 }} variant="contained" onClick={handleClickOpen}>
+        {props.icone && props.icone}
         {props.texto}
       </Button>
       <Dialog open={open} onClose={handleClose}>
