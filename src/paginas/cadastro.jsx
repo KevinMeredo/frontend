@@ -2,13 +2,21 @@ import { Form, Button, Col, Row } from 'react-bootstrap';
 import { useForm } from 'react-hook-form';
 import './styles.css';
 import 'bootstrap/dist/css/bootstrap.min.css'
+import {registerUser} from '../services/user-service'
+import { useNavigate } from 'react-router-dom';
 
 export function Cadastro(){
     
     const { handleSubmit, register, formState: { errors } } = useForm({mode: 'onChange'});
+    const navigate = useNavigate();
 
-    const onSubmit = (data) => {
-        console.log(data);
+    const onSubmit = async (data) => {
+        try {
+            await registerUser(data);
+            navigate('/Painel');
+        } catch (error) {
+            console.log(error.response.data.error)
+        }
     }
     const getMinDate = () => {
         let data = new Date()
@@ -25,7 +33,7 @@ export function Cadastro(){
                           <h1>Registrar</h1>
                         </Col>
                         <Col>
-                          <p>Tem uma conta? <a href='/Login'>Entrar</a></p>
+                          <p>Tem uma conta? <a href='/'>Entrar</a></p>
                         </Col>
                     </Row>
                     <Row>
@@ -33,13 +41,13 @@ export function Cadastro(){
                             <Form.Label>Nome Completo</Form.Label>
                             <Form.Control
                                 type="text"
-                                name="fullName"
-                                id="fullName"
+                                name="nome"
+                                id="nome"
                                 isInvalid={errors.fullName}
                                 isValid={!errors.fullName}
                                 required
                                 placeholder="Insira seu nome completo"
-                                {...register('fullName', {
+                                {...register('nome', {
                                     required: 'Nome Completo é obrigatório'
                                 })}
                             />
@@ -89,13 +97,13 @@ export function Cadastro(){
                             <Form.Label className='reticencias'>Data de Nascimento</Form.Label>
                             <Form.Control
                                 type='date'
-                                name="date"
-                                id="date"
+                                name="nascimento"
+                                id="nascimento"
                                 required
                                 isInvalid={errors.date}
                                 isValid={!errors.date}
                                 placeholder="Insira sua data de nascimento"
-                                {...register('date', {
+                                {...register('nascimento', {
                                     required: {
                                         value: true,
                                         message: 'Data de nascimento é obrigatória'

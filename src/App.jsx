@@ -1,4 +1,4 @@
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import { Agenda } from './paginas/agenda'
 import { Cadastro } from './paginas/cadastro';
 import { Login } from './paginas/login';
@@ -6,18 +6,47 @@ import { RecuperaSenha } from './paginas/recuperaSenha';
 import { PacientesMui } from './paginas/pacientesMui';
 import { MedicosMui } from './paginas/medicosMui';
 import { Painel } from './paginas/painel';
+import { isAuthenticated } from './utils/is-authenticated';
+
+
+export function PrivateRoute({ children }) {
+  if (!isAuthenticated()) {
+    return <Navigate to="/" replace />
+  }
+  return children;
+}
+
 export default function App() {
+
+
   return (
-      <BrowserRouter >
-        <Routes >
-          <Route exact path='/Pacientes' element={<PacientesMui />} />
-          <Route exact path='/Medicos' element={<MedicosMui />} />
-          <Route exact path='/Agenda' element={<Agenda />} />
-          <Route exact path='/Cadastro' element={<Cadastro />} />
-          <Route exact path='/Login' element={<Login />} />
-          <Route exact path='/Painel' element={<Painel />} />
-          <Route exact path='/RecuperaSenha' element={<RecuperaSenha />} />
-        </Routes>
-      </BrowserRouter>
+    <BrowserRouter >
+      <Routes >
+        <Route index path="/" element={<Login />} />
+        <Route exact path='/Cadastro' element={<Cadastro />} />
+        <Route exact path='/RecuperaSenha' element={<RecuperaSenha />} />
+        <Route exact path='/Pacientes' element={(
+          <PrivateRoute>
+            <PacientesMui />
+          </PrivateRoute>
+        )} />
+        <Route exact path='/Medicos' element={(
+          <PrivateRoute>
+            <MedicosMui />
+          </PrivateRoute>
+        )} />
+        <Route exact path='/Agenda' element={(
+          <PrivateRoute>
+            <Agenda />
+          </PrivateRoute>
+        )} />
+        <Route exact path='/Painel' element={(
+          <PrivateRoute>
+            <Painel />
+          </PrivateRoute>
+        )} />
+
+      </Routes>
+    </BrowserRouter>
   );
 }

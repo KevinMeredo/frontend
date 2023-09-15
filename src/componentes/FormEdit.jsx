@@ -28,7 +28,6 @@ export default function FormDialog(props) {
         <DialogTitle>{props.texto}</DialogTitle>
         <DialogContent>
           {props.chaves && props.chaves.map((key) => {
-            console.log(key)
             return (
               <TextField
                 autoFocus

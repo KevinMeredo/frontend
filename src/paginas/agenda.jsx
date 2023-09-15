@@ -1,6 +1,5 @@
 import Paper from '@mui/material/Paper';
 import { Nav } from "../componentes/Nav";
-import Button from '@mui/material/Button';
 import Table from '@mui/material/Table';
 import TableHead from '@mui/material/TableHead';
 import TableBody from '@mui/material/TableBody';
@@ -13,7 +12,6 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { createSvgIcon } from '@mui/material';
-import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import FormEdit from '../componentes/FormEdit'
 import DropBox from '../componentes/DropBox';
 
@@ -69,6 +67,7 @@ export function Agenda() {
         <>
 
             <Nav classname="App-header"></Nav>
+
             <Paper elevation={0} sx={{ overflow: 'hidden' }}>
                 <Grid
                     gap={4}
@@ -78,6 +77,9 @@ export function Agenda() {
                     alignItems="center"
                 >
                     <Buscar coluna='Paciente'></Buscar>
+
+                    <DropBox></DropBox>
+
                     <LocalizationProvider dateAdapter={AdapterDayjs}>
                         <DemoContainer components={['DatePicker']}>
                             <DatePicker
@@ -89,8 +91,9 @@ export function Agenda() {
                             />
                         </DemoContainer>
                     </LocalizationProvider>
-                    <DropBox></DropBox>
-                     <FormEdit icone = {<PlusIcon />} chaves={Object.keys(Dados[0])} texto='Adicionar Agendamento'> </FormEdit>
+
+                    <FormEdit icone={<PlusIcon />} chaves={Object.keys(Dados[0])} texto='Adicionar Agendamento'> </FormEdit>
+
                 </Grid>
             </Paper>
             <TableContainer sx={{ maxHeight: 440 }}>

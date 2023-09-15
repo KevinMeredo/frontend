@@ -1,13 +1,22 @@
 import { Form, Button, Col, Row } from 'react-bootstrap';
 import { useForm } from 'react-hook-form';
 import 'bootstrap/dist/css/bootstrap.min.css'
+import { loginUser } from '../services/user-service';
+import { useNavigate } from 'react-router-dom';
 
 export function Login(){
     
     const { handleSubmit, register, formState: { errors } } = useForm({mode: 'onChange'});
 
-    const onSubmit = (data) => {
-        console.log(data);
+    const navigate = useNavigate();
+
+    const onSubmit = async (data) => {
+        try {
+            await loginUser(data);
+            navigate('/Painel');
+        } catch (error) {
+            console.log(error.response.data.error)
+        }
     }
     return (
         <div className='d-flex justify-content-center '>

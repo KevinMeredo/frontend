@@ -16,7 +16,7 @@ import { Link } from 'react-router-dom';
 import '../App.css'
 
 const pages = ['Pacientes', 'Medicos', 'Agenda', 'Painel'];
-const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
+const settings = ['Profile', 'Account', 'Logout'];
 
 export function Nav() {
   const [anchorElNav, setAnchorElNav] = React.useState(null);

@@ -8,7 +8,8 @@ class UserController {
         const httpHelper = new HttpHelper(response);
         try {
             const { email, senha, CPF, nome, nascimento } = request.body;
-            if (!email || !senha || !CPF ||!nome) return httpHelper.badRequest('Nome, CPF, E-mail e senha são obrigatórios!');
+            console.log(request.body);
+            if (!email || !senha || !CPF || !nome || !nascimento) return httpHelper.badRequest('Nome, CPf, E-mail, Data de Nascimento e senha são obrigatórios!');
             const userAlreadyExists = await UserModel.findOne({ where: { email } });
             if (userAlreadyExists) return httpHelper.badRequest('E-mail de usuário já cadastrado!');
             const passwordHashed = await bcrypt.hash(
@@ -37,9 +38,9 @@ class UserController {
     async login(request, response) {
         const httpHelper = new HttpHelper(response);
         try {
-            const { email, senha } = request.body;
-            if (!email || !senha) return httpHelper.badRequest('E-mail e senha são obrigatórios!');
-            const userExists = await UserModel.findOne({ where: { email } });
+            const { CPF, senha } = request.body;
+            if (!CPF || !senha) return httpHelper.badRequest('CPF e senha são obrigatórios!');
+            const userExists = await UserModel.findOne({ where: { CPF } });
             if (!userExists) return httpHelper.notFound('Usuário não encontrado!');
             const isPasswordValid = await bcrypt.compare(senha, userExists.senha);
             if (!isPasswordValid) return httpHelper.badRequest('Senha incorreta!');
