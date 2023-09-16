@@ -102,7 +102,6 @@ export function Agenda() {
                 }
 
             ))
-            console.log(diasDaSemana)
     };
     function getSemana(data) {
         let mes
@@ -126,7 +125,6 @@ export function Agenda() {
             diasDaSemana.push(`${data.$d.getFullYear()}-${mes}-${dia}`)
         }
         setConsultasSemana(diasDaSemana)
-        console.log(diasDaSemana)
     }
     return (
         <>

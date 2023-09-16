@@ -1,8 +1,8 @@
 import { api } from "./api";
 
-export async function getMedicos() {
+export async function getPacientes() {
     const accessToken = sessionStorage.getItem('token');
-    const result = await api.get('/medicos', {
+    const result = await api.get('/pacientes', {
         headers: {
             'Authorization': `Bearer ${JSON.parse(accessToken)}`
         }
@@ -10,9 +10,9 @@ export async function getMedicos() {
     return result;
 }
 
-export async function deleteMedico(id) {
+export async function deletePaciente(id) {
     const accessToken = sessionStorage.getItem('token');
-    const result = await api.delete(`/medico/${id}`, {
+    const result = await api.delete(`/paciente/${id}`, {
         headers: {
             'Authorization': `Bearer ${JSON.parse(accessToken)}`
         }
@@ -20,14 +20,14 @@ export async function deleteMedico(id) {
     return result;
 }
 
-export async function updateMedico(data) {
+export async function updatePaciente(data) {
     const accessToken = sessionStorage.getItem('token');
-    const result = await api.put(`/medico/${data.id}`, {
+    const result = await api.put(`/paciente/${data.id}`, {
         nome: data.nome,
         email: data.email,
         CPF: data.CPF,
         nascimento: data.nascimento,
-        CRM: data.CRM,
+        RG: data.RG,
         naturalidade: data.naturalidade
     }, {
         headers: {
@@ -37,14 +37,14 @@ export async function updateMedico(data) {
     return result;
 }
 
-export async function createMedico(data) {
+export async function createPaciente(data) {
     const accessToken = sessionStorage.getItem('token');
-    const result = await api.post('/medico', {
+    const result = await api.post('/paciente', {
         nome: data.nome,
         email: data.email,
         CPF: data.CPF,
         nascimento: data.nascimento,
-        CRM: data.CRM,
+        RG: data.RG,
         naturalidade: data.naturalidade
     }, {
         headers: {
