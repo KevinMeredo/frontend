@@ -33,7 +33,7 @@ module.exports = {
               allowNull: false, 
             },
             nascimento: {
-              type: Sequelize.DATE
+              type: Sequelize.DATEONLY
             }
         });
     },

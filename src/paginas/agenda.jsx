@@ -15,12 +15,16 @@ import { createSvgIcon } from '@mui/material';
 import FormEdit from '../componentes/FormEdit'
 import DropBox from '../componentes/DropBox';
 
+
+
 import * as React from 'react';
 import '../App.css'
 
 import { useEffect, useState } from "react";
-import Dados from '../Consultas_dados.json'
 import Buscar from '../componentes/Buscar';
+import { useNavigate } from "react-router-dom";
+import { createConsulta,getConsultas, updateConsulta, deleteConsulta } from '../services/consulta-service';
+
 
 const PlusIcon = createSvgIcon(
     <svg
@@ -36,32 +40,94 @@ const PlusIcon = createSvgIcon(
 );
 
 export function Agenda() {
-
+    
     const opcoes = { year: 'numeric', month: 'numeric', day: 'numeric' }
+    const [Dados, setDados] = useState([''])
     const [consultas, setConsultas] = useState([]);
     const [diasDaSemana, setDiasDaSemana] = useState([])
+
+    const navigate = useNavigate();
+
     useEffect(() => {
+        findConsultas()
     }, []);
+
+    async function findConsultas() {
+        try {
+            const result = await getConsultas();
+            setDados(result.data);
+            console.log(result.data)
+        } catch (error) {
+            console.error(error);
+            navigate('/');
+        }
+    }
+
+    async function removeConsulta(id) {
+        try {
+            await deleteConsulta(id);
+            await findConsultas();
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
+    async function addConsulta(data) {
+        try {
+            await createConsulta(data);
+            await findConsultas();
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
+    async function editConsulta(data) {
+        try {
+            await updateConsulta({
+                id: data.id,
+                nameConsulta: data.nameConsulta,
+                unity: data.unity
+            });
+            await findConsultas();
+        } catch (error) {
+            console.error(error);
+        }
+    }
 
     async function setConsultasSemana(diasDaSemana) {
         setDiasDaSemana(diasDaSemana)
         await setConsultas(
             Dados.filter(
                 function (Dados) {
-                    return (diasDaSemana.includes(Dados.Dia))
+                    return (diasDaSemana.includes(Dados.dia))
                 }
 
             ))
+            console.log(diasDaSemana)
     };
-    function getSemana(dia) {
+    function getSemana(data) {
+        let mes
+        let dia
         const diasDaSemana = []
-        let diaDaSemana = dia.$d.getDay()
-        dia.$d.setDate(dia.$d.getDate() - diaDaSemana - 1)
+        let diaDaSemana = data.$d.getDay()
+        data.$d.setDate(data.$d.getDate() - diaDaSemana - 1)
         for (let i = 0; i < 7; i++) {
-            dia.$d.setDate(dia.$d.getDate() + 1)
-            diasDaSemana.push(dia.$d.toLocaleDateString(undefined, opcoes))
+
+            data.$d.setDate(data.$d.getDate() + 1)
+            
+            dia = data.$d.getDate()
+            mes = data.$d.getMonth() + 1
+            if (data.$d.getDate()<10) {
+                dia = `0${dia}`;
+            }
+            
+            if (data.$d.getMonth() < 9) {
+                mes = `0${mes}`;
+            }
+            diasDaSemana.push(`${data.$d.getFullYear()}-${mes}-${dia}`)
         }
         setConsultasSemana(diasDaSemana)
+        console.log(diasDaSemana)
     }
     return (
         <>
@@ -86,7 +152,7 @@ export function Agenda() {
                                 onChange={(novoValor) => {
                                     getSemana(novoValor)
                                 }}
-                                format="DD-MM-YYYY"
+                                format="DD/MM/YYYY"
                                 label="Data"
                             />
                         </DemoContainer>
@@ -116,7 +182,7 @@ export function Agenda() {
                                     <Paper elevation={0}
                                         key={consulta.id}
                                     >
-                                        {consulta.Dia === diasDaSemana[0] && <FormEdit chaves={Object.keys(consulta)} texto={consulta.Dia}></FormEdit>}
+                                        {consulta.dia === diasDaSemana[0] && <FormEdit ignore= 'id' chaves={Object.keys(consulta)} texto={consulta.dia}></FormEdit>}
                                     </Paper>
                                 )
                             })}
@@ -125,17 +191,7 @@ export function Agenda() {
                             {consultas.map((consulta) => {
                                 return (
                                     <Paper elevation={0} key={consulta.id}>
-                                        {consulta.Dia === diasDaSemana[1] && <FormEdit chaves={Object.keys(consulta)} texto={consulta.Dia}></FormEdit>}
-                                    </Paper>
-                                )
-                            })}
-                        </TableCell>
-                        <TableCell align='center'>
-                            {consultas.map((consulta) => {
-
-                                return (
-                                    <Paper elevation={0} key={consulta.id}>
-                                        {consulta.Dia === diasDaSemana[2] && <FormEdit chaves={Object.keys(consulta)} texto={consulta.Dia}></FormEdit>}
+                                        {consulta.dia === diasDaSemana[1] && <FormEdit ignore= 'id' chaves={Object.keys(consulta)} texto={consulta.dia}></FormEdit>}
                                     </Paper>
                                 )
                             })}
@@ -145,7 +201,7 @@ export function Agenda() {
 
                                 return (
                                     <Paper elevation={0} key={consulta.id}>
-                                        {consulta.Dia === diasDaSemana[3] && <FormEdit chaves={Object.keys(consulta)} texto={consulta.Dia}></FormEdit>}
+                                        {consulta.dia === diasDaSemana[2] && <FormEdit ignore= 'id' chaves={Object.keys(consulta)} texto={consulta.dia}></FormEdit>}
                                     </Paper>
                                 )
                             })}
@@ -155,7 +211,7 @@ export function Agenda() {
 
                                 return (
                                     <Paper elevation={0} key={consulta.id}>
-                                        {consulta.Dia === diasDaSemana[4] && <FormEdit chaves={Object.keys(consulta)} texto={consulta.Dia}></FormEdit>}
+                                        {consulta.dia === diasDaSemana[3] && <FormEdit ignore= 'id' chaves={Object.keys(consulta)} texto={consulta.dia}></FormEdit>}
                                     </Paper>
                                 )
                             })}
@@ -165,7 +221,7 @@ export function Agenda() {
 
                                 return (
                                     <Paper elevation={0} key={consulta.id}>
-                                        {consulta.Dia === diasDaSemana[5] && <FormEdit chaves={Object.keys(consulta)} texto={consulta.Dia}></FormEdit>}
+                                        {consulta.dia === diasDaSemana[4] && <FormEdit ignore= 'id' chaves={Object.keys(consulta)} texto={consulta.dia}></FormEdit>}
                                     </Paper>
                                 )
                             })}
@@ -175,7 +231,17 @@ export function Agenda() {
 
                                 return (
                                     <Paper elevation={0} key={consulta.id}>
-                                        {consulta.Dia === diasDaSemana[6] && <FormEdit chaves={Object.keys(consulta)} texto={consulta.Dia}></FormEdit>}
+                                        {consulta.dia === diasDaSemana[5] && <FormEdit ignore= 'id' chaves={Object.keys(consulta)} texto={consulta.dia}></FormEdit>}
+                                    </Paper>
+                                )
+                            })}
+                        </TableCell>
+                        <TableCell align='center'>
+                            {consultas.map((consulta) => {
+
+                                return (
+                                    <Paper elevation={0} key={consulta.id}>
+                                        {consulta.dia === diasDaSemana[6] && <FormEdit ignore= 'id' chaves={Object.keys(consulta)} texto={consulta.dia}></FormEdit>}
                                     </Paper>
                                 )
                             })}

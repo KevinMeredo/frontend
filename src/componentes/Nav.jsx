@@ -11,12 +11,10 @@ import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
-import AdbIcon from '@mui/icons-material/Adb';
-import { Link } from 'react-router-dom';
 import '../App.css'
 
 const pages = ['Pacientes', 'Medicos', 'Agenda', 'Painel'];
-const settings = ['Profile', 'Account', 'Logout'];
+const settings = ['Profile', 'Account'];
 
 export function Nav() {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
@@ -41,7 +39,6 @@ export function Nav() {
     <AppBar position="static">
       <Container maxWidth="xl">
         <Toolbar disableGutters>
-          <AdbIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
           <Typography
             variant="h6"
             noWrap
@@ -96,7 +93,6 @@ export function Nav() {
               ))}
             </Menu>
           </Box>
-          <AdbIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} />
           <Typography
             variant="h5"
             noWrap
@@ -154,7 +150,16 @@ export function Nav() {
                 <MenuItem key={setting} onClick={handleCloseUserMenu}>
                   <Typography textAlign="center">{setting}</Typography>
                 </MenuItem>
+
+
               ))}
+              <MenuItem>
+                <Button href='/' onClick={() => {
+                  sessionStorage.removeItem('token');
+                }}>
+                  Logout
+                </Button>
+              </MenuItem>
             </Menu>
           </Box>
         </Toolbar>

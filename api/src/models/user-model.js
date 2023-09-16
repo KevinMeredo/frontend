@@ -6,7 +6,7 @@ class UserModel extends Model {
             nome: DataTypes.TEXT,
             email: DataTypes.TEXT,
             CPF: DataTypes.TEXT,
-            nascimento: DataTypes.DATE,
+            nascimento: DataTypes.DATEONLY,
             senha: DataTypes.TEXT
         }, {
             tableName: 'user',

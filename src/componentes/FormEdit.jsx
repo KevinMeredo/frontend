@@ -28,16 +28,19 @@ export default function FormDialog(props) {
         <DialogTitle>{props.texto}</DialogTitle>
         <DialogContent>
           {props.chaves && props.chaves.map((key) => {
-            return (
-              <TextField
-                autoFocus
-                margin='dense'
-                id={key}
-                label={key}
-                fullWidth
-                variant='standard'
-              ></TextField>
-            )
+            if(key !== props.ignore){
+              return (
+                <TextField
+                  autoFocus
+                  margin='dense'
+                  id={key}
+                  label={key}
+                  fullWidth
+                  variant='standard'
+                ></TextField>
+              )
+            }
+           
 
           })}
         </DialogContent>

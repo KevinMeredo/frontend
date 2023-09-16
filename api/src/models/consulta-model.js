@@ -9,7 +9,7 @@ class ConsultaModel extends Model {
             status: DataTypes.TEXT,
             urgencia: DataTypes.TEXT,
             observação: DataTypes.TEXT,
-            dia: DataTypes.DATE,    
+            dia: DataTypes.DATEONLY,    
         }, {
             tableName: 'consulta',
             modelName: 'ConsultaModel',
