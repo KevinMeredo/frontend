@@ -40,8 +40,7 @@ const PlusIcon = createSvgIcon(
 );
 
 export function Agenda() {
-    
-    const opcoes = { year: 'numeric', month: 'numeric', day: 'numeric' }
+
     const [Dados, setDados] = useState([''])
     const [consultas, setConsultas] = useState([]);
     const [diasDaSemana, setDiasDaSemana] = useState([])

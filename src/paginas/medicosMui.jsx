@@ -12,9 +12,13 @@ import FormEdit from '../componentes/FormEdit'
 import Buscar from '../componentes/Buscar'
 import Grid from '@mui/material/Grid'
 import { createSvgIcon } from '@mui/material/utils';
-
-import Dados from '../Medicos_dados.json'
 import { Nav } from '../componentes/Nav';
+
+import { useEffect } from "react";
+import { useNavigate } from 'react-router-dom';
+
+import { getMedicos } from '../services/medico-service'
+
 
 const PlusIcon = createSvgIcon(
   <svg
@@ -29,38 +33,56 @@ const PlusIcon = createSvgIcon(
   'Plus',
 );
 
-const rows = []
-for(let obj in Dados){
-  if(Dados.hasOwnProperty(obj)){
-      rows.push(Dados[obj])
-      
-  }}
-const columns = [
-  { id: 'Nome', label: 'Nome', minWidth: 100 },
-  { id: 'CPF', label: 'CPF', minWidth: 100 },
-  {
-    id: 'CRM',
-    label: 'CRM',
-    minWidth: 100,
-    align: 'left',
-  },
-  {
-    id: 'dataNasc',
-    label: 'Data de Nascimento',
-    minWidth: 100,
-    align: 'left',
-  },
-  {
-    id: 'Naturalidade',
-    label: 'Naturalidade',
-    minWidth: 100,
-    align: 'left',
-    format: (value) => value.toFixed(2),
-  },
-];
+
+
 export function MedicosMui() {
+
+  const navigate = useNavigate();
+
+  useEffect(  () => {
+     findMedicos()
+  }, []);
+
+  const columns = [
+    { id: 'nome', label: 'Nome', minWidth: 100 },
+    { id: 'CPF', label: 'CPF', minWidth: 100 },
+    { id: 'email', label: 'Email', minWidth: 100 },
+    {
+      id: 'CRM',
+      label: 'CRM',
+      minWidth: 100,
+      align: 'left',
+    },
+    {
+      id: 'nascimento',
+      label: 'Data de Nascimento',
+      minWidth: 100,
+      align: 'left',
+    },
+    {
+      id: 'naturalidade',
+      label: 'Naturalidade',
+      minWidth: 100,
+      align: 'left',
+      format: (value) => value.toFixed(2),
+    },
+  ];
+  const [rows, setRows] = React.useState([''])
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
+
+  async function findMedicos() {
+    try {
+      const result = await getMedicos();
+      setRows(result.data)
+      console.log( rows)
+      
+    } catch (error) {
+      console.error(error);
+      navigate('/');
+    } 
+  }
+  
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -80,10 +102,10 @@ export function MedicosMui() {
         justifyContent="space-evenly"
         alignItems="center"
       >
-        <Buscar coluna= 'CRM'></Buscar>
-        <FormEdit icone = {<PlusIcon />} chaves={Object.keys(Dados[0])} texto='Adicionar Medico'> </FormEdit>
+        <Buscar coluna='CRM'></Buscar>
+        <FormEdit ignore='id' icone={<PlusIcon />} chaves={Object.keys(rows[0])} texto='Adicionar Medico'> </FormEdit>
       </Grid>
-        
+
       <TableContainer sx={{ maxHeight: 440 }}>
         <Table stickyHeader aria-label="sticky table">
           <TableHead>
@@ -102,9 +124,10 @@ export function MedicosMui() {
           <TableBody>
             {rows
               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-              .map((row) => {
+              .map( (row) => {
+                 console.log(row)
                 return (
-                  <TableRow hover role="checkbox" tabIndex={-1} key={row.Nome}>
+                  <TableRow hover role="checkbox" tabIndex={-1} key={row.id}>
                     {columns.map((column) => {
                       const value = row[column.id];
                       return (
@@ -116,7 +139,7 @@ export function MedicosMui() {
                       );
                     })}
                     <TableCell>
-                      <FormEdit texto = 'Editar' chaves = {Object.keys(row)}></FormEdit>
+                      <FormEdit ignore='id' texto='Editar' chaves={Object.keys(row)}></FormEdit>
                     </TableCell>
 
                   </TableRow>
