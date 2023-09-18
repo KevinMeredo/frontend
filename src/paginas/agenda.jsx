@@ -54,18 +54,21 @@ export function Agenda() {
     async function findConsultas() {
         try {
             const result = await getConsultas();
-            setDados(result.data);
+            setDados(result.data);   
             console.log(result.data)
+            await setConsultasSemana(diasDaSemana)
         } catch (error) {
             console.error(error);
             navigate('/');
         }
     }
 
+
     async function removeConsulta(id) {
         try {
             await deleteConsulta(id);
             await findConsultas();
+            
         } catch (error) {
             console.error(error);
         }
@@ -75,6 +78,7 @@ export function Agenda() {
         try {
             await createConsulta(data);
             await findConsultas();
+            console.log(data)
         } catch (error) {
             console.error(error);
         }
@@ -84,8 +88,13 @@ export function Agenda() {
         try {
             await updateConsulta({
                 id: data.id,
-                nameConsulta: data.nameConsulta,
-                unity: data.unity
+                CPF_Paciente: data.CPF_Paciente,
+                CRM_Medico: data.CRM_Medico,
+                dia: data.dia,
+                tipo: data.tipo,
+                status: data.status,
+                urgencia: data.urgencia,
+                observação: data.observação
             });
             await findConsultas();
         } catch (error) {
@@ -94,8 +103,9 @@ export function Agenda() {
     }
 
     async function setConsultasSemana(diasDaSemana) {
+        console.log('setConsultas')
         setDiasDaSemana(diasDaSemana)
-        await setConsultas(
+        setConsultas(
             Dados.filter(
                 function (Dados) {
                     return (diasDaSemana.includes(Dados.dia))
@@ -124,6 +134,7 @@ export function Agenda() {
             }
             diasDaSemana.push(`${data.$d.getFullYear()}-${mes}-${dia}`)
         }
+        console.log(diasDaSemana)
         setConsultasSemana(diasDaSemana)
     }
     return (
@@ -142,7 +153,6 @@ export function Agenda() {
                     <Buscar coluna='Paciente'></Buscar>
 
                     <DropBox></DropBox>
-
                     <LocalizationProvider dateAdapter={AdapterDayjs}>
                         <DemoContainer components={['DatePicker']}>
                             <DatePicker
@@ -155,7 +165,7 @@ export function Agenda() {
                         </DemoContainer>
                     </LocalizationProvider>
 
-                    <FormEdit icone={<PlusIcon />} chaves={Object.keys(Dados[0])} texto='Adicionar Agendamento'> </FormEdit>
+                    <FormEdit funcao = {addConsulta} ignore='id' icone={<PlusIcon />} chaves={Object.keys(Dados[0])} texto='Adicionar Agendamento'> </FormEdit>
 
                 </Grid>
             </Paper>
@@ -173,76 +183,21 @@ export function Agenda() {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        <TableCell align='center'>
-                            {consultas.map((consulta) => {
-                                return (
-                                    <Paper elevation={0}
-                                        key={consulta.id}
-                                    >
-                                        {consulta.dia === diasDaSemana[0] && <FormEdit ignore= 'id' chaves={Object.keys(consulta)} texto={consulta.dia}></FormEdit>}
-                                    </Paper>
-                                )
-                            })}
-                        </TableCell>
-                        <TableCell align='center'>
-                            {consultas.map((consulta) => {
-                                return (
-                                    <Paper elevation={0} key={consulta.id}>
-                                        {consulta.dia === diasDaSemana[1] && <FormEdit ignore= 'id' chaves={Object.keys(consulta)} texto={consulta.dia}></FormEdit>}
-                                    </Paper>
-                                )
-                            })}
-                        </TableCell>
-                        <TableCell align='center'>
-                            {consultas.map((consulta) => {
-
-                                return (
-                                    <Paper elevation={0} key={consulta.id}>
-                                        {consulta.dia === diasDaSemana[2] && <FormEdit ignore= 'id' chaves={Object.keys(consulta)} texto={consulta.dia}></FormEdit>}
-                                    </Paper>
-                                )
-                            })}
-                        </TableCell>
-                        <TableCell align='center'>
-                            {consultas.map((consulta) => {
-
-                                return (
-                                    <Paper elevation={0} key={consulta.id}>
-                                        {consulta.dia === diasDaSemana[3] && <FormEdit ignore= 'id' chaves={Object.keys(consulta)} texto={consulta.dia}></FormEdit>}
-                                    </Paper>
-                                )
-                            })}
-                        </TableCell>
-                        <TableCell align='center'>
-                            {consultas.map((consulta) => {
-
-                                return (
-                                    <Paper elevation={0} key={consulta.id}>
-                                        {consulta.dia === diasDaSemana[4] && <FormEdit ignore= 'id' chaves={Object.keys(consulta)} texto={consulta.dia}></FormEdit>}
-                                    </Paper>
-                                )
-                            })}
-                        </TableCell>
-                        <TableCell align='center'>
-                            {consultas.map((consulta) => {
-
-                                return (
-                                    <Paper elevation={0} key={consulta.id}>
-                                        {consulta.dia === diasDaSemana[5] && <FormEdit ignore= 'id' chaves={Object.keys(consulta)} texto={consulta.dia}></FormEdit>}
-                                    </Paper>
-                                )
-                            })}
-                        </TableCell>
-                        <TableCell align='center'>
-                            {consultas.map((consulta) => {
-
-                                return (
-                                    <Paper elevation={0} key={consulta.id}>
-                                        {consulta.dia === diasDaSemana[6] && <FormEdit ignore= 'id' chaves={Object.keys(consulta)} texto={consulta.dia}></FormEdit>}
-                                    </Paper>
-                                )
-                            })}
-                        </TableCell>
+                        {diasDaSemana.map((dia) => {
+                            return(
+                                <TableCell align='center'>
+                                    {consultas.map((consulta) => {
+                                        return (
+                                            <Paper elevation={0}
+                                                key={consulta.id}
+                                            >
+                                                {consulta.dia === dia && <FormEdit deletar={async () =>removeConsulta(consulta.id)} funcao={editConsulta} ignore= 'id' obj={consulta} chaves={Object.keys(consulta)} texto={consulta.dia}></FormEdit>}
+                                            </Paper>
+                                        )
+                                    })}
+                                </TableCell>
+                            )
+                        })}
                     </TableBody>
                 </Table>
             </TableContainer>

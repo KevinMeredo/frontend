@@ -17,7 +17,7 @@ import { Nav } from '../componentes/Nav';
 import { useEffect } from "react";
 import { useNavigate } from 'react-router-dom';
 
-import {getPacientes} from '../services/paciente-service'
+import {getPacientes, createPaciente, updatePaciente, deletePaciente} from '../services/paciente-service'
 
 const PlusIcon = createSvgIcon(
   <svg
@@ -70,13 +70,45 @@ export function PacientesMui() {
     try {
       const result = await getPacientes();
       setRows(result.data)
-      console.log( rows)
       
     } catch (error) {
       console.error(error);
       navigate('/');
     } 
   }
+  async function addPaciente(data) {
+    console.log(data)
+    try {
+        await createPaciente(data);
+        await findPacientes();
+    } catch (error) {
+        console.error(error);
+    }
+}
+async function editPaciente(data) {
+  try {
+      await updatePaciente({
+          id: data.id,
+          CPF: data.CPF,
+          nome: data.nome,
+          RG: data.RG,
+          nascimento: data.nascimento,
+          naturalidade: data.naturalidade,
+          email: data.email
+      });
+      await findPacientes();
+  } catch (error) {
+      console.error(error);
+  }
+}
+async function removePaciente(id) {
+  try {
+      await deletePaciente(id);
+      await findPacientes();
+  } catch (error) {
+      console.error(error);
+  }
+}
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
@@ -96,7 +128,7 @@ export function PacientesMui() {
         alignItems="center"
       >
         <Buscar coluna= 'CRF'></Buscar>
-        <FormEdit ignore='id' icone = {<PlusIcon />} chaves={Object.keys(rows[0])} texto='Adicionar Paciente'> </FormEdit>
+        <FormEdit funcao = {addPaciente} ignore='id' icone = {<PlusIcon />} chaves={Object.keys(rows[0])} texto='Adicionar Paciente'> </FormEdit>
       </Grid>
       <TableContainer sx={{ maxHeight: 440 }}>
         <Table stickyHeader aria-label="sticky table">
@@ -129,7 +161,7 @@ export function PacientesMui() {
                         </TableCell>
                       );
                     })}
-                    <FormEdit ignore='id' texto='Editar' chaves = {Object.keys(row)}></FormEdit>
+                    <FormEdit deletar={async () =>removePaciente(row.id)} funcao={editPaciente} ignore='id' texto='Editar' obj={row} chaves = {Object.keys(row)}></FormEdit>
                   </TableRow>
                 );
               })}

@@ -46,7 +46,7 @@ class PacienteController {
             const pacienteExiste = await PacienteModel.findOne({ where: { id } });
             if (!pacienteExiste) return httpHelper.notFound('Paciente não encontrado!');
             const temConsulta = await ConsultaModel.findOne({where: {CPF_Paciente: pacienteExiste.CPF }})
-            if (temConsulta) return httpHelper.notFound('Não pode deletar paciente com consultas registradas!');
+            if (temConsulta) return httpHelper.badRequest('Não pode deletar paciente com consultas registradas!');
             await PacienteModel.destroy({ where: { id } });
             return httpHelper.ok({
                 message: 'Paciente deletado com sucesso!'

@@ -46,7 +46,7 @@ class MedicoController {
             const medicoExiste = await MedicoModel.findOne({ where: { id } });
             if (!medicoExiste) return httpHelper.notFound('Medico não encontrado!');
             const temConsulta = await ConsultaModel.findOne({where: {CRM_Medico: medicoExiste.CRM }})
-            if (temConsulta) return httpHelper.notFound('Não pode deletar Médico com consultas registradas!');
+            if (temConsulta) return httpHelper.badRequest('Não pode deletar Médico com consultas registradas!');
             await MedicoModel.destroy({ where: { id } });
             return httpHelper.ok({
                 message: 'Medico deletado com sucesso!'

@@ -17,7 +17,7 @@ import { Nav } from '../componentes/Nav';
 import { useEffect } from "react";
 import { useNavigate } from 'react-router-dom';
 
-import { getMedicos } from '../services/medico-service'
+import { getMedicos, createMedico, updateMedico, deleteMedico } from '../services/medico-service'
 
 
 const PlusIcon = createSvgIcon(
@@ -83,6 +83,39 @@ export function MedicosMui() {
     } 
   }
   
+  async function addMedico(data) {
+    console.log(data)
+    try {
+        await createMedico(data);
+        await findMedicos();
+    } catch (error) {
+        console.error(error);
+    }
+}
+async function editMedico(data) {
+  try {
+      await updateMedico({
+          id: data.id,
+          CPF: data.CPF,
+          nome: data.nome,
+          RG: data.RG,
+          nascimento: data.nascimento,
+          naturalidade: data.naturalidade,
+          email: data.email
+      });
+      await findMedicos();
+  } catch (error) {
+      console.error(error);
+  }
+}
+async function removeMedico(id) {
+  try {
+      await deleteMedico(id);
+      await findMedicos();
+  } catch (error) {
+      console.error(error);
+  }
+}
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -103,7 +136,7 @@ export function MedicosMui() {
         alignItems="center"
       >
         <Buscar coluna='CRM'></Buscar>
-        <FormEdit ignore='id' icone={<PlusIcon />} chaves={Object.keys(rows[0])} texto='Adicionar Medico'> </FormEdit>
+        <FormEdit funcao = {addMedico} ignore='id' icone={<PlusIcon />} chaves={Object.keys(rows[0])} texto='Adicionar Medico'> </FormEdit>
       </Grid>
 
       <TableContainer sx={{ maxHeight: 440 }}>
@@ -138,7 +171,7 @@ export function MedicosMui() {
                       );
                     })}
                     <TableCell>
-                      <FormEdit ignore='id' texto='Editar' chaves={Object.keys(row)}></FormEdit>
+                      <FormEdit deletar={async () =>removeMedico(row.id)} funcao={editMedico} ignore='id' texto='Editar' obj={row} chaves={Object.keys(row)}></FormEdit>
                     </TableCell>
 
                   </TableRow>
