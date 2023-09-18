@@ -8,30 +8,30 @@ import DialogTitle from '@mui/material/DialogTitle';
 
 
 export default function FormDialog(props) {
- /*  let padrao
-  (() => {
-    padrao = props.chaves.reduce((accumulator, value) => {
-      if (value != props.ignore) {
-        return ({ ...accumulator, [value]: '' });
-      }
-    }, {})
-  })() */
+  /*  let padrao
+   (() => {
+     padrao = props.chaves.reduce((accumulator, value) => {
+       if (value != props.ignore) {
+         return ({ ...accumulator, [value]: '' });
+       }
+     }, {})
+   })() */
   const [open, setOpen] = React.useState(false);
-  const [Dados, setDados] = React.useState({id:''})
-  
+  const [Dados, setDados] = React.useState({ id: '' })
+
   let padrao
 
   const mudaDado = async (mudanca, key, id) => {
-    let novoDado =  Dados 
+    let novoDado = Dados
     novoDado['id'] = id
-    if(Object.keys(Dados).length !== 0){
+    if (Object.keys(Dados).length !== 0) {
       console.log(Dados)
       Object.keys(Dados).forEach((chave) => {
         if (chave == key) {
           novoDado[chave] = mudanca
-        } else if(novoDado[key]){
+        } else if (novoDado[key]) {
           novoDado[chave] = Dados[chave]
-        } else{
+        } else {
           novoDado[key] = mudanca
         }
         setDados(novoDado)
@@ -41,9 +41,9 @@ export default function FormDialog(props) {
       setDados(novoDado)
       console.log(Dados)
     }
-    
+
   }
-  if(props.obj){
+  if (props.obj) {
     padrao = props.obj
   } else {
     padrao = ''
@@ -52,17 +52,25 @@ export default function FormDialog(props) {
     setOpen(true);
   };
 
-  const handleClose = () => {
-    setOpen(false);
+  const handleClose = async () => {
+    if(props.getAll){
+      await props.getAll().then(
+        () => setOpen(false) 
+      )
+    } else {
+      setOpen(false) 
+    }
+    
+    
   };
 
   const ExecutaEFecha = async () => {
     await props.funcao(Dados)
-    handleClose()
+    await handleClose()
   }
   const DeletaEFecha = async () => {
     await props.deletar()
-    handleClose()
+    await handleClose()
   }
   return (
     <div>
@@ -77,6 +85,7 @@ export default function FormDialog(props) {
             if (key !== props.ignore) {
               return (
                 <TextField
+                  key={key}
                   autoFocus
                   margin='dense'
                   id={key}
@@ -97,7 +106,7 @@ export default function FormDialog(props) {
         <DialogActions>
           <Button onClick={handleClose}>Cancelar</Button>
           {props.deletar && <Button onClick={DeletaEFecha}>Deletar</Button>}
-          <Button onClick={ExecutaEFecha  }>Salvar</Button>
+          <Button onClick={ExecutaEFecha}>Salvar</Button>
         </DialogActions>
       </Dialog>
     </div>

@@ -32,6 +32,14 @@ const PlusIcon = createSvgIcon(
   'Plus',
 );
 export function PacientesMui() {
+  const estrutura = {
+    nome: "",
+    CPF: "",
+    RG: "",
+    email: "",
+    nascimento: "",
+    naturalidade: "",
+  }
   const navigate = useNavigate();
 
   useEffect(  () => {
@@ -128,7 +136,7 @@ async function removePaciente(id) {
         alignItems="center"
       >
         <Buscar coluna= 'CRF'></Buscar>
-        <FormEdit funcao = {addPaciente} ignore='id' icone = {<PlusIcon />} chaves={Object.keys(rows[0])} texto='Adicionar Paciente'> </FormEdit>
+        <FormEdit funcao = {addPaciente} ignore='id' icone = {<PlusIcon />} chaves={Object.keys(estrutura)} texto='Adicionar Paciente'> </FormEdit>
       </Grid>
       <TableContainer sx={{ maxHeight: 440 }}>
         <Table stickyHeader aria-label="sticky table">

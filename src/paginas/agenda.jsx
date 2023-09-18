@@ -23,7 +23,7 @@ import '../App.css'
 import { useEffect, useState } from "react";
 import Buscar from '../componentes/Buscar';
 import { useNavigate } from "react-router-dom";
-import { createConsulta,getConsultas, updateConsulta, deleteConsulta } from '../services/consulta-service';
+import { createConsulta, getConsultas, updateConsulta, deleteConsulta } from '../services/consulta-service';
 
 
 const PlusIcon = createSvgIcon(
@@ -40,23 +40,32 @@ const PlusIcon = createSvgIcon(
 );
 
 export function Agenda() {
-
-    const [Dados, setDados] = useState([''])
+    const estrutura = {
+        CPF_Paciente: "",
+        CRM_Medico: "",
+        tipo: "",
+        status: "",
+        urgencia: "",
+        observação: "",
+        dia: "",
+    }
+    const [Dados, setDados] = useState([])
     const [consultas, setConsultas] = useState([]);
     const [diasDaSemana, setDiasDaSemana] = useState([])
 
     const navigate = useNavigate();
 
     useEffect(() => {
-        findConsultas()
-    }, []);
+        setConsultasSemana(diasDaSemana)
+    }, [Dados]);
 
     async function findConsultas() {
         try {
             const result = await getConsultas();
-            setDados(result.data);   
-            console.log(result.data)
-            await setConsultasSemana(diasDaSemana)
+            console.log("Antes do set", result.data);
+            setDados(result.data)
+            console.log("Depois do setDados", Dados, diasDaSemana)
+            
         } catch (error) {
             console.error(error);
             navigate('/');
@@ -68,7 +77,7 @@ export function Agenda() {
         try {
             await deleteConsulta(id);
             await findConsultas();
-            
+
         } catch (error) {
             console.error(error);
         }
@@ -103,17 +112,21 @@ export function Agenda() {
     }
 
     async function setConsultasSemana(diasDaSemana) {
-        console.log('setConsultas')
+        
+        console.log("setConsultasSemana")
         setDiasDaSemana(diasDaSemana)
         setConsultas(
             Dados.filter(
                 function (Dados) {
+                    console.log(Dados, diasDaSemana)
                     return (diasDaSemana.includes(Dados.dia))
                 }
 
             ))
+        console.log("consultas: ", consultas)
     };
     function getSemana(data) {
+        findConsultas()
         let mes
         let dia
         const diasDaSemana = []
@@ -122,13 +135,13 @@ export function Agenda() {
         for (let i = 0; i < 7; i++) {
 
             data.$d.setDate(data.$d.getDate() + 1)
-            
+
             dia = data.$d.getDate()
             mes = data.$d.getMonth() + 1
-            if (data.$d.getDate()<10) {
+            if (data.$d.getDate() < 10) {
                 dia = `0${dia}`;
             }
-            
+
             if (data.$d.getMonth() < 9) {
                 mes = `0${mes}`;
             }
@@ -159,13 +172,13 @@ export function Agenda() {
                                 onChange={(novoValor) => {
                                     getSemana(novoValor)
                                 }}
-                                format="DD/MM/YYYY"
+                                format="DD-MM-YYYY"
                                 label="Data"
                             />
                         </DemoContainer>
                     </LocalizationProvider>
 
-                    <FormEdit funcao = {addConsulta} ignore='id' icone={<PlusIcon />} chaves={Object.keys(Dados[0])} texto='Adicionar Agendamento'> </FormEdit>
+                    <FormEdit funcao={addConsulta} ignore='id' icone={<PlusIcon />} getAll={findConsultas} chaves={Object.keys(estrutura)} texto='Adicionar Agendamento'> </FormEdit>
 
                 </Grid>
             </Paper>
@@ -183,21 +196,25 @@ export function Agenda() {
                         </TableRow>
                     </TableHead>
                     <TableBody>
+                        <TableRow>
                         {diasDaSemana.map((dia) => {
-                            return(
-                                <TableCell align='center'>
+                            console.log('Passou')
+                            return (
+                                <TableCell key={dia} align='center'>
                                     {consultas.map((consulta) => {
                                         return (
                                             <Paper elevation={0}
                                                 key={consulta.id}
                                             >
-                                                {consulta.dia === dia && <FormEdit deletar={async () =>removeConsulta(consulta.id)} funcao={editConsulta} ignore= 'id' obj={consulta} chaves={Object.keys(consulta)} texto={consulta.dia}></FormEdit>}
+                                                {consulta.dia === dia && <FormEdit getAll={findConsultas} deletar={async () => removeConsulta(consulta.id)} funcao={editConsulta} ignore='id' obj={consulta} chaves={Object.keys(consulta)} texto={consulta.dia}></FormEdit>}
                                             </Paper>
                                         )
                                     })}
                                 </TableCell>
                             )
                         })}
+                        </TableRow>
+                        
                     </TableBody>
                 </Table>
             </TableContainer>

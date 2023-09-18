@@ -36,7 +36,14 @@ const PlusIcon = createSvgIcon(
 
 
 export function MedicosMui() {
-
+  const estrutura = {
+    nome: "",
+    CPF: "",
+    CRM: "",
+    email: "",
+    nascimento: "",
+    naturalidade: "",
+  }
   const navigate = useNavigate();
 
   useEffect(  () => {
@@ -75,7 +82,7 @@ export function MedicosMui() {
     try {
       const result = await getMedicos();
       setRows(result.data)
-      console.log( rows)
+      console.log(rows)
       
     } catch (error) {
       console.error(error);
@@ -136,7 +143,7 @@ async function removeMedico(id) {
         alignItems="center"
       >
         <Buscar coluna='CRM'></Buscar>
-        <FormEdit funcao = {addMedico} ignore='id' icone={<PlusIcon />} chaves={Object.keys(rows[0])} texto='Adicionar Medico'> </FormEdit>
+        <FormEdit funcao = {addMedico} ignore='id' icone={<PlusIcon />} chaves={Object.keys(estrutura)} texto='Adicionar Medico'> </FormEdit>
       </Grid>
 
       <TableContainer sx={{ maxHeight: 440 }}>
