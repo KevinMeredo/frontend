@@ -141,7 +141,7 @@ async function removePaciente(id) {
       <TableContainer sx={{ maxHeight: 440 }}>
         <Table stickyHeader aria-label="sticky table">
           <TableHead>
-            <TableRow>
+            <TableRow key={'head'}>
               {columns.map((column) => (
                 <TableCell
                   key={column.id}
@@ -158,7 +158,7 @@ async function removePaciente(id) {
               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
               .map((row) => {
                 return (
-                  <TableRow hover role="checkbox" tabIndex={-1} key={row.code}>
+                  <TableRow hover role="checkbox" tabIndex={-1} key={row.id ? row.id:'a'}>
                     {columns.map((column) => {
                       const value = row[column.id];
                       return (
@@ -169,7 +169,10 @@ async function removePaciente(id) {
                         </TableCell>
                       );
                     })}
-                    <FormEdit deletar={async () =>removePaciente(row.id)} funcao={editPaciente} ignore='id' texto='Editar' obj={row} chaves = {Object.keys(row)}></FormEdit>
+                    <TableCell>
+                      <FormEdit deletar={async () =>removePaciente(row.id)} funcao={editPaciente} ignore='id' texto='Editar' obj={row} chaves = {Object.keys(row)}></FormEdit>
+
+                    </TableCell>
                   </TableRow>
                 );
               })}

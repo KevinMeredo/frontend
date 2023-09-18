@@ -105,7 +105,7 @@ async function editMedico(data) {
           id: data.id,
           CPF: data.CPF,
           nome: data.nome,
-          RG: data.RG,
+          CRM: data.CRM,
           nascimento: data.nascimento,
           naturalidade: data.naturalidade,
           email: data.email
@@ -149,7 +149,7 @@ async function removeMedico(id) {
       <TableContainer sx={{ maxHeight: 440 }}>
         <Table stickyHeader aria-label="sticky table">
           <TableHead>
-            <TableRow>
+            <TableRow key={'head'}>
               {columns.map((column) => (
                 <TableCell
                   key={column.id}
@@ -166,7 +166,7 @@ async function removeMedico(id) {
               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
               .map( (row) => {
                 return (
-                  <TableRow hover role="checkbox" tabIndex={-1} key={row.id}>
+                  <TableRow hover role="checkbox" tabIndex={-1} key={`item${row.id}`}>
                     {columns.map((column) => {
                       const value = row[column.id];
                       return (
@@ -177,7 +177,7 @@ async function removeMedico(id) {
                         </TableCell>
                       );
                     })}
-                    <TableCell>
+                    <TableCell >
                       <FormEdit deletar={async () =>removeMedico(row.id)} funcao={editMedico} ignore='id' texto='Editar' obj={row} chaves={Object.keys(row)}></FormEdit>
                     </TableCell>
 
