@@ -152,17 +152,15 @@ export function Agenda() {
     }
     return (
         <>
-
-            <Nav classname="App-header"></Nav>
-
-            <Paper elevation={0} sx={{ overflow: 'hidden' }}>
-                <Grid
-                    gap={4}
-                    container
-                    direction="row"
-                    justifyContent="space-evenly"
-                    alignItems="center"
-                >
+        <Nav></Nav>
+        <Paper sx={{ my: 8, width: '100%', overflow: 'scroll'}}>
+        
+            <Grid
+                container
+                direction="row"
+                justifyContent="space-evenly"
+                alignItems="center"
+            >
                     <Buscar coluna='Paciente'></Buscar>
 
                     <DropBox></DropBox>
@@ -180,8 +178,7 @@ export function Agenda() {
 
                     <FormEdit funcao={addConsulta} ignore='id' icone={<PlusIcon />} getAll={findConsultas} chaves={Object.keys(estrutura)} texto='Adicionar Agendamento'> </FormEdit>
 
-                </Grid>
-            </Paper>
+                
             <TableContainer sx={{ maxHeight: 440 }}>
                 <Table stickyHeader aria-label="sticky table">
                     <TableHead>
@@ -218,6 +215,8 @@ export function Agenda() {
                     </TableBody>
                 </Table>
             </TableContainer>
+            </Grid>
+        </Paper>
         </>
 
     )

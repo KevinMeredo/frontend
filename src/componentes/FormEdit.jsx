@@ -5,17 +5,9 @@ import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
+import ModalConfirmacao from '../componentes/ModalConfirmacao'
 
-
-export default function FormDialog(props) {
-  /*  let padrao
-   (() => {
-     padrao = props.chaves.reduce((accumulator, value) => {
-       if (value != props.ignore) {
-         return ({ ...accumulator, [value]: '' });
-       }
-     }, {})
-   })() */
+export default function FormEdit(props) {
   const [open, setOpen] = React.useState(false);
   const [Dados, setDados] = React.useState({ id: '' })
 
@@ -68,10 +60,7 @@ export default function FormDialog(props) {
     await props.funcao(Dados)
     await handleClose()
   }
-  const DeletaEFecha = async () => {
-    await props.deletar()
-    await handleClose()
-  }
+  
   return (
     <div>
       <Button sx={{ gap: 2 }} variant="contained" onClick={handleClickOpen}>
@@ -105,7 +94,7 @@ export default function FormDialog(props) {
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose}>Cancelar</Button>
-          {props.deletar && <Button onClick={DeletaEFecha}>Deletar</Button>}
+          {props.deletar && <ModalConfirmacao texto= 'deletar' funcao={props.deletar}/>}
           <Button onClick={ExecutaEFecha}>Salvar</Button>
         </DialogActions>
       </Dialog>

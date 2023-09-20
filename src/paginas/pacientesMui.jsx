@@ -127,18 +127,20 @@ async function removePaciente(id) {
   };
 
   return (
-    <Paper sx={{ width: '100%', overflow: 'hidden' }}>
-      <Nav></Nav>
+    <>
+    <Nav></Nav>
+    <Paper sx={{ my: 8, width: '100%', overflow: 'scroll'}}>
+      
       <Grid
         container
         direction="row"
         justifyContent="space-evenly"
         alignItems="center"
       >
-        <Buscar coluna= 'CRF'></Buscar>
+        <Buscar coluna= 'CPF'></Buscar>
         <FormEdit funcao = {addPaciente} ignore='id' icone = {<PlusIcon />} chaves={Object.keys(estrutura)} texto='Adicionar Paciente'> </FormEdit>
-      </Grid>
-      <TableContainer sx={{ maxHeight: 440 }}>
+      
+      <TableContainer sx={{ maxHeight: 440}}>
         <Table stickyHeader aria-label="sticky table">
           <TableHead>
             <TableRow key={'head'}>
@@ -188,6 +190,9 @@ async function removePaciente(id) {
         onPageChange={handleChangePage}
         onRowsPerPageChange={handleChangeRowsPerPage}
       />
+      </Grid>
     </Paper>
+    </>
+    
   );
 }

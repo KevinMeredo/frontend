@@ -134,8 +134,10 @@ async function removeMedico(id) {
   };
 
   return (
-    <Paper sx={{ width: '100%', overflow: 'hidden' }}>
-      <Nav></Nav>
+    <>
+    <Nav></Nav>
+    <Paper sx={{ my: 8, width: '100%', overflow: 'scroll'}}>
+      
       <Grid
         container
         direction="row"
@@ -197,5 +199,6 @@ async function removeMedico(id) {
         onRowsPerPageChange={handleChangeRowsPerPage}
       />
     </Paper>
+    </>
   );
 }

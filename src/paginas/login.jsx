@@ -56,7 +56,7 @@ export function Login(){
                         <Form.Group as={Col} sm className='mb-4'>
                             <Form.Label>Senha</Form.Label>
                             <Form.Control
-                                type="text"
+                                type="password"
                                 name="senha"
                                 id="senha"
                                 isInvalid={errors.senha}
