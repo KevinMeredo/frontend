@@ -15,11 +15,13 @@ const consultaController = new ConsultaController();
 
 routes.post('/medico', authMiddleware, medicoController.create);
 routes.get('/medicos', authMiddleware, medicoController.getAll);
+routes.get('/medico/:CRM', authMiddleware, medicoController.getByCRM)
 routes.delete('/medico/:id', authMiddleware, medicoController.delete);
 routes.put('/medico/:id', authMiddleware, medicoController.update);
 
 routes.post('/paciente', authMiddleware, pacienteController.create);
 routes.get('/pacientes', authMiddleware, pacienteController.getAll);
+routes.get('/paciente/:CPF', authMiddleware, pacienteController.getByCPF)
 routes.delete('/paciente/:id', authMiddleware, pacienteController.delete);
 routes.put('/paciente/:id', authMiddleware, pacienteController.update);
 

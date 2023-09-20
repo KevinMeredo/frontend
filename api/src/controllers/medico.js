@@ -37,7 +37,18 @@ class MedicoController {
             return httpHelper.internalError(error);
         }
     }
-
+    async getByCRM(request, response) {
+        const httpHelper = new HttpHelper(response);
+        try {
+            const medico = await MedicoModel.findOne({ where: { CRM: request.params.CRM} })
+            if(medico){
+                return httpHelper.ok(medico);
+            }
+            return httpHelper.notFound("Medico não encontrado")
+                }   catch (error) {
+            return httpHelper.internalError(error);
+        }
+    }
     async delete(request, response) {
         const httpHelper = new HttpHelper(response);
         try {

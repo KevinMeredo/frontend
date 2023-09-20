@@ -38,6 +38,21 @@ class PacienteController {
         }
     }
 
+    async getByCPF(request, response) {
+        const httpHelper = new HttpHelper(response);
+        try {
+            const paciente = await PacienteModel.findOne({ where: { CPF: request.params.CPF } })
+            if(paciente){
+                return httpHelper.ok(paciente);
+            }
+            return httpHelper.notFound("Paciente não encontrado")
+
+        }   catch (error) {
+
+            return httpHelper.internalError(error);
+        }
+    }
+
     async delete(request, response) {
         const httpHelper = new HttpHelper(response);
         try {
