@@ -17,7 +17,7 @@ import { Nav } from '../componentes/Nav';
 import { useEffect } from "react";
 import { useNavigate } from 'react-router-dom';
 
-import {getPacientes, createPaciente, updatePaciente, deletePaciente} from '../services/paciente-service'
+import {getPacientes, getByCPF, createPaciente, updatePaciente, deletePaciente} from '../services/paciente-service'
 
 const PlusIcon = createSvgIcon(
   <svg
@@ -84,6 +84,16 @@ export function PacientesMui() {
       navigate('/');
     } 
   }
+
+  async function findByCPF(CPF) {
+    try {
+      const result = await getByCPF(CPF);
+      console.log(result)
+      return result
+    } catch (error) {
+      console.error(error);
+    }
+  }
   async function addPaciente(data) {
     console.log(data)
     try {
@@ -137,7 +147,7 @@ async function removePaciente(id) {
         justifyContent="space-evenly"
         alignItems="center"
       >
-        <Buscar coluna= 'CPF'></Buscar>
+          <Buscar coluna= 'CPF' funcao = {findByCPF}></Buscar>
         <FormEdit funcao = {addPaciente} ignore='id' icone = {<PlusIcon />} chaves={Object.keys(estrutura)} texto='Adicionar Paciente'> </FormEdit>
       
       <TableContainer sx={{ maxHeight: 440}}>

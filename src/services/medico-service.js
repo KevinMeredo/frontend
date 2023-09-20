@@ -9,6 +9,15 @@ export async function getMedicos() {
     });
     return result;
 }
+export async function getByCRM(CRM) {
+    const accessToken = sessionStorage.getItem('token');
+    const result = await api.get(`/medico/${CRM}`, {
+        headers: {
+            'Authorization': `Bearer ${JSON.parse(accessToken)}`
+        }
+    });
+    return result;
+}
 
 export async function deleteMedico(id) {
     const accessToken = sessionStorage.getItem('token');

@@ -10,6 +10,16 @@ export async function getPacientes() {
     return result;
 }
 
+export async function getByCPF(CPF) {
+    const accessToken = sessionStorage.getItem('token');
+    const result = await api.get(`/paciente/${CPF}`, {
+        headers: {
+            'Authorization': `Bearer ${JSON.parse(accessToken)}`
+        }
+    });
+    return result;
+}
+
 export async function deletePaciente(id) {
     const accessToken = sessionStorage.getItem('token');
     const result = await api.delete(`/paciente/${id}`, {

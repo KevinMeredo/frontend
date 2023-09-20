@@ -17,7 +17,7 @@ import { Nav } from '../componentes/Nav';
 import { useEffect } from "react";
 import { useNavigate } from 'react-router-dom';
 
-import { getMedicos, createMedico, updateMedico, deleteMedico } from '../services/medico-service'
+import { getMedicos, createMedico, updateMedico, deleteMedico, getByCRM } from '../services/medico-service'
 
 
 const PlusIcon = createSvgIcon(
@@ -46,8 +46,8 @@ export function MedicosMui() {
   }
   const navigate = useNavigate();
 
-  useEffect(  () => {
-     findMedicos()
+  useEffect(() => {
+    findMedicos()
   }, []);
 
   const columns = [
@@ -83,46 +83,55 @@ export function MedicosMui() {
       const result = await getMedicos();
       setRows(result.data)
       console.log(rows)
-      
+
     } catch (error) {
       console.error(error);
       navigate('/');
-    } 
+    }
   }
-  
+  async function findByCRM(CRM) {
+    try {
+      const result = await getByCRM(CRM);
+      console.log(result)
+      return result
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
   async function addMedico(data) {
     console.log(data)
     try {
-        await createMedico(data);
-        await findMedicos();
+      await createMedico(data);
+      await findMedicos();
     } catch (error) {
-        console.error(error);
+      console.error(error);
     }
-}
-async function editMedico(data) {
-  try {
+  }
+  async function editMedico(data) {
+    try {
       await updateMedico({
-          id: data.id,
-          CPF: data.CPF,
-          nome: data.nome,
-          CRM: data.CRM,
-          nascimento: data.nascimento,
-          naturalidade: data.naturalidade,
-          email: data.email
+        id: data.id,
+        CPF: data.CPF,
+        nome: data.nome,
+        CRM: data.CRM,
+        nascimento: data.nascimento,
+        naturalidade: data.naturalidade,
+        email: data.email
       });
       await findMedicos();
-  } catch (error) {
+    } catch (error) {
       console.error(error);
+    }
   }
-}
-async function removeMedico(id) {
-  try {
+  async function removeMedico(id) {
+    try {
       await deleteMedico(id);
       await findMedicos();
-  } catch (error) {
+    } catch (error) {
       console.error(error);
+    }
   }
-}
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -135,70 +144,70 @@ async function removeMedico(id) {
 
   return (
     <>
-    <Nav></Nav>
-    <Paper sx={{ my: 8, width: '100%', overflow: 'scroll'}}>
-      
-      <Grid
-        container
-        direction="row"
-        justifyContent="space-evenly"
-        alignItems="center"
-      >
-        <Buscar coluna='CRM'></Buscar>
-        <FormEdit funcao = {addMedico} ignore='id' icone={<PlusIcon />} chaves={Object.keys(estrutura)} texto='Adicionar Medico'> </FormEdit>
-      </Grid>
+      <Nav></Nav>
+      <Paper sx={{ my: 8, width: '100%', overflow: 'scroll' }}>
 
-      <TableContainer sx={{ maxHeight: 440 }}>
-        <Table stickyHeader aria-label="sticky table">
-          <TableHead>
-            <TableRow key={'head'}>
-              {columns.map((column) => (
-                <TableCell
-                  key={column.id}
-                  align={column.align}
-                  style={{ minWidth: column.minWidth }}
-                >
-                  {column.label}
-                </TableCell>
-              ))}
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {rows
-              .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-              .map( (row) => {
-                return (
-                  <TableRow hover role="checkbox" tabIndex={-1} key={`item${row.id}`}>
-                    {columns.map((column) => {
-                      const value = row[column.id];
-                      return (
-                        <TableCell key={column.id} align={column.align}>
-                          {column.format && typeof value === 'number'
-                            ? column.format(value)
-                            : value}
-                        </TableCell>
-                      );
-                    })}
-                    <TableCell >
-                      <FormEdit deletar={async () =>removeMedico(row.id)} funcao={editMedico} ignore='id' texto='Editar' obj={row} chaves={Object.keys(row)}></FormEdit>
-                    </TableCell>
+        <Grid
+          container
+          direction="row"
+          justifyContent="space-evenly"
+          alignItems="center"
+        >
+          <Buscar funcao={findByCRM} editar ={editMedico} deletar={removeMedico} coluna='CRM' > </Buscar>
+          <FormEdit funcao={addMedico}  ignore='id' icone={<PlusIcon />} chaves={Object.keys(estrutura)} texto='Adicionar Medico'> </FormEdit>
+        </Grid>
 
-                  </TableRow>
-                );
-              })}
-          </TableBody>
-        </Table>
-      </TableContainer>
-      <TablePagination
-        rowsPerPageOptions={[10, 25, 100]}
-        component="div"
-        count={rows.length}
-        rowsPerPage={rowsPerPage}
-        page={page}
-        onPageChange={handleChangePage}
-        onRowsPerPageChange={handleChangeRowsPerPage}
-      />
-    </Paper>
+        <TableContainer sx={{ maxHeight: 440 }}>
+          <Table stickyHeader aria-label="sticky table">
+            <TableHead>
+              <TableRow key={'head'}>
+                {columns.map((column) => (
+                  <TableCell
+                    key={column.id}
+                    align={column.align}
+                    style={{ minWidth: column.minWidth }}
+                  >
+                    {column.label}
+                  </TableCell>
+                ))}
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {rows
+                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                .map((row) => {
+                  return (
+                    <TableRow hover role="checkbox" tabIndex={-1} key={`item${row.id}`}>
+                      {columns.map((column) => {
+                        const value = row[column.id];
+                        return (
+                          <TableCell key={column.id} align={column.align}>
+                            {column.format && typeof value === 'number'
+                              ? column.format(value)
+                              : value}
+                          </TableCell>
+                        );
+                      })}
+                      <TableCell >
+                        <FormEdit deletar={async () => removeMedico(row.id)} funcao={editMedico} ignore='id' texto='Editar' obj={row} chaves={Object.keys(row)}></FormEdit>
+                      </TableCell>
+
+                    </TableRow>
+                  );
+                })}
+            </TableBody>
+          </Table>
+        </TableContainer>
+        <TablePagination
+          rowsPerPageOptions={[10, 25, 100]}
+          component="div"
+          count={rows.length}
+          rowsPerPage={rowsPerPage}
+          page={page}
+          onPageChange={handleChangePage}
+          onRowsPerPageChange={handleChangeRowsPerPage}
+        />
+      </Paper>
     </>
   );
 }

@@ -40,32 +40,36 @@ export default function FormEdit(props) {
   } else {
     padrao = ''
   }
-  const handleClickOpen = () => {
+  const handleClickOpen = async () => {
+    if (props.executa) {
+      await props.executa()
+    }
     setOpen(true);
   };
 
   const handleClose = async () => {
-    if(props.getAll){
+    if (props.getAll) {
       await props.getAll().then(
-        () => setOpen(false) 
+        () => setOpen(false)
       )
     } else {
-      setOpen(false) 
+      setOpen(false)
     }
-    
-    
+
+
   };
 
   const ExecutaEFecha = async () => {
+    console.log(props)
     await props.funcao(Dados)
     await handleClose()
   }
-  
+
   return (
     <div>
       <Button sx={{ gap: 2 }} variant="contained" onClick={handleClickOpen}>
         {props.icone && props.icone}
-        {props.texto}
+        {props.texto && props.texto}
       </Button>
       <Dialog open={open} onClose={handleClose}>
         <DialogTitle>{props.texto}</DialogTitle>
@@ -94,7 +98,7 @@ export default function FormEdit(props) {
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose}>Cancelar</Button>
-          {props.deletar && <ModalConfirmacao texto= 'deletar' funcao={props.deletar}/>}
+          {props.deletar && <ModalConfirmacao texto='deletar' funcao={props.deletar} />}
           <Button onClick={ExecutaEFecha}>Salvar</Button>
         </DialogActions>
       </Dialog>
