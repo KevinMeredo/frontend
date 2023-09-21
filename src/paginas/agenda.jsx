@@ -24,6 +24,8 @@ import { useEffect, useState } from "react";
 import Buscar from '../componentes/Buscar';
 import { useNavigate } from "react-router-dom";
 import { createConsulta, getConsultas, updateConsulta, deleteConsulta } from '../services/consulta-service';
+import { getByCPF, getPacientes } from '../services/paciente-service';
+import { getByCRM, getMedicos } from '../services/medico-service';
 
 
 const PlusIcon = createSvgIcon(
@@ -49,6 +51,8 @@ export function Agenda() {
         observação: "",
         dia: "",
     }
+    const [medicos, setMedicos] = useState([])
+    const [pacientes, setPacientes] = useState([])
     const [Dados, setDados] = useState([])
     const [consultas, setConsultas] = useState([]);
     const [diasDaSemana, setDiasDaSemana] = useState([])
@@ -56,20 +60,31 @@ export function Agenda() {
     const navigate = useNavigate();
 
     useEffect(() => {
+        findMedicos()
+        findPacientes()
         setConsultasSemana(diasDaSemana)
     }, [Dados]);
 
     async function findConsultas() {
         try {
             const result = await getConsultas();
+            let novoDado = await result.data.map(
+                async (consulta) => {
+                    console.log(consulta)
+                    console.log('pacientes ', pacientes)
+                }
+            )
             console.log("Antes do set", result.data);
             setDados(result.data)
             console.log("Depois do setDados", Dados, diasDaSemana)
-            
+            console.log("novoDado", novoDado)
+            setPacientes(novoDado)
+            console.log(pacientes)
         } catch (error) {
             console.error(error);
             navigate('/');
         }
+
     }
 
 
@@ -82,7 +97,37 @@ export function Agenda() {
             console.error(error);
         }
     }
+    async function findByCPF(CPF) {
+        try {
+            const result = await getByCPF(CPF);
+            console.log(result)
+            return result
+        } catch (error) {
+            console.error(error);
+        }
+    }
+    async function findMedicos() {
+        try {
+            const result = await getMedicos();
+            setMedicos(result.data)
+            console.log(medicos)
 
+        } catch (error) {
+            console.error(error);
+            navigate('/');
+        }
+    }
+
+    async function findPacientes() {
+        try {
+            const result = await getPacientes();
+            setPacientes(result.data)
+
+        } catch (error) {
+            console.error(error);
+            navigate('/');
+        }
+    }
     async function addConsulta(data) {
         try {
             await createConsulta(data);
@@ -112,7 +157,7 @@ export function Agenda() {
     }
 
     async function setConsultasSemana(diasDaSemana) {
-        
+
         console.log("setConsultasSemana")
         setDiasDaSemana(diasDaSemana)
         setConsultas(
@@ -152,18 +197,18 @@ export function Agenda() {
     }
     return (
         <>
-        <Nav></Nav>
-        <Paper sx={{ my: 8, width: '100%', overflow: 'scroll'}}>
-        
-            <Grid
-                container
-                direction="row"
-                justifyContent="space-evenly"
-                alignItems="center"
-            >
+            <Nav></Nav>
+            <Paper sx={{ my: 8, width: '100%', overflow: 'scroll' }}>
+
+                <Grid
+                    container
+                    direction="row"
+                    justifyContent="space-evenly"
+                    alignItems="center"
+                >
                     <Buscar coluna='Paciente'></Buscar>
 
-                    <DropBox></DropBox>
+                    <DropBox medicos={medicos}></DropBox>
                     <LocalizationProvider dateAdapter={AdapterDayjs}>
                         <DemoContainer components={['DatePicker']}>
                             <DatePicker
@@ -178,45 +223,45 @@ export function Agenda() {
 
                     <FormEdit funcao={addConsulta} ignore='id' icone={<PlusIcon />} getAll={findConsultas} chaves={Object.keys(estrutura)} texto='Adicionar Agendamento'> </FormEdit>
 
-                
-            <TableContainer sx={{ maxHeight: 440 }}>
-                <Table stickyHeader aria-label="sticky table">
-                    <TableHead>
-                        <TableRow>
-                            <TableCell align='center'> Domingo</TableCell>
-                            <TableCell align='center'> Segunda</TableCell>
-                            <TableCell align='center'> Terça</TableCell>
-                            <TableCell align='center'> Quarta</TableCell>
-                            <TableCell align='center'> Quinta</TableCell>
-                            <TableCell align='center'> Sexta</TableCell>
-                            <TableCell align='center'> Sábado</TableCell>
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        <TableRow>
-                        {diasDaSemana.map((dia) => {
-                            console.log('Passou')
-                            return (
-                                <TableCell key={dia} align='center'>
-                                    {consultas.map((consulta) => {
+
+                    <TableContainer sx={{ maxHeight: 440 }}>
+                        <Table stickyHeader aria-label="sticky table">
+                            <TableHead>
+                                <TableRow>
+                                    <TableCell align='center'> Domingo</TableCell>
+                                    <TableCell align='center'> Segunda</TableCell>
+                                    <TableCell align='center'> Terça</TableCell>
+                                    <TableCell align='center'> Quarta</TableCell>
+                                    <TableCell align='center'> Quinta</TableCell>
+                                    <TableCell align='center'> Sexta</TableCell>
+                                    <TableCell align='center'> Sábado</TableCell>
+                                </TableRow>
+                            </TableHead>
+                            <TableBody>
+                                <TableRow>
+                                    {diasDaSemana.map((dia) => {
+                                        console.log('Passou')
                                         return (
-                                            <Paper elevation={0}
-                                                key={consulta.id}
-                                            >
-                                                {consulta.dia === dia && <FormEdit getAll={findConsultas} deletar={async () => removeConsulta(consulta.id)} funcao={editConsulta} ignore='id' obj={consulta} chaves={Object.keys(consulta)} texto={consulta.dia}></FormEdit>}
-                                            </Paper>
+                                            <TableCell key={dia} align='center'>
+                                                {consultas.map((consulta) => {
+                                                    return (
+                                                        <Paper elevation={0}
+                                                            key={consulta.id}
+                                                        >
+                                                            {consulta.dia === dia && <FormEdit getAll={findConsultas} deletar={async () => removeConsulta(consulta.id)} funcao={editConsulta} ignore='id' obj={consulta} chaves={Object.keys(consulta)} texto={consulta.dia}></FormEdit>}
+                                                        </Paper>
+                                                    )
+                                                })}
+                                            </TableCell>
                                         )
                                     })}
-                                </TableCell>
-                            )
-                        })}
-                        </TableRow>
-                        
-                    </TableBody>
-                </Table>
-            </TableContainer>
-            </Grid>
-        </Paper>
+                                </TableRow>
+
+                            </TableBody>
+                        </Table>
+                    </TableContainer>
+                </Grid>
+            </Paper>
         </>
 
     )

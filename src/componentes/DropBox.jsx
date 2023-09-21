@@ -4,7 +4,7 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 
-export default function SelectAutoWidth() {
+export default function DropBox(props) {
   const [Medico, setMedico] = React.useState('');
 
   const handleChange = (event) => {
@@ -23,12 +23,13 @@ export default function SelectAutoWidth() {
           autoWidth
           label="Medico"
         >
-          <MenuItem value={20}>
-            Todos os Médicos
+          <MenuItem key={-1}value={-1}>
+            Qualquer Médico
           </MenuItem>
-          <MenuItem value={10}>Dr Fulano</MenuItem>
-          <MenuItem value={21}>Dr Ciclano</MenuItem>
-          <MenuItem value={22}>Dr Beltrano</MenuItem>
+          {props.medicos.map(
+            ( medico, key) => 
+              <MenuItem key={key} value={key}>{medico.nome}</MenuItem>
+            )}
         </Select>
       </FormControl>
     </div>
