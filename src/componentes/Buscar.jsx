@@ -14,12 +14,10 @@ export default function Buscar(props) {
     let entidade
     async function executaFuncao() {
         try {
-             entidade = await props.funcao(valorColuna).then(
-                (entidade) => {
-                    console.log(entidade.data)
-                    setTabela(entidade.data)
-                }
-             )
+            entidade = await props.funcao(valorColuna)
+            console.log(entidade.data)
+            setTabela(entidade.data)
+                
         } catch (error) {
             console.log(error)
             setTabela({})
