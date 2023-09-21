@@ -88,7 +88,7 @@ export function Cadastro() {
                                     required: 'CPF é obrigatório',
                                     pattern: {
                                         value: /[0-9]{11}/,
-                                        message: 'formato invalido'
+                                        message: 'Escreva os 11 números do CPF (apenas os números)'
                                     },
                                     maxLength:{
                                         value: 11,

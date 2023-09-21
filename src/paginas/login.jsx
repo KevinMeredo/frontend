@@ -46,7 +46,15 @@ export function Login(){
                                 required
                                 placeholder="Insira seu CPF"
                                 {...register('CPF', {
-                                    required: 'CPF é obrigatório'
+                                    required: 'CPF é obrigatório',
+                                    pattern: {
+                                        value: /[0-9]{11}/,
+                                        message: 'Escreva os 11 números do CPF (apenas os números)'
+                                    },
+                                    maxLength:{
+                                        value: 11,
+                                        message: "CPF invalido"
+                                    }
                                 })}
                             />
                             {errors.CPF && <Form.Control.Feedback type="invalid">{errors.CPF.message}</Form.Control.Feedback>}
