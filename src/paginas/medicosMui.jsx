@@ -96,6 +96,7 @@ export function MedicosMui() {
       return result
     } catch (error) {
       console.error(error);
+      return undefined
     }
   }
 

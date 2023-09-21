@@ -11,10 +11,22 @@ import FormEdit from './FormEdit';
 export default function Buscar(props) {
     const [valorColuna, setValorColuna] = React.useState('')
     const [tabela, setTabela] = React.useState({})
+    let entidade
     async function executaFuncao() {
-        const entidade = await props.funcao(valorColuna)
-        setTabela(entidade.data)
-        console.log(tabela)
+        try {
+             entidade = await props.funcao(valorColuna).then(
+                (entidade) => {
+                    console.log(entidade.data)
+                    setTabela(entidade.data)
+                }
+             )
+        } catch (error) {
+            console.log(error)
+            setTabela({})
+        } finally {
+            console.log(tabela)
+        }
+        
     }
 
     function mudaValor(valor) {

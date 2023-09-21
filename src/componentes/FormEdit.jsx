@@ -42,9 +42,21 @@ export default function FormEdit(props) {
   }
   const handleClickOpen = async () => {
     if (props.executa) {
-      await props.executa()
+      await props.executa().then(
+        
+      )
+      console.log(props)
     }
-    setOpen(true);
+    if(props.obj){
+      console.log(props)
+      if(Object.keys(props.obj).length !==0){
+        setOpen(true);
+      }
+    } else {
+      setOpen(true);
+    }
+
+    
   };
 
   const handleClose = async () => {

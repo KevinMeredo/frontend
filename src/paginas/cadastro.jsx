@@ -65,7 +65,7 @@ export function Cadastro() {
                                 {...register('nome', {
                                     required: 'Nome Completo é obrigatório',
                                     pattern: {
-                                        value: /^[a-zA-Z]+$/,
+                                        value: /^[a-zA-Z ]+$/,
                                         message: 'Use apenas Letras'
                                     }
                                 })}
@@ -87,8 +87,12 @@ export function Cadastro() {
                                 {...register('CPF', {
                                     required: 'CPF é obrigatório',
                                     pattern: {
-                                        value: /[0-9]{3}[.]?[0-9]{3}[.]?[0-9]{3}[-]?[0-9]{2}/,
+                                        value: /[0-9]{11}/,
                                         message: 'formato invalido'
+                                    },
+                                    maxLength:{
+                                        value: 11,
+                                        message: "CPF invalido"
                                     }
                                 })}
                             />
