@@ -72,6 +72,8 @@ export function Agenda() {
                 async (consulta) => {
                     console.log(consulta)
                     console.log('pacientes ', pacientes)
+                    if (pacientes.includes(consulta.CPF_Paciente))
+                        console.log(consulta,)
                 }
             )
             console.log("Antes do set", result.data);
@@ -105,6 +107,15 @@ export function Agenda() {
         } catch (error) {
             console.error(error);
         }
+    }
+    function findByName(nome){
+        const paciente = pacientes.filter(
+            function (paciente) {
+                console.log(paciente, nome)
+                return (paciente.nome === nome)
+            }
+        )
+        return paciente
     }
     async function findMedicos() {
         try {
@@ -166,7 +177,6 @@ export function Agenda() {
                     console.log(Dados, diasDaSemana)
                     return (diasDaSemana.includes(Dados.dia))
                 }
-
             ))
         console.log("consultas: ", consultas)
     };
@@ -206,7 +216,7 @@ export function Agenda() {
                     justifyContent="space-evenly"
                     alignItems="center"
                 >
-                    <Buscar coluna='Paciente'></Buscar>
+                    <Buscar noData funcao={findByName} coluna='Paciente'></Buscar>
 
                     <DropBox medicos={medicos}></DropBox>
                     <LocalizationProvider dateAdapter={AdapterDayjs}>

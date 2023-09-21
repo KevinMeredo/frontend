@@ -10,9 +10,10 @@ import ModalConfirmacao from '../componentes/ModalConfirmacao'
 export default function FormEdit(props) {
   const [open, setOpen] = React.useState(false);
   const [Dados, setDados] = React.useState({ id: '' })
+  const [tabela, setTabela] = React.useState({})
 
   let padrao
-
+  let chaves
   const mudaDado = async (mudanca, key, id) => {
     let novoDado = Dados
     novoDado['id'] = id
@@ -35,21 +36,35 @@ export default function FormEdit(props) {
     }
 
   }
-  if (props.obj) {
-    padrao = props.obj
+  if (tabela) {
+    if(props.noData){
+      padrao= tabela
+      console.log(padrao)
+    } else {
+      padrao = tabela
+    }
+
   } else {
     padrao = ''
   }
+  if(props.chaves){
+     chaves = props.chaves
+  } else {
+     chaves = Object.keys(tabela)
+  }
   const handleClickOpen = async () => {
     if (props.executa) {
-      await props.executa().then(
-        
-      )
+      let tabela = await props.executa()
+      setTabela(tabela)
+      console.log(tabela)
       console.log(props)
     }
-    if(props.obj){
+
+    if(Object.keys(tabela).length){
       console.log(props)
-      if(Object.keys(props.obj).length !==0){
+      console.log(tabela)
+      console.log(Object.keys(tabela).length)
+      if(Object.keys(tabela).length !==0){
         setOpen(true);
       }
     } else {
@@ -86,7 +101,7 @@ export default function FormEdit(props) {
       <Dialog open={open} onClose={handleClose}>
         <DialogTitle>{props.texto}</DialogTitle>
         <DialogContent>
-          {props.chaves && props.chaves.map((key) => {
+          {chaves.length !==0  && chaves.map((key) => {
             if (key !== props.ignore) {
               return (
                 <TextField
