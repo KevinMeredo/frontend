@@ -23,12 +23,14 @@ export default function DropBox(props) {
           autoWidth
           label="Medico"
         >
-          <MenuItem key={-1}value={-1}>
+          <MenuItem onClick={() =>props.setMedico({})} key={-1}value={-1}>
             Qualquer Médico
           </MenuItem>
           {props.medicos.map(
+            
             ( medico, key) => 
-              <MenuItem key={key} value={key}>{medico.nome}</MenuItem>
+              
+              <MenuItem onClick={() =>props.setMedico(medico)} key={key} value={key}>{medico.nome}</MenuItem>
             )}
         </Select>
       </FormControl>

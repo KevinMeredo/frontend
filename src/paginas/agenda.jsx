@@ -52,6 +52,7 @@ export function Agenda() {
         dia: "",
     }
     const [medicos, setMedicos] = useState([])
+    const [medico, setMedico] = useState({})
     const [pacientes, setPacientes] = useState([])
     const [Dados, setDados] = useState([])
     const [consultas, setConsultas] = useState([]);
@@ -104,7 +105,7 @@ export function Agenda() {
             console.error(error);
         }
     }
-    async function findByCPF(CPF) {
+/*     async function findByCPF(CPF) {
         try {
             const result = await getByCPF(CPF);
             console.log(result)
@@ -112,7 +113,7 @@ export function Agenda() {
         } catch (error) {
             console.error(error);
         }
-    }
+    } */
     function findByName(nome){
         const paciente = pacientes.filter(
             function (paciente) {
@@ -213,17 +214,18 @@ export function Agenda() {
     return (
         <>
             <Nav></Nav>
-            <Paper sx={{ my: 8, width: '100%', overflow: 'scroll' }}>
+            <Paper sx={{ mt: 10, width: '70%', height:'100%', overflow: 'scroll', maxWidth: 1400 }}>
 
                 <Grid
+                    sx={{mx: 4, gap:2} }
                     container
                     direction="row"
-                    justifyContent="space-evenly"
+                    justifyContent="start"
                     alignItems="center"
                 >
                     <Buscar noData funcao={findByName} coluna='Paciente'></Buscar>
 
-                    <DropBox medicos={medicos}></DropBox>
+                    <DropBox medicos={medicos} setMedico={setMedico}></DropBox>
                     <LocalizationProvider dateAdapter={AdapterDayjs}>
                         <DemoContainer components={['DatePicker']}>
                             <DatePicker
@@ -239,8 +241,8 @@ export function Agenda() {
                     <FormEdit funcao={addConsulta} ignore='id' icone={<PlusIcon />} getAll={findConsultas} chaves={Object.keys(estrutura)} texto='Adicionar Agendamento'> </FormEdit>
 
 
-                    <TableContainer sx={{ maxHeight: 440 }}>
-                        <Table stickyHeader aria-label="sticky table">
+                    <TableContainer sx={{  maxWidth: 1200 }}>
+                        <Table stickyHeader aria-label="sticky table" >
                             <TableHead>
                                 <TableRow>
                                     <TableCell align='center'> Domingo</TableCell>
@@ -255,15 +257,15 @@ export function Agenda() {
                             <TableBody>
                                 <TableRow>
                                     {diasDaSemana.map((dia) => {
-                                        console.log('Passou')
+                                        console.log("medico: ", medico)
                                         return (
                                             <TableCell key={dia} align='center'>
                                                 {consultas.map((consulta) => {
                                                     return (
-                                                        <Paper elevation={0}
+                                                        <Paper sx={{maxWidth: 8}} elevation={0}
                                                             key={consulta.id}
                                                         >
-                                                            {consulta.dia === dia && <FormEdit getAll={findConsultas} deletar={async () => removeConsulta(consulta.id)} funcao={editConsulta} ignore='id' obj={consulta} chaves={Object.keys(consulta)} texto={consulta.NomePaciente}></FormEdit>}
+                                                            {(consulta.dia === dia && (consulta.CRM_Medico === medico.CRM || !medico.CRM)) && <FormEdit getAll={findConsultas} deletar={async () => removeConsulta(consulta.id)} funcao={editConsulta} ignore='id' obj={consulta} chaves={Object.keys(consulta)} texto={consulta.NomePaciente}></FormEdit>}
                                                         </Paper>
                                                     )
                                                 })}

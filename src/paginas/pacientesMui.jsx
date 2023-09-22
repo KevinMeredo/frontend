@@ -139,12 +139,13 @@ async function removePaciente(id) {
   return (
     <>
     <Nav></Nav>
-    <Paper sx={{ my: 8, width: '100%', overflow: 'scroll'}}>
+    <Paper sx={{ mt: 10,  width: '70%',height:'100%', overflow: 'scroll' }}>
       
       <Grid
+        sx={{mx: 4, gap:2} }
         container
         direction="row"
-        justifyContent="space-evenly"
+        justifyContent="start"
         alignItems="center"
       >
           <Buscar coluna= 'CPF' funcao = {findByCPF} editar ={editPaciente} deletar={removePaciente}></Buscar>
@@ -192,6 +193,7 @@ async function removePaciente(id) {
         </Table>
       </TableContainer>
       <TablePagination
+        sx={{mb:2, position:'fixed', bottom:0}}
         rowsPerPageOptions={[10, 25, 100]}
         component="div"
         count={rows.length}
