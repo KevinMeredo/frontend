@@ -5,40 +5,31 @@ import SearchIcon from '@mui/icons-material/Search';
 import FormControl from '@mui/material/FormControl';
 import { FormHelperText } from '@mui/material';
 import FormEdit from './FormEdit';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogTitle from '@mui/material/DialogTitle';
+import Lista from './Lista';
+import { Button } from '@mui/material';
 
 
-export default function Buscar(props) {
+export default function BuscarLista(props) {
+    const [open, setOpen] = React.useState(false);
     const [valorColuna, setValorColuna] = React.useState('')
     let entidade
-    async function executaFuncao() {
-        try {
-            if (props.noData) {
-                entidade = await props.funcao(valorColuna)
-                console.log(entidade)
-
-                return(entidade)
-            } else {
-                entidade = await props.funcao(valorColuna)
-                console.log(entidade.data)
-                return (entidade.data)
-            }
-
-
-        } catch (error) {
-            console.log(error)
-            return undefined
-        } finally {
-
-        }
-
+    function AbreLista(){
+        setOpen(true);
     }
-
     function mudaValor(valor) {
         console.log(valor)
         console.log(props)
         setValorColuna(valor)
 
     }
+    const handleClose = async () => {
+          setOpen(false)
+      };
+    
     return (
         <Paper
             variant="outlined"
@@ -54,7 +45,17 @@ export default function Buscar(props) {
                         }} />
                 <FormHelperText />
             </FormControl>
-            <FormEdit  deletar={props.deletar} executa={executaFuncao} icone={<SearchIcon></SearchIcon>} funcao={props.editar} ignore='id'></FormEdit>
+            <Button onClick={AbreLista}><SearchIcon></SearchIcon></Button>
+            <Dialog open={open} onClose={handleClose}>
+                <DialogTitle>{props.texto}</DialogTitle>
+                    <DialogContent>
+                        <Lista></Lista>
+                    </DialogContent>
+                    <DialogActions>
+          <Button onClick={handleClose}>Fechar</Button>
+        </DialogActions>
+      </Dialog>
         </Paper>
     )
+
 }

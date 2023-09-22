@@ -26,6 +26,8 @@ import { useNavigate } from "react-router-dom";
 import { createConsulta, getConsultas, updateConsulta, deleteConsulta } from '../services/consulta-service';
 import { getByCPF, getPacientes } from '../services/paciente-service';
 import { getByCRM, getMedicos } from '../services/medico-service';
+import Lista from '../componentes/Lista';
+import BuscarLista from '../componentes/BuscarLista';
 
 
 const PlusIcon = createSvgIcon(
@@ -214,7 +216,7 @@ export function Agenda() {
     return (
         <>
             <Nav></Nav>
-            <Paper sx={{ mt: 10, width: '70%', height:'100%', overflow: 'scroll', maxWidth: 1400 }}>
+            <Paper sx={{ mt: 10, width: '70%', height:'100%', overflow: 'scroll', maxWidth: 1200 }}>
 
                 <Grid
                     sx={{mx: 4, gap:2} }
@@ -223,8 +225,8 @@ export function Agenda() {
                     justifyContent="start"
                     alignItems="center"
                 >
+                    <BuscarLista></BuscarLista>
                     <Buscar noData funcao={findByName} coluna='Paciente'></Buscar>
-
                     <DropBox medicos={medicos} setMedico={setMedico}></DropBox>
                     <LocalizationProvider dateAdapter={AdapterDayjs}>
                         <DemoContainer components={['DatePicker']}>
@@ -241,17 +243,17 @@ export function Agenda() {
                     <FormEdit funcao={addConsulta} ignore='id' icone={<PlusIcon />} getAll={findConsultas} chaves={Object.keys(estrutura)} texto='Adicionar Agendamento'> </FormEdit>
 
 
-                    <TableContainer sx={{  maxWidth: 1200 }}>
+                    <TableContainer sx={{  maxWidth: 1400 }}>
                         <Table stickyHeader aria-label="sticky table" >
                             <TableHead>
                                 <TableRow>
-                                    <TableCell align='center'> Domingo</TableCell>
-                                    <TableCell align='center'> Segunda</TableCell>
-                                    <TableCell align='center'> Terça</TableCell>
-                                    <TableCell align='center'> Quarta</TableCell>
-                                    <TableCell align='center'> Quinta</TableCell>
-                                    <TableCell align='center'> Sexta</TableCell>
-                                    <TableCell align='center'> Sábado</TableCell>
+                                    <TableCell justifyContent='center' align='center'> Domingo</TableCell>
+                                    <TableCell justifyContent='center' align='center'> Segunda</TableCell>
+                                    <TableCell justifyContent='center' align='center'> Terça</TableCell>
+                                    <TableCell justifyContent='center' align='center'> Quarta</TableCell>
+                                    <TableCell justifyContent='center' align='center'> Quinta</TableCell>
+                                    <TableCell justifyContent='center' align='center'> Sexta</TableCell>
+                                    <TableCell justifyContent='center' align='center'> Sábado</TableCell>
                                 </TableRow>
                             </TableHead>
                             <TableBody>
@@ -259,10 +261,10 @@ export function Agenda() {
                                     {diasDaSemana.map((dia) => {
                                         console.log("medico: ", medico)
                                         return (
-                                            <TableCell key={dia} align='center'>
+                                            <TableCell  justifyContent='center' sx={{  maxWidth: 100 }} key={dia} align='center'>
                                                 {consultas.map((consulta) => {
                                                     return (
-                                                        <Paper sx={{maxWidth: 8}} elevation={0}
+                                                        <Paper justifyContent='center' sx={{maxWidth: 200}} elevation={0}
                                                             key={consulta.id}
                                                         >
                                                             {(consulta.dia === dia && (consulta.CRM_Medico === medico.CRM || !medico.CRM)) && <FormEdit getAll={findConsultas} deletar={async () => removeConsulta(consulta.id)} funcao={editConsulta} ignore='id' obj={consulta} chaves={Object.keys(consulta)} texto={consulta.NomePaciente}></FormEdit>}
