@@ -155,7 +155,7 @@ export function MedicosMui() {
           alignItems="center"
         >
           <Buscar funcao={findByCRM} editar ={editMedico} deletar={removeMedico} coluna='CRM' > </Buscar>
-          <FormEdit funcao={addMedico}  ignore='id' icone={<PlusIcon />} chaves={Object.keys(estrutura)} texto='Adicionar Medico'> </FormEdit>
+          <FormEdit noData funcao={addMedico}  ignore='id' icone={<PlusIcon />} chaves={Object.keys(estrutura)} texto='Adicionar Medico'> </FormEdit>
         </Grid>
 
         <TableContainer sx={{ maxHeight: 440 }}>

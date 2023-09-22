@@ -147,7 +147,7 @@ async function removePaciente(id) {
         justifyContent="space-evenly"
         alignItems="center"
       >
-          <Buscar coluna= 'CPF' funcao = {findByCPF}></Buscar>
+          <Buscar coluna= 'CPF' funcao = {findByCPF} editar ={editPaciente} deletar={removePaciente}></Buscar>
         <FormEdit funcao = {addPaciente} ignore='id' icone = {<PlusIcon />} chaves={Object.keys(estrutura)} texto='Adicionar Paciente'> </FormEdit>
       
       <TableContainer sx={{ maxHeight: 440}}>

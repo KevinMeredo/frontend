@@ -14,6 +14,7 @@ export default function FormEdit(props) {
 
   let padrao
   let chaves
+  let podeAbrir = true
   const mudaDado = async (mudanca, key, id) => {
     let novoDado = Dados
     novoDado['id'] = id
@@ -36,21 +37,40 @@ export default function FormEdit(props) {
     }
 
   }
+  
   if (tabela) {
-    if(props.noData){
-      padrao= tabela
+    if (props.noData) {
+      padrao = tabela
       console.log(padrao)
+    } else if (props.obj) {
+
+      padrao = props.obj
+      console.log(padrao, props)
     } else {
+      console.log('sem obj')
       padrao = tabela
     }
 
   } else {
+    console.log('não tem tabela')
     padrao = ''
   }
-  if(props.chaves){
-     chaves = props.chaves
+  if (props.chaves) {
+    console.log('podeAbrir')
+    chaves = props.chaves
+    podeAbrir = true
   } else {
-     chaves = Object.keys(tabela)
+    try{
+      chaves = Object.keys(tabela)
+      console.log('podeAbrir')
+      podeAbrir = true
+    } 
+    catch (error) {
+      console.log("ERRO: ",error)
+      chaves = ''
+      console.log('naopodeAbrir')
+      podeAbrir = false
+    }
   }
   const handleClickOpen = async () => {
     if (props.executa) {
@@ -58,20 +78,22 @@ export default function FormEdit(props) {
       setTabela(tabela)
       console.log(tabela)
       console.log(props)
+    
     }
 
-    if(Object.keys(tabela).length){
+    if (tabela!=undefined && Object.keys(tabela).length != 0) {
       console.log(props)
       console.log(tabela)
       console.log(Object.keys(tabela).length)
-      if(Object.keys(tabela).length !==0){
+      if (Object.keys(tabela).length !== 0 && podeAbrir) {
+        console.log( 'abriu')
         setOpen(true);
       }
-    } else {
+    } else if(podeAbrir){
+      console.log( 'abriu')
       setOpen(true);
     }
-
-    
+  
   };
 
   const handleClose = async () => {
@@ -101,7 +123,7 @@ export default function FormEdit(props) {
       <Dialog open={open} onClose={handleClose}>
         <DialogTitle>{props.texto}</DialogTitle>
         <DialogContent>
-          {chaves.length !==0  && chaves.map((key) => {
+          {chaves.length !== 0 && chaves.map((key) => {
             if (key !== props.ignore) {
               return (
                 <TextField

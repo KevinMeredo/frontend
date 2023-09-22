@@ -54,7 +54,7 @@ export default function Buscar(props) {
                         }} />
                 <FormHelperText />
             </FormControl>
-            <FormEdit noData={props.noData} deletar={props.deletar} executa={executaFuncao} icone={<SearchIcon></SearchIcon>} funcao={props.editar} ignore='id'></FormEdit>
+            <FormEdit  deletar={props.deletar} executa={executaFuncao} icone={<SearchIcon></SearchIcon>} funcao={props.editar} ignore='id'></FormEdit>
         </Paper>
     )
 }

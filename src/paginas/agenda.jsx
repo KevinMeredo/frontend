@@ -72,8 +72,13 @@ export function Agenda() {
                 async (consulta) => {
                     console.log(consulta)
                     console.log('pacientes ', pacientes)
-                    if (pacientes.includes(consulta.CPF_Paciente))
-                        console.log(consulta,)
+                    pacientes.map(
+                       (paciente) => {
+                        if (paciente.CPF === consulta.CPF_Paciente)
+                            consulta.NomePaciente = paciente.nome
+                       } 
+                    )
+                    
                 }
             )
             console.log("Antes do set", result.data);
@@ -258,7 +263,7 @@ export function Agenda() {
                                                         <Paper elevation={0}
                                                             key={consulta.id}
                                                         >
-                                                            {consulta.dia === dia && <FormEdit getAll={findConsultas} deletar={async () => removeConsulta(consulta.id)} funcao={editConsulta} ignore='id' obj={consulta} chaves={Object.keys(consulta)} texto={consulta.dia}></FormEdit>}
+                                                            {consulta.dia === dia && <FormEdit getAll={findConsultas} deletar={async () => removeConsulta(consulta.id)} funcao={editConsulta} ignore='id' obj={consulta} chaves={Object.keys(consulta)} texto={consulta.NomePaciente}></FormEdit>}
                                                         </Paper>
                                                     )
                                                 })}
