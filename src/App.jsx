@@ -5,7 +5,7 @@ import { Login } from './paginas/login';
 import { RecuperaSenha } from './paginas/recuperaSenha';
 import { PacientesMui } from './paginas/pacientesMui';
 import { MedicosMui } from './paginas/medicosMui';
-import { Painel } from './paginas/painel';
+import { Painel } from './paginas/Painel';
 import { isAuthenticated } from './utils/is-authenticated';
 
 
