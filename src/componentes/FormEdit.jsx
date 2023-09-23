@@ -6,6 +6,11 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import ModalConfirmacao from '../componentes/ModalConfirmacao'
+import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import dayjs from 'dayjs';
 
 export default function FormEdit(props) {
   const [open, setOpen] = React.useState(false);
@@ -16,12 +21,13 @@ export default function FormEdit(props) {
   let chaves
   let podeAbrir = true
   const mudaDado = async (mudanca, key, id) => {
+    console.log(mudanca, key, id)
     let novoDado = Dados
     novoDado['id'] = id
     if (Object.keys(Dados).length !== 0) {
       console.log(Dados)
       Object.keys(Dados).forEach((chave) => {
-        if (chave == key) {
+        if (chave === key) {
           novoDado[chave] = mudanca
         } else if (novoDado[key]) {
           novoDado[chave] = Dados[chave]
@@ -37,7 +43,7 @@ export default function FormEdit(props) {
     }
 
   }
-  
+
   if (tabela) {
     if (props.noData) {
       padrao = tabela
@@ -60,13 +66,13 @@ export default function FormEdit(props) {
     chaves = props.chaves
     podeAbrir = true
   } else {
-    try{
+    try {
       chaves = Object.keys(tabela)
       console.log('podeAbrir')
       podeAbrir = true
-    } 
+    }
     catch (error) {
-      console.log("ERRO: ",error)
+      console.log("ERRO: ", error)
       chaves = ''
       console.log('naopodeAbrir')
       podeAbrir = false
@@ -78,22 +84,22 @@ export default function FormEdit(props) {
       setTabela(tabela)
       console.log(tabela)
       console.log(props)
-    
+
     }
 
-    if (tabela!=undefined && Object.keys(tabela).length != 0) {
+    if (tabela !== undefined && Object.keys(tabela).length !== 0) {
       console.log(props)
       console.log(tabela)
       console.log(Object.keys(tabela).length)
       if (Object.keys(tabela).length !== 0 && podeAbrir) {
-        console.log( 'abriu')
+        console.log('abriu')
         setOpen(true);
       }
-    } else if(podeAbrir){
-      console.log( 'abriu')
+    } else if (podeAbrir) {
+      console.log('abriu')
       setOpen(true);
     }
-  
+
   };
 
   const handleClose = async () => {
@@ -124,9 +130,28 @@ export default function FormEdit(props) {
         <DialogTitle>{props.texto}</DialogTitle>
         <DialogContent>
           {chaves.length !== 0 && chaves.map((key) => {
-            if (key !== props.ignore) {
+            if(key === 'CPF'){
               return (
                 <TextField
+                  
+                  key={key}
+                  inputProps={{ inputMode: 'numeric', pattern: '[0-9]*' }}
+                  autoFocus
+                  margin='dense'
+                  id={key}
+                  label={key}
+                  defaultValue={padrao[key]}
+                  fullWidth
+                  variant='standard'
+                  onChange={(event) => {
+                    mudaDado(event.target.value, key, padrao[props.ignore]);
+                  }}
+                ></TextField>
+              )
+            }    else if (key !== props.ignore && key !== 'nascimento' && key !== 'dia' ) {
+              return (
+                <TextField
+                  
                   key={key}
                   autoFocus
                   margin='dense'
@@ -140,8 +165,23 @@ export default function FormEdit(props) {
                   }}
                 ></TextField>
               )
-            }
+            } else if (key !== props.ignore) {
+              return (
+                <LocalizationProvider  key={key+'2'} dateAdapter={AdapterDayjs}>
+                  <DemoContainer key={key+'1'} components={['DatePicker']}>
+                    <DatePicker
+                    label={key}
+                    key={key}
+                      onChange={(value) => {
+                        mudaDado(value, key, padrao[props.ignore]);
+                      }}
+                      defaultValue={dayjs(padrao[key])}
+                    />
+                  </DemoContainer>
+                </LocalizationProvider>
+              )
 
+            }
 
           })}
         </DialogContent>
