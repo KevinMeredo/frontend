@@ -38,7 +38,7 @@ export default function BuscarLista(props) {
             sx={{ p: '2px 4px', display: 'flex', boxShadow: 0, alignItems: 'center', maxWidth: 300 }}
         >
             <FormControl defaultValue="" >
-                <InputBase placeholder={`Busca por ${props.coluna}`}
+                <InputBase placeholder={`Busca por Paciente`}
                     onChange={
                         (event) => {
                             mudaValor(event.target.value);

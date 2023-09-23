@@ -247,13 +247,13 @@ export function Agenda() {
                         <Table stickyHeader aria-label="sticky table" >
                             <TableHead>
                                 <TableRow>
-                                    <TableCell justifyContent='center' align='center'> Domingo</TableCell>
-                                    <TableCell justifyContent='center' align='center'> Segunda</TableCell>
-                                    <TableCell justifyContent='center' align='center'> Terça</TableCell>
-                                    <TableCell justifyContent='center' align='center'> Quarta</TableCell>
-                                    <TableCell justifyContent='center' align='center'> Quinta</TableCell>
-                                    <TableCell justifyContent='center' align='center'> Sexta</TableCell>
-                                    <TableCell justifyContent='center' align='center'> Sábado</TableCell>
+                                    <TableCell align='center'> Domingo</TableCell>
+                                    <TableCell align='center'> Segunda</TableCell>
+                                    <TableCell align='center'> Terça</TableCell>
+                                    <TableCell align='center'> Quarta</TableCell>
+                                    <TableCell align='center'> Quinta</TableCell>
+                                    <TableCell align='center'> Sexta</TableCell>
+                                    <TableCell align='center'> Sábado</TableCell>
                                 </TableRow>
                             </TableHead>
                             <TableBody>
@@ -261,10 +261,10 @@ export function Agenda() {
                                     {diasDaSemana.map((dia) => {
                                         console.log("medico: ", medico)
                                         return (
-                                            <TableCell  justifyContent='center' sx={{  maxWidth: 100 }} key={dia} align='center'>
+                                            <TableCell   sx={{  maxWidth: 100 }} key={dia} align='center'>
                                                 {consultas.map((consulta) => {
                                                     return (
-                                                        <Paper justifyContent='center' sx={{maxWidth: 200}} elevation={0}
+                                                        <Paper sx={{maxWidth: 200}} elevation={0}
                                                             key={consulta.id}
                                                         >
                                                             {(consulta.dia === dia && (consulta.CRM_Medico === medico.CRM || !medico.CRM)) && <FormEdit getAll={findConsultas} deletar={async () => removeConsulta(consulta.id)} funcao={editConsulta} ignore='id' obj={consulta} chaves={Object.keys(consulta)} texto={consulta.NomePaciente}></FormEdit>}

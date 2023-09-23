@@ -78,7 +78,7 @@ export function Login(){
                             {errors.senha && <Form.Control.Feedback type="invalid">{errors.senha.message}</Form.Control.Feedback>}
                         </Form.Group>
                     </Row>
-                    <Row className='mb-3'> <a href='/recuperaSenha' class="text-danger">Esqueceu sua senha?</a></Row>
+                    <Row className='mb-3'> <a href='/recuperaSenha' className="text-danger">Esqueceu sua senha?</a></Row>
                     <Row className=' display-flex justify-content-center align-items-center w-100'>
                       <Button className='w-50 position' type="submit">Entrar</Button>
                     </Row>

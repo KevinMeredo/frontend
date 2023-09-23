@@ -11,6 +11,7 @@ import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
+import { Navigate } from 'react-router-dom';
 import '../App.css'
 
 const pages = ['Pacientes', 'Medicos', 'Agenda', 'Painel'];
@@ -153,11 +154,20 @@ export function Nav() {
 
 
               ))}
-              <MenuItem>
-                <Button href='/' onClick={() => {
-                  sessionStorage.removeItem('token');
-                }}>
-                  Logout
+              <MenuItem sx={{ width: '100%' }} onClick={() => {
+                sessionStorage.removeItem('token');
+                handleCloseUserMenu()
+              }}>
+                <Button
+                  key='sair'
+                  href={`/`}
+                  onClick={() => {
+                    sessionStorage.removeItem('token');
+                    handleCloseUserMenu()
+                  }}
+                  sx={{ width:'100%', color: 'inherit', display: 'block' }}
+                >
+                  Sair
                 </Button>
               </MenuItem>
             </Menu>
@@ -165,5 +175,6 @@ export function Nav() {
         </Toolbar>
       </Container>
     </AppBar>
+
   );
 }
