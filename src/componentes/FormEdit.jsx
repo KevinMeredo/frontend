@@ -11,11 +11,15 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import dayjs from 'dayjs';
+import { FormHelperText } from '@mui/material';
 
 export default function FormEdit(props) {
   const [open, setOpen] = React.useState(false);
   const [Dados, setDados] = React.useState({ id: '' })
   const [tabela, setTabela] = React.useState({})
+  const [error, setError] = React.useState(false); // State to track error
+
+  const numericPattern = /^[0-9]*$/; // Regular expression for numeric input only
 
   let padrao
   let chaves
@@ -34,12 +38,33 @@ export default function FormEdit(props) {
         } else {
           novoDado[key] = mudanca
         }
-        setDados(novoDado)
+        console.log(novoDado)
+        if(key ==='CPF' || key ==='CPF_Paciente'){
+          if ((numericPattern.test(novoDado[key]) && VerificaCPF(novoDado[key])) || novoDado === '' ) {
+            console.log(novoDado)
+            setDados(novoDado)
+            setError(false); // Clear the error if input is valid
+          } else {
+            setError(true)
+          }
+        }else {
+          setDados(novoDado)
+        }
+        
       })
     } else {
-      novoDado[key] = mudanca
-      setDados(novoDado)
-      console.log(Dados)
+      console.log(novoDado)
+      if(key ==='CPF' || key ==='CPF_Paciente'){
+        if (numericPattern.test(novoDado[key]  && VerificaCPF(novoDado[key])) || novoDado === '' ) {
+          console.log(novoDado)
+          setDados(novoDado)
+          setError(false); // Clear the error if input is valid
+        } else {
+          setError(true)
+        }
+      }else {
+        setDados(novoDado)
+      }
     }
 
   }
@@ -78,6 +103,50 @@ export default function FormEdit(props) {
       podeAbrir = false
     }
   }
+  function VerificaCPF(CPF) {
+
+    var soma;
+    var resto;
+    soma = 0;
+    if (CPF === "00000000000") {
+        return false;
+    }
+    
+    for (let i = 1; i <= 9; i++) {
+        soma = soma + parseInt(CPF.substring(i - 1, i)) * (11 - i);
+    }
+    
+    resto = soma % 11;
+    
+    if (resto === 10 || resto === 11 || resto < 2) {
+        resto = 0;
+    } else {
+        resto = 11 - resto;
+    }
+    
+    if (resto !== parseInt(CPF.substring(9, 10))) {
+        return false;
+    }
+    
+    soma = 0;
+    
+    for (let i = 1; i <= 10; i++) {
+        soma = soma + parseInt(CPF.substring(i - 1, i)) * (12 - i);
+    }
+    resto = soma % 11;
+    
+    if (resto === 10 || resto === 11 || resto < 2) {
+        resto = 0;
+    } else {
+        resto = 11 - resto;
+    }
+    
+    if (resto !== parseInt(CPF.substring(10, 11))) {
+        return false;
+    }
+    
+    return true;
+    }
   const handleClickOpen = async () => {
     if (props.executa) {
       let tabela = await props.executa()
@@ -115,9 +184,12 @@ export default function FormEdit(props) {
   };
 
   const ExecutaEFecha = async () => {
-    console.log(props)
-    await props.funcao(Dados)
-    await handleClose()
+    if(!error){
+      console.log(props)
+      await props.funcao(Dados)
+      await handleClose()
+    }
+    
   }
 
   return (
@@ -130,12 +202,37 @@ export default function FormEdit(props) {
         <DialogTitle>{props.texto}</DialogTitle>
         <DialogContent>
           {chaves.length !== 0 && chaves.map((key) => {
-            if(key === 'CPF'){
+            if(key === 'CPF' || key ==='CPF_Paciente'){
+              return (
+                <>
+                <TextField
+                  
+                  key={key}
+                  InputProps={{
+                    inputProps: {
+                      pattern: '[0-9]*',
+                    },
+                  }}
+                  autoFocus
+                  margin='dense'
+                  id={key}
+                  label={key}
+                  defaultValue={padrao[key]}
+                  fullWidth
+                  error={error} // Set the error state
+                  variant='standard'
+                  onChange={(event) => {
+                    mudaDado(event.target.value, key, padrao[props.ignore]);
+                  }}
+                ></TextField>
+                {error && <FormHelperText error>CPF invalido.</FormHelperText>}
+                </>
+              )
+            }    else if (key !== props.ignore && key !== 'nascimento' && key !== 'dia' && padrao[key] !== props.texto ) {
               return (
                 <TextField
                   
                   key={key}
-                  inputProps={{ inputMode: 'numeric', pattern: '[0-9]*' }}
                   autoFocus
                   margin='dense'
                   id={key}
@@ -148,24 +245,7 @@ export default function FormEdit(props) {
                   }}
                 ></TextField>
               )
-            }    else if (key !== props.ignore && key !== 'nascimento' && key !== 'dia' ) {
-              return (
-                <TextField
-                  
-                  key={key}
-                  autoFocus
-                  margin='dense'
-                  id={key}
-                  label={key}
-                  defaultValue={padrao[key]}
-                  fullWidth
-                  variant='standard'
-                  onChange={(event) => {
-                    mudaDado(event.target.value, key, padrao[props.ignore]);
-                  }}
-                ></TextField>
-              )
-            } else if (key !== props.ignore) {
+            } else if (key !== props.ignore  && padrao[key] !== props.texto ) {
               return (
                 <LocalizationProvider  key={key+'2'} dateAdapter={AdapterDayjs}>
                   <DemoContainer key={key+'1'} components={['DatePicker']}>
