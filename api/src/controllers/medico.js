@@ -9,15 +9,15 @@ class MedicoController {
             const { CPF, CRM, nascimento, nome, naturalidade, email } = request.body;
             if (!CPF) return httpHelper.badRequest('CPF inválido!');
 
-            if (!CRM)  return httpHelper.badRequest('CRM inválido!');
+            if (!CRM) return httpHelper.badRequest('CRM inválido!');
 
-            if (!nascimento)  return httpHelper.badRequest('Data de nascimento inválido!');
+            if (!nascimento) return httpHelper.badRequest('Data de nascimento inválido!');
 
-            if (!nome)  return httpHelper.badRequest('Nome inválido!');
+            if (!nome) return httpHelper.badRequest('Nome inválido!');
 
-            if (!naturalidade)  return httpHelper.badRequest('Naturalidade inválida!');
+            if (!naturalidade) return httpHelper.badRequest('Naturalidade inválida!');
 
-            if (!email)  return httpHelper.badRequest('Email inválido!');
+            if (!email) return httpHelper.badRequest('Email inválido!');
 
             const medico = await MedicoModel.create({
                 CPF, CRM, nascimento, nome, email, naturalidade
@@ -40,12 +40,12 @@ class MedicoController {
     async getByCRM(request, response) {
         const httpHelper = new HttpHelper(response);
         try {
-            const medico = await MedicoModel.findOne({ where: { CRM: request.params.CRM} })
-            if(medico){
+            const medico = await MedicoModel.findOne({ where: { CRM: request.params.CRM } })
+            if (medico) {
                 return httpHelper.ok(medico);
             }
             return httpHelper.notFound("Medico não encontrado")
-                }   catch (error) {
+        } catch (error) {
             return httpHelper.internalError(error);
         }
     }
@@ -56,7 +56,7 @@ class MedicoController {
             if (!id) return httpHelper.badRequest('Parâmetros inválidos!');
             const medicoExiste = await MedicoModel.findOne({ where: { id } });
             if (!medicoExiste) return httpHelper.notFound('Medico não encontrado!');
-            const temConsulta = await ConsultaModel.findOne({where: {CRM_Medico: medicoExiste.CRM }})
+            const temConsulta = await ConsultaModel.findOne({ where: { CRM_Medico: medicoExiste.CRM } })
             if (temConsulta) return httpHelper.badRequest('Não pode deletar Médico com consultas registradas!');
             await MedicoModel.destroy({ where: { id } });
             return httpHelper.ok({
@@ -73,7 +73,7 @@ class MedicoController {
             const { id } = request.params;
             const { CPF, CRM, nascimento, nome, naturalidade, email } = request.body;
             if (!id) return httpHelper.badRequest('Parâmetros inválidos!');
-            
+
             const MedicoExiste = await MedicoModel.findByPk(id);
             if (!MedicoExiste) return httpHelper.notFound('medico não encontrado!');
             await MedicoModel.update({

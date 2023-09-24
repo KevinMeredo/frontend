@@ -30,7 +30,11 @@ routes.get('/consultas', authMiddleware, consultaController.getAll);
 routes.delete('/consulta/:id', authMiddleware, consultaController.delete);
 routes.put('/consulta/:id', authMiddleware, consultaController.update);
 
+routes.get('/user', authMiddleware, userController.getOne)
+routes.put('/user/:id', authMiddleware, userController.update)
+routes.delete('/user/:id', authMiddleware, userController.delete)
 routes.post('/register', userController.register);
 routes.post('/login', userController.login);
+
 
 module.exports = { routes };

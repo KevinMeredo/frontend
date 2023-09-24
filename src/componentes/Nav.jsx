@@ -147,17 +147,20 @@ export function Nav() {
               open={Boolean(anchorElUser)}
               onClose={handleCloseUserMenu}
             >
-              {settings.map((setting) => (
-                <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                  <Typography textAlign="center">{setting}</Typography>
+                <MenuItem key={1}>
+                <Button
+                  key='Perfil'
+                  href={`/EditarPerfil`}
+                  onClick={() => {
+                    handleCloseUserMenu()
+                  }}
+                  sx={{ width:'100%', color: 'inherit', display: 'block' }}
+                >
+                  Perfil
+                </Button>
                 </MenuItem>
 
-
-              ))}
-              <MenuItem sx={{ width: '100%' }} onClick={() => {
-                sessionStorage.removeItem('token');
-                handleCloseUserMenu()
-              }}>
+              <MenuItem key={2} sx={{ width: '100%' }}>
                 <Button
                   key='sair'
                   href={`/`}

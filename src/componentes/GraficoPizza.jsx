@@ -3,20 +3,19 @@ import { Chart } from "react-google-charts";
 
 export const data = [
   ["Task", "Hours per Day"],
-  ["Work", 11],
-  ["Eat", 2],
-  ["Commute", 2],
-  ["Watch TV", 2],
-  ["Sleep", 7],
+  ["Trabalhando hoje", 11],
+  ["Trabalhando essa semana", 2],
+  ["de Folga essa Semana", 2],
 ];
 
 export const options = {
-  title: "My Daily Activities",
+  title: "Medicos em Serviço",
 };
 
 export function GraficoPizza() {
   return (
     <Chart
+      
       chartType="PieChart"
       data={data}
       options={options}

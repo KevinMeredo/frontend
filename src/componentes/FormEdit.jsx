@@ -39,7 +39,7 @@ export default function FormEdit(props) {
         }
         console.log(novoDado)
         if (key === 'CPF' || key === 'CPF_Paciente') {
-          if (VerificaCPF(novoDado[key]) || novoDado === '') {
+          if ((numericPattern.test(novoDado[key]) && VerificaCPF(novoDado[key])) || novoDado === '') {
             console.log(novoDado)
             setDados(novoDado)
             setError(false); // Clear the error if input is valid
@@ -237,7 +237,7 @@ export default function FormEdit(props) {
                       mudaDado(event.target.value, key, padrao[props.ignore]);
                     }}
                   ></TextField>
-                  {error && <FormHelperText error>CPF invalido.</FormHelperText>}
+                  {error && <FormHelperText error>CPF invalido, escreva apenas os 11 números  do CPF</FormHelperText>}
                 </>
               )
             } else if (key !== props.ignore && key !== 'nascimento' && key !== 'dia' && padrao[key] !== props.texto) {
