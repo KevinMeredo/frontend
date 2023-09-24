@@ -3,6 +3,7 @@
     flex-direction: column;
     justify-content: center;
     display: flex;
+    margin-top: 64px;
 }
 .coluna60 {
     width: 60%;

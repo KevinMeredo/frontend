@@ -102,9 +102,11 @@ class UserController {
     }
     async getOne(request, response) {
         const httpHelper = new HttpHelper(response);
+        console.log(request)
         try {
             const { token } = request.body
             const decoded = jwt.verify(token, process.env.TOKEN_SECRET);
+            console.log(decoded)
             var userId = decoded.id
             const user = await UserModel.findByPk( userId )
             if (user) {

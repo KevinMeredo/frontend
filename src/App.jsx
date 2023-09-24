@@ -7,6 +7,7 @@ import { PacientesMui } from './paginas/pacientesMui';
 import { MedicosMui } from './paginas/medicosMui';
 import { Painel } from './paginas/Painel';
 import { isAuthenticated } from './utils/is-authenticated';
+import { EditarPerfil } from './paginas/editarPerfil';
 
 
 export function PrivateRoute({ children }) {
@@ -25,11 +26,17 @@ export default function App() {
         <Route index path="/" element={<Login />} />
         <Route exact path='/Cadastro' element={<Cadastro />} />
         <Route exact path='/RecuperaSenha' element={<RecuperaSenha />} />
+        <Route exact path='/EditarPerfil' element={(
+          <PrivateRoute>
+            <EditarPerfil />
+          </PrivateRoute>
+        )} />
         <Route exact path='/Pacientes' element={(
           <PrivateRoute>
             <PacientesMui />
           </PrivateRoute>
         )} />
+        
         <Route exact path='/Medicos' element={(
           <PrivateRoute>
             <MedicosMui />
