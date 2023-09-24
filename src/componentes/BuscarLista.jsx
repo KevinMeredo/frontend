@@ -16,7 +16,6 @@ import { Button } from '@mui/material';
 export default function BuscarLista(props) {
     const [open, setOpen] = React.useState(false);
     const [valorColuna, setValorColuna] = React.useState('')
-    let entidade
     function AbreLista(){
         setOpen(true);
     }
@@ -49,7 +48,7 @@ export default function BuscarLista(props) {
             <Dialog open={open} onClose={handleClose}>
                 <DialogTitle>{props.texto}</DialogTitle>
                     <DialogContent>
-                        <Lista></Lista>
+                        <Lista nome = {valorColuna}></Lista>
                     </DialogContent>
                     <DialogActions>
           <Button onClick={handleClose}>Fechar</Button>

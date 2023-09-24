@@ -21,7 +21,6 @@ import * as React from 'react';
 import '../App.css'
 
 import { useEffect, useState } from "react";
-import Buscar from '../componentes/Buscar';
 import { useNavigate } from "react-router-dom";
 import { createConsulta, getConsultas, updateConsulta, deleteConsulta } from '../services/consulta-service';
 import { getByCPF, getPacientes } from '../services/paciente-service';
@@ -92,7 +91,6 @@ export function Agenda() {
             console.log(pacientes)
         } catch (error) {
             console.error(error);
-            navigate('/');
         }
 
     }
@@ -116,15 +114,7 @@ export function Agenda() {
             console.error(error);
         }
     } */
-    function findByName(nome){
-        const paciente = pacientes.filter(
-            function (paciente) {
-                console.log(paciente, nome)
-                return (paciente.nome === nome)
-            }
-        )
-        return paciente
-    }
+
     async function findMedicos() {
         try {
             const result = await getMedicos();
@@ -225,8 +215,7 @@ export function Agenda() {
                     justifyContent="start"
                     alignItems="center"
                 >
-                    <BuscarLista></BuscarLista>
-                    <Buscar noData funcao={findByName} coluna='Paciente'></Buscar>
+                    <BuscarLista  ></BuscarLista>
                     <DropBox medicos={medicos} setMedico={setMedico}></DropBox>
                     <LocalizationProvider dateAdapter={AdapterDayjs}>
                         <DemoContainer components={['DatePicker']}>
