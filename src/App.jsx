@@ -2,7 +2,6 @@ import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import { Agenda } from './paginas/agenda'
 import { Cadastro } from './paginas/cadastro';
 import { Login } from './paginas/login';
-import { RecuperaSenha } from './paginas/recuperaSenha';
 import { PacientesMui } from './paginas/pacientesMui';
 import { MedicosMui } from './paginas/medicosMui';
 import { Painel } from './paginas/Painel';
@@ -25,7 +24,6 @@ export default function App() {
       <Routes >
         <Route index path="/" element={<Login />} />
         <Route exact path='/Cadastro' element={<Cadastro />} />
-        <Route exact path='/RecuperaSenha' element={<RecuperaSenha />} />
         <Route exact path='/EditarPerfil' element={(
           <PrivateRoute>
             <EditarPerfil />

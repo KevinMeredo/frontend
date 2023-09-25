@@ -25,7 +25,6 @@ import { useNavigate } from "react-router-dom";
 import { createConsulta, getConsultas, updateConsulta, deleteConsulta } from '../services/consulta-service';
 import { getByCPF, getPacientes } from '../services/paciente-service';
 import { getByCRM, getMedicos } from '../services/medico-service';
-import Lista from '../componentes/Lista';
 import BuscarLista from '../componentes/BuscarLista';
 
 

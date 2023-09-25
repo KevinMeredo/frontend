@@ -15,9 +15,7 @@ export async function getUser() {
     const accessToken = sessionStorage.getItem('token');
     
     console.log(JSON.parse(accessToken))
-    const result = await api.get('/user', {
-            token: accessToken
-        }, {
+    const result = await api.get('/user',{
         headers: {
             'Authorization': `Bearer ${JSON.parse(accessToken)}`
         }
@@ -40,12 +38,13 @@ export async function updateUser(data) {
     });
     return result;
 }
-export async function deleteUser(id) {
+export async function deleteUser() {
     const accessToken = sessionStorage.getItem('token');
-    const result = await api.delete(`/user/${id}`, {
+    const result = await api.delete(`/user`, {
         headers: {
             'Authorization': `Bearer ${JSON.parse(accessToken)}`
         }
     });
+    console.log(result)
     return result;
 }

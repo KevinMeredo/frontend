@@ -65,7 +65,10 @@ class UserController {
             if (!UserExiste) return httpHelper.notFound('Usuário não encontrado!');
             if (email) {
                 const userAlreadyExists = await UserModel.findOne({ where: { email } });
-                if (userAlreadyExists) return httpHelper.badRequest('E-mail de usuário já cadastrado!');
+                if (userAlreadyExists && userAlreadyExists.id !==UserExiste.id){
+                    console.log(userAlreadyExists,UserExiste)
+                    return httpHelper.badRequest('E-mail de usuário já cadastrado!');
+                } 
             }
             let passwordHashed
             if (senha) {
@@ -88,11 +91,14 @@ class UserController {
     async delete(request, response) {
         const httpHelper = new HttpHelper(response);
         try {
-            const { id } = request.params;
-            if (!id) return httpHelper.badRequest('Id não informado!');
-            const UserExiste = await UserModel.findOne({ where: { id } });
+            const token  = request.headers.authorization.split(' ')[1]
+            const decoded = jwt.verify(token, process.env.TOKEN_SECRET);
+            console.log(decoded)
+            var userId = decoded.id
+            if (!userId) return httpHelper.badRequest('Id não informado!');
+            const UserExiste = await UserModel.findOne({ where: { id: userId } });
             if (!UserExiste) return httpHelper.notFound('Usuário não encontrado!');
-            await UserModel.destroy({ where: { id } });
+            await UserModel.destroy({ where: { id: userId } });
             return httpHelper.ok({
                 message: 'Usuário deletado com sucesso!'
             })
@@ -104,7 +110,7 @@ class UserController {
         const httpHelper = new HttpHelper(response);
         console.log(request)
         try {
-            const { token } = request.body
+            const token  = request.headers.authorization.split(' ')[1]
             const decoded = jwt.verify(token, process.env.TOKEN_SECRET);
             console.log(decoded)
             var userId = decoded.id

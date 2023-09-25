@@ -32,7 +32,7 @@ routes.put('/consulta/:id', authMiddleware, consultaController.update);
 
 routes.get('/user', authMiddleware, userController.getOne)
 routes.put('/user/:id', authMiddleware, userController.update)
-routes.delete('/user/:id', authMiddleware, userController.delete)
+routes.delete('/user', authMiddleware, userController.delete)
 routes.post('/register', userController.register);
 routes.post('/login', userController.login);
 
