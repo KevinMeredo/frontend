@@ -5,6 +5,7 @@ import SearchIcon from '@mui/icons-material/Search';
 import FormControl from '@mui/material/FormControl';
 import { FormHelperText } from '@mui/material';
 import FormEdit from './FormEdit';
+import ERRO from '../componentes/ERRO';
 
 
 export default function Buscar(props) {

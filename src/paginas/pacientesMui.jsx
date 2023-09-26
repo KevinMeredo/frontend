@@ -13,6 +13,7 @@ import Buscar from '../componentes/Buscar';
 import Grid from '@mui/material/Grid'
 import { createSvgIcon } from '@mui/material/utils';
 import { Nav } from '../componentes/Nav';
+import ERRO from '../componentes/ERRO'
 
 import { useEffect } from "react";
 import { useNavigate } from 'react-router-dom';
@@ -32,6 +33,7 @@ const PlusIcon = createSvgIcon(
   'Plus',
 );
 export function PacientesMui() {
+
   const estrutura = {
     nome: "",
     CPF: "",
@@ -70,6 +72,7 @@ export function PacientesMui() {
       format: (value) => value.toFixed(2),
     },
   ];
+  const [erro, setErro] = React.useState()
   const [rows, setRows] = React.useState([''])
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
@@ -91,6 +94,7 @@ export function PacientesMui() {
       console.log(result)
       return result
     } catch (error) {
+
       console.error(error);
     }
   }
@@ -117,6 +121,7 @@ async function editPaciente(data) {
       await findPacientes();
   } catch (error) {
       console.error(error);
+      setErro(error)
   }
 }
 async function removePaciente(id) {
@@ -140,7 +145,7 @@ async function removePaciente(id) {
     <>
     <Nav></Nav>
     <Paper sx={{ mt: 10,  width: '70%',height:'100%', overflow: 'scroll' }}>
-      
+    {erro ? console.log('bbbb') : console.log('aaaaaa')}
       <Grid
         sx={{mx: 4, gap:2} }
         container
