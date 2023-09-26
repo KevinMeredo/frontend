@@ -19,7 +19,7 @@ export const data = [
 
 export const options = {
   chart: {
-    title: "Atendimentos realizados"
+    title: "Atendimentos Registrados"
   },
 };
 

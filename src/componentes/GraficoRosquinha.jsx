@@ -10,7 +10,7 @@ export const data = [
 
 export const options = {
   title: "Medicos em Serviço (quantidade de consultas )",
-  pieHole: 0.5
+  pieHole: 0.4
 };
 
 export function GraficoRosquinha(props) {
