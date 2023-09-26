@@ -1,6 +1,6 @@
 import { Grid, Paper } from '@mui/material';
 import { GraficoBarra } from '../componentes/GraficoBarra';
-import { GraficoPizza } from '../componentes/GraficoRosquinha';
+import { GraficoRosquinha } from '../componentes/GraficoRosquinha';
 import { Nav } from '../componentes/Nav';
 import * as React from 'react';
 import { getMedicos } from '../services/medico-service';
@@ -14,12 +14,11 @@ export function Painel() {
             const result = await getMedicos();
             const opcoes = result.data.map((opcao) => {
                 console.log(opcao)
-                return ({id:opcao.id,nome:opcao.nome})
+                return ({id:opcao.id,nome:opcao.nome,CRM:opcao.CRM})
             })
             console.log(opcoes)
             setMedicos(opcoes)
             console.log(medicos)
-
         } catch (error) {
             console.error(error);
         }
@@ -50,10 +49,10 @@ export function Painel() {
                 alignItems="center"
             >
                 <Paper sx={{width:'50%'}}>
-                    <GraficoPizza opcoes={medicos} quantidade={consultas} ></GraficoPizza>
+                    <GraficoRosquinha opcoes={medicos} quantidade={consultas} ></GraficoRosquinha>
                 </Paper>
                 <Paper sx={{ width: '80%' }}>
-                    <GraficoBarra ></GraficoBarra>
+                    <GraficoBarra quantidade={consultas} ></GraficoBarra>
                 </Paper>
 
             </Grid>

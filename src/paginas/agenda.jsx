@@ -228,7 +228,7 @@ export function Agenda() {
                         </DemoContainer>
                     </LocalizationProvider>
 
-                    <FormEdit funcao={addConsulta} ignore='id' icone={<PlusIcon />} getAll={findConsultas} chaves={Object.keys(estrutura)} texto='Adicionar Agendamento'> </FormEdit>
+                    <FormEdit medicos={medicos} funcao={addConsulta} ignore='id' icone={<PlusIcon />} getAll={findConsultas} chaves={Object.keys(estrutura)} texto='Adicionar Agendamento'> </FormEdit>
 
 
                     <TableContainer sx={{  maxWidth: 1400 }}>
@@ -255,7 +255,7 @@ export function Agenda() {
                                                         <Paper sx={{maxWidth: 200}} elevation={0}
                                                             key={consulta.id}
                                                         >
-                                                            {(consulta.dia === dia && (consulta.CRM_Medico === medico.CRM || !medico.CRM)) && <FormEdit getAll={findConsultas} deletar={async () => removeConsulta(consulta.id)} funcao={editConsulta} ignore='id' obj={consulta} chaves={Object.keys(consulta)} texto={consulta.NomePaciente}></FormEdit>}
+                                                            {(consulta.dia === dia && (consulta.CRM_Medico === medico.CRM || !medico.CRM)) && <FormEdit medicos={medicos} getAll={findConsultas} deletar={async () => removeConsulta(consulta.id)} funcao={editConsulta} ignore='id' obj={consulta} chaves={Object.keys(consulta)} texto={consulta.NomePaciente}></FormEdit>}
                                                         </Paper>
                                                     )
                                                 })}

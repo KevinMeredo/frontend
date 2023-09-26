@@ -23,22 +23,25 @@ export default function Lista(props) {
             let pacienteFiltrado = result.data.filter(
                 (paciente) => {
                     console.log(paciente)
-                    return (paciente.nome === props.nome)
+                    return (paciente.nome.toLowerCase() === props.nome.toLowerCase())
                 }
             )
 
             const resultConsulta = await getConsultas();
-            let DadoFiltrado = resultConsulta.data.filter(
-                (consulta) => {
-                    console.log(pacienteFiltrado[0].CPF, consulta)
-                    return (pacienteFiltrado[0].CPF === consulta.CPF_Paciente)
-                }
-
-            )
-            console.log("Antes do set", DadoFiltrado);
-            setDados(DadoFiltrado)
-            console.log(Dados)
-
+            if(pacienteFiltrado.length !== 0){
+                let DadoFiltrado = resultConsulta.data.filter(
+                    (consulta) => {
+                        console.log(pacienteFiltrado, consulta)
+                        return (pacienteFiltrado[0].CPF === consulta.CPF_Paciente)
+                    }
+    
+                )
+                console.log("Antes do set", DadoFiltrado);
+                setDados(DadoFiltrado)
+                console.log(Dados)
+    
+            }
+           
         } catch (error) {
             console.error(error);
         }
@@ -74,6 +77,8 @@ export default function Lista(props) {
     }
 
     return (
+        <>
+        {Dados[0] !== "" ? 
         <Box
             sx={{ width: '100%', height: '80%', maxWidth: 400,flexDirection: 'column', bgcolor: 'background.paper' }}
         >
@@ -81,7 +86,7 @@ export default function Lista(props) {
                 Consultas
             </Typography>
                 {Dados.map((consulta) => {
-                    console.log(consulta)
+                    console.log(Dados)
                     return (
                         <Paper sx={{ maxWidth: 200 }} elevation={0}
                             key={`${consulta.id}` + '1'}
@@ -93,5 +98,10 @@ export default function Lista(props) {
 
 
         </Box>
+             : <Typography sx={{ px:0 }} textAlign="center">
+             Nenhum paciente com esse nome tem consultas, escreva o nome completo e verifique se está digitado corretamente
+         </Typography>}
+            
+            </>
     );
 }

@@ -27,9 +27,7 @@ export default function Buscar(props) {
         } catch (error) {
             console.log(error)
             return undefined
-        } finally {
-
-        }
+        } 
 
     }
 

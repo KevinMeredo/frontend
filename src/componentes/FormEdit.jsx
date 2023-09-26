@@ -6,6 +6,11 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import ModalConfirmacao from '../componentes/ModalConfirmacao'
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import Typography from '@mui/material/Typography';
+import FormControl from '@mui/material/FormControl';
+import Select from '@mui/material/Select';
 import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
@@ -16,12 +21,12 @@ import { FormHelperText } from '@mui/material';
 export default function FormEdit(props) {
   const [open, setOpen] = React.useState(false);
   const [Dados, setDados] = React.useState({ id: '' })
-  const [tabela, setTabela] = React.useState({})
+  const [tabela, setTabela] = React.useState({ id: '' })
   const [error, setError] = React.useState(false); // State to track error
 
   const numericPattern = /^[0-9]*$/; // Regular expression for numeric input only
   let padrao
-  let chaves
+  let chaves = ''
   let podeAbrir = true
   const mudaDado = async (mudanca, key, id) => {
     console.log(mudanca, key, id)
@@ -54,7 +59,7 @@ export default function FormEdit(props) {
     } else {
       console.log(novoDado)
       if (key === 'CPF' || key === 'CPF_Paciente') {
-        if ( VerificaCPF(novoDado[key]) || novoDado === '') {
+        if (VerificaCPF(novoDado[key]) || novoDado === '') {
           console.log(novoDado)
           setDados(novoDado)
           setError(false); // Clear the error if input is valid
@@ -91,9 +96,11 @@ export default function FormEdit(props) {
     podeAbrir = true
   } else {
     try {
+
       chaves = Object.keys(tabela)
       console.log('podeAbrir')
-      podeAbrir = true
+      if (chaves) podeAbrir = true
+
     }
     catch (error) {
       console.log("ERRO: ", error)
@@ -149,8 +156,9 @@ export default function FormEdit(props) {
   const handleClickOpen = async () => {
 
     if (props.executa) {
-      let tabela = await props.executa()
-      setTabela(tabela)
+      let tab = await props.executa()
+      setTabela(tab)
+
       console.log(tabela)
       console.log(props)
 
@@ -161,7 +169,7 @@ export default function FormEdit(props) {
       console.log(tabela)
       console.log(Object.keys(tabela).length)
       if (Object.keys(tabela).length !== 0 && podeAbrir) {
-        console.log('abriu')
+        console.log('abriu', tabela)
         if (props.getAll) {
           await props.getAll().then(
             () => setOpen(true)
@@ -170,15 +178,18 @@ export default function FormEdit(props) {
           setOpen(true)
         }
       }
-    } else if (podeAbrir) {
-      console.log('abriu')
-      if (props.getAll) {
-        await props.getAll().then(
-          () => setOpen(true)
-        )
-      } else {
-        setOpen(true)
+    } else if (tabela) {
+      if (chaves.length !== 0) {
+        console.log('abriu', tabela, chaves)
+        if (props.getAll) {
+          await props.getAll().then(
+            () => setOpen(true)
+          )
+        } else {
+          setOpen(true)
+        }
       }
+
     }
 
   };
@@ -196,11 +207,16 @@ export default function FormEdit(props) {
   };
 
   const ExecutaEFecha = async () => {
-    if (!error) {
-      console.log(props)
-      await props.funcao(Dados)
-      await handleClose()
+    try {
+      if (!error) {
+        console.log(props)
+        await props.funcao(Dados)
+        await handleClose()
+      }
+    } catch (error) {
+      console.log(error)
     }
+
 
   }
 
@@ -210,79 +226,102 @@ export default function FormEdit(props) {
         {props.icone && props.icone}
         {props.texto && props.texto}
       </Button>
-      <Dialog open={open} onClose={handleClose}>
-        <DialogTitle>{props.texto}</DialogTitle>
-        <DialogContent>
-          {chaves.length !== 0 && chaves.map((key) => {
-            if (key === 'CPF' || key === 'CPF_Paciente') {
-              return (
-                <>
+      {chaves &&
+        <Dialog open={open} onClose={handleClose}>
+          <DialogTitle>{props.texto}</DialogTitle>
+          <DialogContent>
+            {chaves.length !== 0 && chaves.map((key) => {
+              console.log(key)
+              if (key === 'CPF' || key === 'CPF_Paciente') {
+                return (
+                  <>
+                    <TextField
+
+                      key={key}
+                      InputProps={{
+                        inputProps: {
+                          pattern: '[0-9]*',
+                        },
+                      }}
+                      autoFocus
+                      margin='dense'
+                      id={key}
+                      label={key}
+                      defaultValue={padrao[key]}
+                      fullWidth
+                      error={error} // Set the error state
+                      variant='standard'
+                      onChange={(event) => {
+                        mudaDado(event.target.value, key, padrao[props.ignore]);
+                      }}
+                    ></TextField>
+                    {error && <FormHelperText error>CPF invalido, escreva apenas os 11 números  do CPF</FormHelperText>}
+                  </>
+                )
+              } else if (key == 'CRM_Medico') {
+                return (<>
+                  {props.medicos ?
+                    <FormControl sx={{ m: 1, minWidth: 100 }} >
+                      <InputLabel >Medico</InputLabel>
+                      <Select
+                        labelId="demo-simple-select-autowidth-label"
+                        id="demo-simple-select-autowidth"
+                        autoWidth
+                        onChange={(event) => {
+                          mudaDado(event.target.value, key, padrao[props.ignore]);
+                        }}
+                        label="Medico"
+                      >
+                        {props.medicos.map(
+                          (medico, key) =>
+                            <MenuItem key={key} value={medico.CRM}>{medico.nome}</MenuItem>
+                        )}
+                      </Select>
+                    </FormControl> : <Typography>aaaaa</Typography>}
+                </>)
+              } else if (key !== props.ignore && key !== 'nascimento' && key !== 'dia' && padrao[key] !== props.texto) {
+                return (
                   <TextField
 
                     key={key}
-                    InputProps={{
-                      inputProps: {
-                        pattern: '[0-9]*',
-                      },
-                    }}
                     autoFocus
                     margin='dense'
                     id={key}
                     label={key}
                     defaultValue={padrao[key]}
                     fullWidth
-                    error={error} // Set the error state
                     variant='standard'
                     onChange={(event) => {
                       mudaDado(event.target.value, key, padrao[props.ignore]);
                     }}
                   ></TextField>
-                  {error && <FormHelperText error>CPF invalido, escreva apenas os 11 números  do CPF</FormHelperText>}
-                </>
-              )
-            } else if (key !== props.ignore && key !== 'nascimento' && key !== 'dia' && padrao[key] !== props.texto) {
-              return (
-                <TextField
+                )
+              } else if (key !== props.ignore && padrao[key] !== props.texto) {
+                return (
+                  <LocalizationProvider key={key + '2'} dateAdapter={AdapterDayjs}>
+                    <DemoContainer key={key + '1'} components={['DatePicker']}>
+                      <DatePicker
+                        label={key}
+                        key={key}
+                        onChange={(value) => {
+                          mudaDado(value, key, padrao[props.ignore]);
+                        }}
+                        defaultValue={dayjs(padrao[key])}
+                      />
+                    </DemoContainer>
+                  </LocalizationProvider>
+                )
 
-                  key={key}
-                  autoFocus
-                  margin='dense'
-                  id={key}
-                  label={key}
-                  defaultValue={padrao[key]}
-                  fullWidth
-                  variant='standard'
-                  onChange={(event) => {
-                    mudaDado(event.target.value, key, padrao[props.ignore]);
-                  }}
-                ></TextField>
-              )
-            } else if (key !== props.ignore && padrao[key] !== props.texto) {
-              return (
-                <LocalizationProvider key={key + '2'} dateAdapter={AdapterDayjs}>
-                  <DemoContainer key={key + '1'} components={['DatePicker']}>
-                    <DatePicker
-                      label={key}
-                      key={key}
-                      onChange={(value) => {
-                        mudaDado(value, key, padrao[props.ignore]);
-                      }}
-                      defaultValue={dayjs(padrao[key])}
-                    />
-                  </DemoContainer>
-                </LocalizationProvider>
-              )
+              }
 
-            }
-
-          })}
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleClose}>Cancelar</Button>
-          {props.deletar && <ModalConfirmacao texto='deletar' funcao={props.deletar} />}
-          <Button onClick={ExecutaEFecha}>Salvar</Button>
-        </DialogActions>
-      </Dialog>
+            })}
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleClose}>Cancelar</Button>
+            {props.deletar && <ModalConfirmacao texto='deletar' funcao={props.deletar} />}
+            <Button onClick={ExecutaEFecha}>Salvar</Button>
+          </DialogActions>
+        </Dialog>}
     </div>
   );
 }
