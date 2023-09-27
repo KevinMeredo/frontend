@@ -149,7 +149,7 @@ export function MedicosMui() {
       <Paper sx={{ mt: 10,  width: '70%',height:'100%', overflow: 'scroll' }}>
 
         <Grid
-          sx={{mx: 4, gap:2} }
+          sx={{ml:2, gap:2} }
           container
           direction="row"
           justifyContent="start"
