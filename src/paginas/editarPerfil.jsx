@@ -28,10 +28,10 @@ export function EditarPerfil() {
     const mudaDado = (valor, chave) => {
         console.log(dados, chave, valor)
         let novoDado = dados
-            novoDado[chave] = valor
-            setDados(novoDado)
-            if (chave === 'nascimento') nascimentoFlag = true
-            if (chave === 'CPF') CPFFlag = true
+        novoDado[chave] = valor
+        setDados(novoDado)
+        if (chave === 'nascimento') nascimentoFlag = true
+        if (chave === 'CPF') CPFFlag = true
     }
     async function findUser() {
         try {
@@ -42,7 +42,7 @@ export function EditarPerfil() {
             console.log(error)
         }
     }
-    async function removeUser(id){
+    async function removeUser(id) {
         try {
             await deleteUser(id);
             navigate('/')
@@ -157,7 +157,6 @@ export function EditarPerfil() {
                                 type="text"
                                 name="CPF"
                                 id="CPF"
-                                value={dados.CPF}
                                 defaultValue={dados.CPF}
                                 isInvalid={errors.CPF}
                                 isValid={!errors.CPF}
@@ -253,7 +252,7 @@ export function EditarPerfil() {
                             {errors.senha && <Form.Control.Feedback type="invalid">{errors.senha.message}</Form.Control.Feedback>}
                         </Form.Group>
                     </Row>
-                    <Row className=' display-flex justify-content-center align-items-center  w-100'>                    
+                    <Row className=' display-flex justify-content-center align-items-center  w-100'>
                         <Button className='w-50 position' type="submit">Cadastrar</Button>
                         <ModalConfirmacao texto='deletar' funcao={async () => removeUser()} />
                     </Row>
