@@ -29,11 +29,9 @@ export default function FormEdit(props) {
   let chaves = ''
   let podeAbrir = true
   const mudaDado = async (mudanca, key, id) => {
-    console.log(mudanca, key, id)
     let novoDado = Dados
     novoDado['id'] = id
     if (Object.keys(Dados).length !== 0) {
-      console.log(Dados)
       Object.keys(Dados).forEach((chave) => {
         if (chave === key) {
           novoDado[chave] = mudanca
@@ -42,10 +40,8 @@ export default function FormEdit(props) {
         } else {
           novoDado[key] = mudanca
         }
-        console.log(novoDado)
         if (key === 'CPF' || key === 'CPF_Paciente') {
           if ((numericPattern.test(novoDado[key]) && VerificaCPF(novoDado[key])) || novoDado === '') {
-            console.log(novoDado)
             setDados(novoDado)
             setError(false); // Clear the error if input is valid
           } else {
@@ -57,10 +53,8 @@ export default function FormEdit(props) {
 
       })
     } else {
-      console.log(novoDado)
       if (key === 'CPF' || key === 'CPF_Paciente') {
         if (VerificaCPF(novoDado[key]) || novoDado === '') {
-          console.log(novoDado)
           setDados(novoDado)
           setError(false); // Clear the error if input is valid
         } else {
@@ -76,36 +70,29 @@ export default function FormEdit(props) {
   if (tabela) {
     if (props.noData) {
       padrao = tabela
-      console.log(padrao)
     } else if (props.obj) {
 
       padrao = props.obj
-      console.log(padrao, props)
     } else {
-      console.log('sem obj')
       padrao = tabela
     }
 
   } else {
-    console.log('não tem tabela')
     padrao = ''
   }
   if (props.chaves) {
-    console.log('podeAbrir')
     chaves = props.chaves
     podeAbrir = true
   } else {
     try {
 
       chaves = Object.keys(tabela)
-      console.log('podeAbrir')
       if (chaves) podeAbrir = true
 
     }
     catch (error) {
-      console.log("ERRO: ", error)
+      console.log(error)
       chaves = ''
-      console.log('naopodeAbrir')
       podeAbrir = false
     }
   }
@@ -154,22 +141,13 @@ export default function FormEdit(props) {
     return true;
   }
   const handleClickOpen = async () => {
-
     if (props.executa) {
       let tab = await props.executa()
       setTabela(tab)
-
-      console.log(tabela)
-      console.log(props)
-
     }
 
     if (tabela !== undefined && Object.keys(tabela).length !== 0) {
-      console.log(props)
-      console.log(tabela)
-      console.log(Object.keys(tabela).length)
       if (Object.keys(tabela).length !== 0 && podeAbrir) {
-        console.log('abriu', tabela)
         if (props.getAll) {
           await props.getAll().then(
             () => setOpen(true)
@@ -180,7 +158,6 @@ export default function FormEdit(props) {
       }
     } else if (tabela) {
       if (chaves.length !== 0) {
-        console.log('abriu', tabela, chaves)
         if (props.getAll) {
           await props.getAll().then(
             () => setOpen(true)
@@ -209,7 +186,6 @@ export default function FormEdit(props) {
   const ExecutaEFecha = async () => {
     try {
       if (!error) {
-        console.log(props)
         await props.funcao(Dados)
         await handleClose()
       }
@@ -222,7 +198,7 @@ export default function FormEdit(props) {
 
   return (
     <div>
-      <Button sx={{ gap: 2 }} variant="contained" onClick={handleClickOpen}>
+      <Button sx={{ gap: 2 }} variant="contained" disabled={error}onClick={handleClickOpen}>
         {props.icone && props.icone}
         {props.texto && props.texto}
       </Button>
@@ -231,7 +207,7 @@ export default function FormEdit(props) {
           <DialogTitle>{props.texto}</DialogTitle>
           <DialogContent>
             {chaves.length !== 0 && chaves.map((key) => {
-              console.log(key)
+
               if (key === 'CPF' || key === 'CPF_Paciente') {
                 return (
                   <>
@@ -241,6 +217,7 @@ export default function FormEdit(props) {
                       InputProps={{
                         inputProps: {
                           pattern: '[0-9]*',
+                          message:'Digite Apenas os 11 números'
                         },
                       }}
                       autoFocus
@@ -249,6 +226,7 @@ export default function FormEdit(props) {
                       label={key}
                       defaultValue={padrao[key]}
                       fullWidth
+                      required
                       error={error} // Set the error state
                       variant='standard'
                       onChange={(event) => {
@@ -282,7 +260,7 @@ export default function FormEdit(props) {
               } else if (key !== props.ignore && key !== 'nascimento' && key !== 'dia' && padrao[key] !== props.texto) {
                 return (
                   <TextField
-
+                    required
                     key={key}
                     autoFocus
                     margin='dense'

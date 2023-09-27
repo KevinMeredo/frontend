@@ -12,6 +12,12 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { createSvgIcon } from '@mui/material';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogTitle from '@mui/material/DialogTitle';
+import { Button } from '@mui/material';
+import { Typography } from '@mui/material';
 import FormEdit from '../componentes/FormEdit'
 import DropBox from '../componentes/DropBox';
 
@@ -23,8 +29,8 @@ import '../App.css'
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { createConsulta, getConsultas, updateConsulta, deleteConsulta } from '../services/consulta-service';
-import { getByCPF, getPacientes } from '../services/paciente-service';
-import { getByCRM, getMedicos } from '../services/medico-service';
+import { getPacientes } from '../services/paciente-service';
+import { getMedicos } from '../services/medico-service';
 import BuscarLista from '../componentes/BuscarLista';
 
 
@@ -51,6 +57,8 @@ export function Agenda() {
         observação: "",
         dia: "",
     }
+    const [erro, setErro] = useState()
+    const [open, setOpen] = useState(false)
     const [medicos, setMedicos] = useState([])
     const [medico, setMedico] = useState({})
     const [pacientes, setPacientes] = useState([])
@@ -74,12 +82,12 @@ export function Agenda() {
                     console.log(consulta)
                     console.log('pacientes ', pacientes)
                     pacientes.map(
-                       (paciente) => {
-                        if (paciente.CPF === consulta.CPF_Paciente)
-                            consulta.NomePaciente = paciente.nome
-                       } 
+                        (paciente) => {
+                            if (paciente.CPF === consulta.CPF_Paciente)
+                                consulta.NomePaciente = paciente.nome
+                        }
                     )
-                    
+
                 }
             )
             console.log("Antes do set", result.data);
@@ -89,7 +97,8 @@ export function Agenda() {
             setPacientes(novoDado)
             console.log(pacientes)
         } catch (error) {
-            console.error(error);
+            setOpen(true);
+            setErro(error.response.data.error)
         }
 
     }
@@ -101,19 +110,10 @@ export function Agenda() {
             await findConsultas();
 
         } catch (error) {
-            console.error(error);
+            setOpen(true);
+            setErro(error.response.data.error)
         }
     }
-/*     async function findByCPF(CPF) {
-        try {
-            const result = await getByCPF(CPF);
-            console.log(result)
-            return result
-        } catch (error) {
-            console.error(error);
-        }
-    } */
-
     async function findMedicos() {
         try {
             const result = await getMedicos();
@@ -121,8 +121,8 @@ export function Agenda() {
             console.log(medicos)
 
         } catch (error) {
-            console.error(error);
-            navigate('/');
+            setOpen(true);
+            setErro(error.response.data.error)
         }
     }
 
@@ -132,8 +132,8 @@ export function Agenda() {
             setPacientes(result.data)
 
         } catch (error) {
-            console.error(error);
-            navigate('/');
+            setOpen(true);
+            setErro(error.response.data.error)
         }
     }
     async function addConsulta(data) {
@@ -142,7 +142,8 @@ export function Agenda() {
             await findConsultas();
             console.log(data)
         } catch (error) {
-            console.error(error);
+            setOpen(true);
+            setErro(error.response.data.error)
         }
     }
 
@@ -160,7 +161,8 @@ export function Agenda() {
             });
             await findConsultas();
         } catch (error) {
-            console.error(error);
+            setOpen(true);
+            setErro(error.response.data.error)
         }
     }
 
@@ -204,11 +206,22 @@ export function Agenda() {
     }
     return (
         <>
+            {erro && (<Dialog open={open} onClose={() => { setOpen(false) }}>
+                <DialogTitle>Erro: </DialogTitle>
+                <DialogContent>
+                    <Typography sx={{ px: 30 }} textAlign="center">
+                        {erro}
+                    </Typography>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={() => { setOpen(false) }}>Fechar</Button>
+                </DialogActions>
+            </Dialog>)}
             <Nav></Nav>
-            <Paper sx={{ mt: 10, width: '70%', height:'100%', overflow: 'scroll', maxWidth: 1200 }}>
+            <Paper sx={{ mt: 10, width: '70%', height: '100%', overflow: 'scroll', maxWidth: 1200 }}>
 
                 <Grid
-                    sx={{ml:2, gap:2} }
+                    sx={{ ml: 2, gap: 2 }}
                     container
                     direction="row"
                     justifyContent="start"
@@ -231,7 +244,7 @@ export function Agenda() {
                     <FormEdit medicos={medicos} funcao={addConsulta} ignore='id' icone={<PlusIcon />} getAll={findConsultas} chaves={Object.keys(estrutura)} texto='Adicionar Agendamento'> </FormEdit>
 
 
-                    <TableContainer sx={{  maxWidth: 1400 }}>
+                    <TableContainer sx={{ maxWidth: 1400 }}>
                         <Table stickyHeader aria-label="sticky table" >
                             <TableHead>
                                 <TableRow>
@@ -249,10 +262,10 @@ export function Agenda() {
                                     {diasDaSemana.map((dia) => {
                                         console.log("medico: ", medico)
                                         return (
-                                            <TableCell   sx={{  maxWidth: 100 }} key={dia} align='center'>
+                                            <TableCell sx={{ maxWidth: 100 }} key={dia} align='center'>
                                                 {consultas.map((consulta) => {
                                                     return (
-                                                        <Paper sx={{maxWidth: 200}} elevation={0}
+                                                        <Paper sx={{ maxWidth: 200 }} elevation={0}
                                                             key={consulta.id}
                                                         >
                                                             {(consulta.dia === dia && (consulta.CRM_Medico === medico.CRM || !medico.CRM)) && <FormEdit medicos={medicos} getAll={findConsultas} deletar={async () => removeConsulta(consulta.id)} funcao={editConsulta} ignore='id' obj={consulta} chaves={Object.keys(consulta)} texto={consulta.NomePaciente}></FormEdit>}

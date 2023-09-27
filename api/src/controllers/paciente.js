@@ -7,17 +7,17 @@ class PacienteController {
         const httpHelper = new HttpHelper(response);
         try {
             const { CPF, RG, nascimento, nome, naturalidade, email } = request.body;
-            if (!CPF) return httpHelper.badRequest('CPF inválido!');
+            if (!nome)  return httpHelper.badRequest('Nome é obrigatório!');
 
-            if (!RG)  return httpHelper.badRequest('RG inválido!');
+            if (!CPF) return httpHelper.badRequest('CPF é obrigatório!');
 
-            if (!nascimento)  return httpHelper.badRequest('Data de nascimento inválido!');
+            if (!RG)  return httpHelper.badRequest('RG é obrigatório!');
 
-            if (!nome)  return httpHelper.badRequest('Nome inválido!');
+            if (!nascimento)  return httpHelper.badRequest('Data de nascimento é obrigatória!');
 
-            if (!naturalidade)  return httpHelper.badRequest('Naturalida inválida!');
+            if (!naturalidade)  return httpHelper.badRequest('Naturalidade é obrigatória!');
 
-            if (!email)  return httpHelper.badRequest('Email inválido!');
+            if (!email)  return httpHelper.badRequest('Email é obrigatório!');
 
             const paciente = await PacienteModel.create({
                 CPF, RG, nascimento, nome, email, naturalidade

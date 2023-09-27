@@ -10,6 +10,7 @@ export async function getMedicos() {
     return result;
 }
 export async function getByCRM(CRM) {
+    if(!CRM) CRM=0
     const accessToken = sessionStorage.getItem('token');
     const result = await api.get(`/medico/${CRM}`, {
         headers: {

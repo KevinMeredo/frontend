@@ -11,11 +11,16 @@ import Paper from '@mui/material/Paper';
 import FormEdit from '../componentes/FormEdit'
 import Buscar from '../componentes/Buscar'
 import Grid from '@mui/material/Grid'
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogTitle from '@mui/material/DialogTitle';
+import { Button } from '@mui/material';
+import { Typography } from '@mui/material';
 import { createSvgIcon } from '@mui/material/utils';
 import { Nav } from '../componentes/Nav';
 
 import { useEffect } from "react";
-import { useNavigate } from 'react-router-dom';
 
 import { getMedicos, createMedico, updateMedico, deleteMedico, getByCRM } from '../services/medico-service'
 
@@ -44,7 +49,7 @@ export function MedicosMui() {
     nascimento: "",
     naturalidade: "",
   }
-  const navigate = useNavigate();
+
 
   useEffect(() => {
     findMedicos()
@@ -74,6 +79,8 @@ export function MedicosMui() {
       format: (value) => value.toFixed(2),
     },
   ];
+  const [erro, setErro] = React.useState()
+  const [open, setOpen] = React.useState(false)
   const [rows, setRows] = React.useState([''])
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
@@ -85,8 +92,8 @@ export function MedicosMui() {
       console.log(rows)
 
     } catch (error) {
-      console.error(error);
-      navigate('/');
+      setOpen(true);
+      setErro(error.response.data.error)
     }
   }
   async function findByCRM(CRM) {
@@ -95,7 +102,8 @@ export function MedicosMui() {
       console.log(result)
       return result
     } catch (error) {
-      console.error(error);
+      setOpen(true);
+      setErro(error.response.data.error)
       return undefined
     }
   }
@@ -106,7 +114,8 @@ export function MedicosMui() {
       await createMedico(data);
       await findMedicos();
     } catch (error) {
-      console.error(error);
+      setOpen(true);
+      setErro(error.response.data.error)
     }
   }
   async function editMedico(data) {
@@ -122,7 +131,8 @@ export function MedicosMui() {
       });
       await findMedicos();
     } catch (error) {
-      console.error(error);
+      setOpen(true);
+      setErro(error.response.data.error)
     }
   }
   async function removeMedico(id) {
@@ -130,7 +140,8 @@ export function MedicosMui() {
       await deleteMedico(id);
       await findMedicos();
     } catch (error) {
-      console.error(error);
+      setOpen(true);
+      setErro(error.response.data.error)
     }
   }
 
@@ -145,18 +156,29 @@ export function MedicosMui() {
 
   return (
     <>
+      {erro && (<Dialog open={open} onClose={() => { setOpen(false) }}>
+        <DialogTitle>Erro: </DialogTitle>
+        <DialogContent>
+          <Typography sx={{ px: 30 }} textAlign="center">
+            {erro}
+          </Typography>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => { setOpen(false) }}>Fechar</Button>
+        </DialogActions>
+      </Dialog>)}
       <Nav></Nav>
-      <Paper sx={{ mt: 10,  width: '70%',height:'100%', overflow: 'scroll' }}>
+      <Paper sx={{ mt: 10, width: '70%', height: '100%', overflow: 'scroll' }}>
 
         <Grid
-          sx={{ml:2, gap:2} }
+          sx={{ ml: 2, gap: 2 }}
           container
           direction="row"
           justifyContent="start"
           alignItems="center"
         >
-          <Buscar  funcao={findByCRM} editar ={editMedico} deletar={removeMedico} coluna='CRM' > </Buscar>
-          <FormEdit noData funcao={addMedico}  ignore='id' icone={<PlusIcon />} chaves={Object.keys(estrutura)} texto='Adicionar Medico'> </FormEdit>
+          <Buscar funcao={findByCRM} editar={editMedico} deletar={removeMedico} coluna='CRM' > </Buscar>
+          <FormEdit noData funcao={addMedico} ignore='id' icone={<PlusIcon />} chaves={Object.keys(estrutura)} texto='Adicionar Medico'> </FormEdit>
         </Grid>
 
         <TableContainer sx={{ maxHeight: 440 }}>
@@ -201,8 +223,8 @@ export function MedicosMui() {
           </Table>
         </TableContainer>
         <TablePagination
-          
-          sx={{mb:2, position:'fixed', bottom:0}}
+
+          sx={{ mb: 2, position: 'fixed', bottom: 0 }}
           rowsPerPageOptions={[10, 25, 100]}
           component="div"
           count={rows.length}

@@ -10,15 +10,19 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import FormEdit from '../componentes/FormEdit';
 import Buscar from '../componentes/Buscar';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogTitle from '@mui/material/DialogTitle';
+import { Button } from '@mui/material';
+import { Typography } from '@mui/material';
 import Grid from '@mui/material/Grid'
 import { createSvgIcon } from '@mui/material/utils';
 import { Nav } from '../componentes/Nav';
-import ERRO from '../componentes/ERRO'
 
 import { useEffect } from "react";
-import { useNavigate } from 'react-router-dom';
 
-import {getPacientes, getByCPF, createPaciente, updatePaciente, deletePaciente} from '../services/paciente-service'
+import { getPacientes, getByCPF, createPaciente, updatePaciente, deletePaciente } from '../services/paciente-service'
 
 const PlusIcon = createSvgIcon(
   <svg
@@ -42,10 +46,9 @@ export function PacientesMui() {
     nascimento: "",
     naturalidade: "",
   }
-  const navigate = useNavigate();
 
-  useEffect(  () => {
-     findPacientes()
+  useEffect(() => {
+    findPacientes()
   }, []);
 
   const columns = [
@@ -73,19 +76,22 @@ export function PacientesMui() {
     },
   ];
   const [erro, setErro] = React.useState()
+  const [open, setOpen] = React.useState(false)
   const [rows, setRows] = React.useState([''])
   const [page, setPage] = React.useState(0);
+
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
   async function findPacientes() {
     try {
       const result = await getPacientes();
       setRows(result.data)
-      
+
     } catch (error) {
       console.error(error);
-      navigate('/');
-    } 
+      setOpen(true);
+      setErro(error.response.data.error)
+    }
   }
 
   async function findByCPF(CPF) {
@@ -94,44 +100,50 @@ export function PacientesMui() {
       console.log(result)
       return result
     } catch (error) {
-
+      setOpen(true);
+      setErro(error.response.data.error);
       console.error(error);
     }
   }
   async function addPaciente(data) {
     console.log(data)
     try {
-        await createPaciente(data);
-        await findPacientes();
+      await createPaciente(data);
+      await findPacientes();
     } catch (error) {
-        console.error(error);
+      setOpen(true);
+      setErro(error.response.data.error)
+      console.error(error);
     }
-}
-async function editPaciente(data) {
-  try {
+  }
+  async function editPaciente(data) {
+    try {
       await updatePaciente({
-          id: data.id,
-          CPF: data.CPF,
-          nome: data.nome,
-          RG: data.RG,
-          nascimento: data.nascimento,
-          naturalidade: data.naturalidade,
-          email: data.email
+        id: data.id,
+        CPF: data.CPF,
+        nome: data.nome,
+        RG: data.RG,
+        nascimento: data.nascimento,
+        naturalidade: data.naturalidade,
+        email: data.email
       });
       await findPacientes();
-  } catch (error) {
+    } catch (error) {
       console.error(error);
-      setErro(error)
+      setOpen(true);
+      setErro(error.response.data.error)
+    }
   }
-}
-async function removePaciente(id) {
-  try {
+  async function removePaciente(id) {
+    try {
       await deletePaciente(id);
       await findPacientes();
-  } catch (error) {
+    } catch (error) {
       console.error(error);
+      setOpen(true);
+      setErro(error.response.data.error)
+    }
   }
-}
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
@@ -143,73 +155,84 @@ async function removePaciente(id) {
 
   return (
     <>
-    <Nav></Nav>
-    <Paper sx={{ mt: 10,  width: '70%',height:'100%', overflow: 'auto' }}>
-    {erro ? console.log('bbbb') : console.log('aaaaaa')}
-      <Grid
-        sx={{ml:2, gap:2} }
-        container
-        direction="row"
-        justifyContent="start"
-        alignItems="center"
-      >
-          <Buscar coluna= 'CPF' funcao = {findByCPF} editar ={editPaciente} deletar={removePaciente}></Buscar>
-        <FormEdit funcao = {addPaciente} ignore='id' icone = {<PlusIcon />} chaves={Object.keys(estrutura)} texto='Adicionar Paciente'> </FormEdit>
-      
-      <TableContainer sx={{ maxHeight: 440}}>
-        <Table stickyHeader aria-label="sticky table">
-          <TableHead>
-            <TableRow key={'head'}>
-              {columns.map((column) => (
-                <TableCell
-                  key={column.id}
-                  align={column.align}
-                  style={{ minWidth: column.minWidth }}
-                >
-                  {column.label}
-                </TableCell>
-              ))}
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {rows
-              .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-              .map((row) => {
-                return (
-                  <TableRow hover role="checkbox" tabIndex={-1} key={row.id ? row.id:'a'}>
-                    {columns.map((column) => {
-                      const value = row[column.id];
-                      return (
-                        <TableCell key={column.id} align={column.align}>
-                          {column.format && typeof value === 'number'
-                            ? column.format(value)
-                            : value}
-                        </TableCell>
-                      );
-                    })}
-                    <TableCell>
-                      <FormEdit deletar={async () =>removePaciente(row.id)} funcao={editPaciente} ignore='id' texto='Editar' obj={row} chaves = {Object.keys(row)}></FormEdit>
+      {erro && (<Dialog open={open} onClose={() => { setOpen(false) }}>
+        <DialogTitle>Erro: </DialogTitle>
+        <DialogContent>
+          <Typography sx={{ px: 30 }} textAlign="center">
+            {erro}
+          </Typography>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => { setOpen(false) }}>Fechar</Button>
+        </DialogActions>
+      </Dialog>)}
 
+      <Nav></Nav>
+      <Paper sx={{ mt: 10, width: '70%', height: '100%', overflow: 'auto' }}>
+        <Grid
+          sx={{ ml: 2, gap: 2 }}
+          container
+          direction="row"
+          justifyContent="start"
+          alignItems="center"
+        >
+          <Buscar coluna='CPF' funcao={findByCPF} editar={editPaciente} deletar={removePaciente}></Buscar>
+          <FormEdit funcao={addPaciente} ignore='id' icone={<PlusIcon />} chaves={Object.keys(estrutura)} texto='Adicionar Paciente'> </FormEdit>
+
+          <TableContainer sx={{ maxHeight: 440 }}>
+            <Table stickyHeader aria-label="sticky table">
+              <TableHead>
+                <TableRow key={'head'}>
+                  {columns.map((column) => (
+                    <TableCell
+                      key={column.id}
+                      align={column.align}
+                      style={{ minWidth: column.minWidth }}
+                    >
+                      {column.label}
                     </TableCell>
-                  </TableRow>
-                );
-              })}
-          </TableBody>
-        </Table>
-      </TableContainer>
-      <TablePagination
-        sx={{mb:2, position:'fixed', bottom:0}}
-        rowsPerPageOptions={[10, 25, 100]}
-        component="div"
-        count={rows.length}
-        rowsPerPage={rowsPerPage}
-        page={page}
-        onPageChange={handleChangePage}
-        onRowsPerPageChange={handleChangeRowsPerPage}
-      />
-      </Grid>
-    </Paper>
+                  ))}
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {rows
+                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                  .map((row) => {
+                    return (
+                      <TableRow hover role="checkbox" tabIndex={-1} key={row.id ? row.id : 'a'}>
+                        {columns.map((column) => {
+                          const value = row[column.id];
+                          return (
+                            <TableCell key={column.id} align={column.align}>
+                              {column.format && typeof value === 'number'
+                                ? column.format(value)
+                                : value}
+                            </TableCell>
+                          );
+                        })}
+                        <TableCell>
+                          <FormEdit deletar={async () => removePaciente(row.id)} funcao={editPaciente} ignore='id' texto='Editar' obj={row} chaves={Object.keys(row)}></FormEdit>
+
+                        </TableCell>
+                      </TableRow>
+                    );
+                  })}
+              </TableBody>
+            </Table>
+          </TableContainer>
+          <TablePagination
+            sx={{ mb: 2, position: 'fixed', bottom: 0 }}
+            rowsPerPageOptions={[10, 25, 100]}
+            component="div"
+            count={rows.length}
+            rowsPerPage={rowsPerPage}
+            page={page}
+            onPageChange={handleChangePage}
+            onRowsPerPageChange={handleChangeRowsPerPage}
+          />
+        </Grid>
+      </Paper>
     </>
-    
+
   );
 }

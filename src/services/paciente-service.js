@@ -11,6 +11,7 @@ export async function getPacientes() {
 }
 
 export async function getByCPF(CPF) {
+    if(!CPF) CPF=0
     const accessToken = sessionStorage.getItem('token');
     const result = await api.get(`/paciente/${CPF}`, {
         headers: {
