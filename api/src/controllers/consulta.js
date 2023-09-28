@@ -1,5 +1,6 @@
 const { HttpHelper } = require('../utils/http-helper');
 const { ConsultaModel } = require('../models/consulta-model');
+const { PacienteModel } = require('../models/paciente-model')
 
 class ConsultaController {
     async create(request, response) {
@@ -19,7 +20,8 @@ class ConsultaController {
             if (!urgencia)  return httpHelper.badRequest('urgencia inválida!');
 
             if (!observação)  return httpHelper.badRequest('Observação inválida!');
-
+            const pacienteExiste = await PacienteModel.findOne({where: {CPF: CPF_Paciente}})
+            if(!pacienteExiste) return httpHelper.notFound(`Paciente com CPF: ${CPF_Paciente} não encontrado`)
             const consulta = await ConsultaModel.create({
                 CPF_Paciente, CRM_Medico, dia, tipo, status, urgencia, observação
             });
@@ -64,6 +66,8 @@ class ConsultaController {
             
             const consultaExiste = await ConsultaModel.findByPk(id);
             if (!consultaExiste) return httpHelper.notFound('consulta não encontrado!');
+            const pacienteExiste = await PacienteModel.findOne({where: {CPF: CPF_Paciente}})
+            if(!pacienteExiste) return httpHelper.notFound(`Paciente com CPF: ${CPF_Paciente} não encontrado`)
             await ConsultaModel.update({
                 CPF_Paciente, CRM_Medico, dia, tipo, status, urgencia, observação
             }, {

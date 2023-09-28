@@ -23,7 +23,7 @@ export default function AlertDialog(props) {
   }
   return (
     <div>
-      <Button variant="outlined" onClick={handleClickOpen}>
+      <Button color='error' variant="outlined" onClick={handleClickOpen}>
         {props.texto}
       </Button>
       <Dialog

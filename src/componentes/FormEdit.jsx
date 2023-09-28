@@ -172,6 +172,7 @@ export default function FormEdit(props) {
   };
 
   const handleClose = async () => {
+    setError(false)
     if (props.getAll) {
       await props.getAll().then(
         () => setOpen(false)
@@ -238,8 +239,8 @@ export default function FormEdit(props) {
                 )
               } else if (key == 'CRM_Medico') {
                 return (<>
-                  {props.medicos ?
-                    <FormControl sx={{ m: 1, minWidth: 100 }} >
+                  {props.medicos &&
+                    <FormControl key={-1} sx={{ m: 1, minWidth: 100 }} >
                       <InputLabel >Medico</InputLabel>
                       <Select
                         labelId="demo-simple-select-autowidth-label"
@@ -255,7 +256,7 @@ export default function FormEdit(props) {
                             <MenuItem key={key} value={medico.CRM}>{medico.nome}</MenuItem>
                         )}
                       </Select>
-                    </FormControl> : <Typography>aaaaa</Typography>}
+                    </FormControl>}
                 </>)
               } else if (key !== props.ignore && key !== 'nascimento' && key !== 'dia' && padrao[key] !== props.texto) {
                 return (

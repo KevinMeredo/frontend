@@ -28,20 +28,27 @@ export default function Lista(props) {
             )
 
             const resultConsulta = await getConsultas();
-            if(pacienteFiltrado.length !== 0){
+            let resposta
+            if (pacienteFiltrado.length !== 0) {
                 let DadoFiltrado = resultConsulta.data.filter(
                     (consulta) => {
+                        resposta = false
                         console.log(pacienteFiltrado, consulta)
-                        return (pacienteFiltrado[0].CPF === consulta.CPF_Paciente)
+  
+                       pacienteFiltrado.forEach((paciente) => {
+                            console.log(paciente)
+                            if(paciente.CPF === consulta.CPF_Paciente){resposta = true} 
+                        })
+                        return resposta
                     }
-    
+
                 )
                 console.log("Antes do set", DadoFiltrado);
                 setDados(DadoFiltrado)
                 console.log(Dados)
-    
+
             }
-           
+
         } catch (error) {
             console.error(error);
         }
@@ -78,30 +85,30 @@ export default function Lista(props) {
 
     return (
         <>
-        {Dados[0] !== "" ? 
-        <Box
-            sx={{ width: '100%', height: '80%', maxWidth: 400,flexDirection: 'column', bgcolor: 'background.paper' }}
-        >
-            <Typography sx={{ px:0 }} textAlign="center">
-                Consultas
-            </Typography>
-                {Dados.map((consulta) => {
-                    console.log(Dados)
-                    return (
-                        <Paper sx={{ maxWidth: 200 }} elevation={0}
-                            key={`${consulta.id}` + '1'}
-                        >
-                            {<FormEdit key={consulta.id} getAll={findPacientes} deletar={async () => removeConsulta(consulta.id)} funcao={editConsulta} ignore='id' obj={consulta} chaves={Object.keys(consulta)} texto={consulta.dia}></FormEdit>}
-                        </Paper>
-                    )
-                })}
+            {Dados[0] !== "" ?
+                <Box
+                    sx={{ width: '100%', height: '80%', maxWidth: 400, flexDirection: 'column', bgcolor: 'background.paper' }}
+                >
+                    <Typography sx={{ px: 0 }} textAlign="center">
+                        Consultas
+                    </Typography>
+                    {Dados.map((consulta) => {
+                        console.log(Dados)
+                        return (
+                            <Paper sx={{ maxWidth: 200 }} elevation={0}
+                                key={`${consulta.id}` + '1'}
+                            >
+                                {<FormEdit key={consulta.id} getAll={findPacientes} deletar={async () => removeConsulta(consulta.id)} funcao={editConsulta} ignore='id' obj={consulta} chaves={Object.keys(consulta)} texto={consulta.dia}></FormEdit>}
+                            </Paper>
+                        )
+                    })}
 
 
-        </Box>
-             : <Typography sx={{ px:0 }} textAlign="center">
-             Nenhum paciente com esse nome tem consultas, escreva o nome completo e verifique se está digitado corretamente
-         </Typography>}
-            
-            </>
+                </Box>
+                : <Typography sx={{ px: 0 }} textAlign="center">
+                    Nenhum paciente com esse nome tem consultas, escreva o nome completo e verifique se está digitado corretamente
+                </Typography>}
+
+        </>
     );
 }

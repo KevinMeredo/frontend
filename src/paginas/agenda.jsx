@@ -209,7 +209,7 @@ export function Agenda() {
             {erro && (<Dialog open={open} onClose={() => { setOpen(false) }}>
                 <DialogTitle>Erro: </DialogTitle>
                 <DialogContent>
-                    <Typography sx={{ px: 30 }} textAlign="center">
+                    <Typography sx={{ px: 3 }} textAlign="center">
                         {erro}
                     </Typography>
                 </DialogContent>
@@ -218,7 +218,7 @@ export function Agenda() {
                 </DialogActions>
             </Dialog>)}
             <Nav></Nav>
-            <Paper sx={{ mt: 10, width: '70%', height: '100%', overflow: 'scroll', maxWidth: 1200 }}>
+            <Paper sx={{ mt: 10,  width: {xs:'100%', sm:'100%',xl:'70%',lg:'70%'}, height: '100%', overflow: 'scroll', maxWidth: 1200 }}>
 
                 <Grid
                     sx={{ ml: 2, gap: 2 }}

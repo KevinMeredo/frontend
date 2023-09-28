@@ -1,6 +1,7 @@
 const { HttpHelper } = require('../utils/http-helper');
 const { MedicoModel } = require('../models/medico-model');
 const { ConsultaModel } = require('../models/consulta-model');
+const { Op } = require("sequelize");
 
 class MedicoController {
     async create(request, response) {
@@ -18,6 +19,12 @@ class MedicoController {
             if (!naturalidade) return httpHelper.badRequest('Naturalidade inválida!');
 
             if (!email) return httpHelper.badRequest('Email inválido!');
+            const repeteUnique = MedicoModel.findOne({
+                where: {
+                    [Op.or]: [{ CPF: CPF }, { CRM: CRM }, { email: email }]
+                }
+            })
+            if (repeteUnique) return httpHelper.badRequest('Há outro Medico com este CRM, CPF ou Email, verifique os dados antes de cadastrar')
 
             const medico = await MedicoModel.create({
                 CPF, CRM, nascimento, nome, email, naturalidade
@@ -76,6 +83,12 @@ class MedicoController {
 
             const MedicoExiste = await MedicoModel.findByPk(id);
             if (!MedicoExiste) return httpHelper.notFound('medico não encontrado!');
+            const repeteUnique = MedicoModel.findOne({
+                where: {
+                    [Op.or]: [{ CPF: CPF }, { CRM: CRM }, { email: email }]
+                }
+            })
+            if (repeteUnique) return httpHelper.badRequest('Há outro Medico com este CRM, CPF ou Email, verifique os dados antes de atualizar')
             await MedicoModel.update({
                 CPF, CRM, nascimento, nome, naturalidade, email
             }, {

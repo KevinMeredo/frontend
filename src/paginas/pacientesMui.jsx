@@ -158,7 +158,7 @@ export function PacientesMui() {
       {erro && (<Dialog open={open} onClose={() => { setOpen(false) }}>
         <DialogTitle>Erro: </DialogTitle>
         <DialogContent>
-          <Typography sx={{ px: 30 }} textAlign="center">
+          <Typography sx={{ px: 3 }} textAlign="center">
             {erro}
           </Typography>
         </DialogContent>
@@ -168,7 +168,7 @@ export function PacientesMui() {
       </Dialog>)}
 
       <Nav></Nav>
-      <Paper sx={{ mt: 10, width: '70%', height: '100%', overflow: 'auto' }}>
+      <Paper sx={{ mt: 10, width: {xs:'100%', sm:'100%',xl:'70%',lg:'70%'}, height: '100%', overflow: 'auto' }}>
         <Grid
           sx={{ ml: 2, gap: 2 }}
           container
@@ -210,7 +210,7 @@ export function PacientesMui() {
                             </TableCell>
                           );
                         })}
-                        <TableCell>
+                        <TableCell key={row.id +'1'}>
                           <FormEdit deletar={async () => removePaciente(row.id)} funcao={editPaciente} ignore='id' texto='Editar' obj={row} chaves={Object.keys(row)}></FormEdit>
 
                         </TableCell>
