@@ -1,12 +1,20 @@
+import * as React from 'react';
 import { Form, Button, Col, Row } from 'react-bootstrap';
 import { useForm } from 'react-hook-form';
 import 'bootstrap/dist/css/bootstrap.min.css'
 import { loginUser } from '../services/user-service';
 import { useNavigate } from 'react-router-dom';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogTitle from '@mui/material/DialogTitle';
+import { Typography } from '@mui/material';
 
-export function Login(){
-    
-    const { handleSubmit, register, formState: { errors } } = useForm({mode: 'onChange'});
+export function Login() {
+
+    const [erro, setErro] = React.useState()
+    const [open, setOpen] = React.useState(false)
+    const { handleSubmit, register, formState: { errors } } = useForm({ mode: 'onChange' });
 
     const navigate = useNavigate();
 
@@ -16,24 +24,37 @@ export function Login(){
             navigate('/Painel');
         } catch (error) {
             console.log(error.response.data.error)
+            setOpen(true);
+            setErro(error.response.data.error)
         }
     }
     return (
         <div className='d-flex justify-content-center '>
             <div className='login-registro-card'>
+                {erro && (<Dialog open={open} onClose={() => { setOpen(false) }}>
+                    <DialogTitle>Erro: </DialogTitle>
+                    <DialogContent>
+                        <Typography sx={{ px: 3 }} textAlign="center">
+                            {erro}
+                        </Typography>
+                    </DialogContent>
+                    <DialogActions>
+                        <Button onClick={() => { setOpen(false) }}>Fechar</Button>
+                    </DialogActions>
+                </Dialog>)}
                 <Form className=' form-container p-5 card mw-800px ' noValidate validated={!errors} onSubmit={handleSubmit(onSubmit)}>
                     <Row>
                         <Col>
                             Seja bem-vindo!
-                            <Row> 
+                            <Row>
                                 <Col> <h1>Login</h1> </Col>
                             </Row>
-                        </Col>        
+                        </Col>
                         <Col className='w-auto' >
-                          <p >Sem registro? <a href='/Cadastro'>Registre-se</a></p>
-                        </Col>       
+                            <p >Sem registro? <a href='/Cadastro'>Registre-se</a></p>
+                        </Col>
                     </Row>
-                    
+
                     <Row>
                         <Form.Group as={Col} sm className='mb-4'>
                             <Form.Label>CPF</Form.Label>
@@ -51,7 +72,7 @@ export function Login(){
                                         value: /[0-9]{11}/,
                                         message: 'Escreva os 11 números do CPF (apenas os números)'
                                     },
-                                    maxLength:{
+                                    maxLength: {
                                         value: 11,
                                         message: "CPF invalido"
                                     }
@@ -79,12 +100,11 @@ export function Login(){
                         </Form.Group>
                     </Row>
                     <Row className=' display-flex justify-content-center align-items-center w-100'>
-                      <Button className='w-50 position' type="submit">Entrar</Button>
+                        <Button className='w-50 position' type="submit">Entrar</Button>
                     </Row>
-                    
+
                 </Form>
             </div>
         </div>
     );
-}  
-    
+}

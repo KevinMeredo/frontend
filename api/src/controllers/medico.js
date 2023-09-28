@@ -83,12 +83,6 @@ class MedicoController {
 
             const MedicoExiste = await MedicoModel.findByPk(id);
             if (!MedicoExiste) return httpHelper.notFound('medico não encontrado!');
-            const repeteUnique = MedicoModel.findOne({
-                where: {
-                    [Op.or]: [{ CPF: CPF }, { CRM: CRM }, { email: email }]
-                }
-            })
-            if (repeteUnique) return httpHelper.badRequest('Há outro Medico com este CRM, CPF ou Email, verifique os dados antes de atualizar')
             await MedicoModel.update({
                 CPF, CRM, nascimento, nome, naturalidade, email
             }, {

@@ -27,7 +27,6 @@ import * as React from 'react';
 import '../App.css'
 
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { createConsulta, getConsultas, updateConsulta, deleteConsulta } from '../services/consulta-service';
 import { getPacientes } from '../services/paciente-service';
 import { getMedicos } from '../services/medico-service';
@@ -66,8 +65,6 @@ export function Agenda() {
     const [consultas, setConsultas] = useState([]);
     const [diasDaSemana, setDiasDaSemana] = useState([])
 
-    const navigate = useNavigate();
-
     useEffect(() => {
         findMedicos()
         findPacientes()
@@ -79,8 +76,6 @@ export function Agenda() {
             const result = await getConsultas();
             let novoDado = await result.data.map(
                 async (consulta) => {
-                    console.log(consulta)
-                    console.log('pacientes ', pacientes)
                     pacientes.map(
                         (paciente) => {
                             if (paciente.CPF === consulta.CPF_Paciente)
@@ -90,12 +85,9 @@ export function Agenda() {
 
                 }
             )
-            console.log("Antes do set", result.data);
             setDados(result.data)
-            console.log("Depois do setDados", Dados, diasDaSemana)
-            console.log("novoDado", novoDado)
             setPacientes(novoDado)
-            console.log(pacientes)
+
         } catch (error) {
             setOpen(true);
             setErro(error.response.data.error)
@@ -118,7 +110,6 @@ export function Agenda() {
         try {
             const result = await getMedicos();
             setMedicos(result.data)
-            console.log(medicos)
 
         } catch (error) {
             setOpen(true);
@@ -140,7 +131,6 @@ export function Agenda() {
         try {
             await createConsulta(data);
             await findConsultas();
-            console.log(data)
         } catch (error) {
             setOpen(true);
             setErro(error.response.data.error)
@@ -167,17 +157,13 @@ export function Agenda() {
     }
 
     async function setConsultasSemana(diasDaSemana) {
-
-        console.log("setConsultasSemana")
         setDiasDaSemana(diasDaSemana)
         setConsultas(
             Dados.filter(
                 function (Dados) {
-                    console.log(Dados, diasDaSemana)
                     return (diasDaSemana.includes(Dados.dia))
                 }
             ))
-        console.log("consultas: ", consultas)
     };
     function getSemana(data) {
         findConsultas()
@@ -201,7 +187,6 @@ export function Agenda() {
             }
             diasDaSemana.push(`${data.$d.getFullYear()}-${mes}-${dia}`)
         }
-        console.log(diasDaSemana)
         setConsultasSemana(diasDaSemana)
     }
     return (
@@ -260,7 +245,6 @@ export function Agenda() {
                             <TableBody>
                                 <TableRow>
                                     {diasDaSemana.map((dia) => {
-                                        console.log("medico: ", medico)
                                         return (
                                             <TableCell sx={{ maxWidth: 100 }} key={dia} align='center'>
                                                 {consultas.map((consulta) => {
