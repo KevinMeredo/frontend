@@ -207,7 +207,7 @@ export function Agenda() {
                 (<Dialog open={open} onClose={() => { setOpen(false) }}>
                     <DialogTitle>ERRO: </DialogTitle>
                     <DialogContent>
-                        <Typography sx={{ px: 3 }} textAlign="center">
+                        <Typography sx={{ px: 3 }} color={'error'} textAlign="center">
                             {erro}
                         </Typography>
                     </DialogContent>
