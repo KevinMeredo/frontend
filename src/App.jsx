@@ -4,7 +4,7 @@ import { Cadastro } from './paginas/cadastro';
 import { Login } from './paginas/login';
 import { PacientesMui } from './paginas/pacientesMui';
 import { MedicosMui } from './paginas/medicosMui';
-import { Painel } from './paginas/Painel';
+import { Painel } from './paginas/painel';
 import { isAuthenticated } from './utils/is-authenticated';
 import { EditarPerfil } from './paginas/editarPerfil';
 
