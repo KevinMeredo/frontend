@@ -39,7 +39,8 @@ export function EditarPerfil() {
             delete user.data.senha
             setDados(user.data)
         } catch (error) {
-            console.log(error)
+            alert(error.response.data.error)
+            navigate('/')
         }
     }
     async function removeUser(id) {

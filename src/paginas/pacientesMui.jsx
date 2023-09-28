@@ -1,5 +1,6 @@
 import * as React from 'react';
 import '../App.css'
+import { useNavigate } from 'react-router-dom';
 import Table from '@mui/material/Table';
 import TableHead from '@mui/material/TableHead';
 import TableBody from '@mui/material/TableBody';
@@ -38,6 +39,7 @@ const PlusIcon = createSvgIcon(
 );
 export function PacientesMui() {
 
+  const navigate=useNavigate()
   const estrutura = {
     nome: "",
     CPF: "",
@@ -75,6 +77,7 @@ export function PacientesMui() {
       format: (value) => value.toFixed(2),
     },
   ];
+  const [mensagem, setMensagem] = React.useState()
   const [erro, setErro] = React.useState()
   const [open, setOpen] = React.useState(false)
   const [rows, setRows] = React.useState([''])
@@ -89,8 +92,8 @@ export function PacientesMui() {
 
     } catch (error) {
       console.error(error);
-      setOpen(true);
-      setErro(error.response.data.error)
+      alert(error.response.data.error)
+      navigate('/')
     }
   }
 
@@ -110,6 +113,8 @@ export function PacientesMui() {
     try {
       await createPaciente(data);
       await findPacientes();
+      setMensagem('Paciente criado com sucesso')
+      setOpen(true)
     } catch (error) {
       setOpen(true);
       setErro(error.response.data.error)
@@ -128,6 +133,8 @@ export function PacientesMui() {
         email: data.email
       });
       await findPacientes();
+      setMensagem('Paciente atualizado com sucesso')
+      setOpen(true)
     } catch (error) {
       console.error(error);
       setOpen(true);
@@ -138,6 +145,8 @@ export function PacientesMui() {
     try {
       await deletePaciente(id);
       await findPacientes();
+      setMensagem('Paciente deletado com sucesso')
+      setOpen(true)
     } catch (error) {
       console.error(error);
       setOpen(true);
@@ -155,17 +164,30 @@ export function PacientesMui() {
 
   return (
     <>
-      {erro && (<Dialog open={open} onClose={() => { setOpen(false) }}>
-        <DialogTitle>Erro: </DialogTitle>
-        <DialogContent>
-          <Typography sx={{ px: 3 }} textAlign="center">
-            {erro}
-          </Typography>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={() => { setOpen(false) }}>Fechar</Button>
-        </DialogActions>
-      </Dialog>)}
+      {erro ?
+                (<Dialog open={open} onClose={() => { setOpen(false) }}>
+                    <DialogTitle>ERRO: </DialogTitle>
+                    <DialogContent>
+                        <Typography sx={{ px: 3 }} textAlign="center">
+                            {erro}
+                        </Typography>
+                    </DialogContent>
+                    <DialogActions>
+                        <Button onClick={() => { setOpen(false) }}>Fechar</Button>
+                    </DialogActions>
+                </Dialog>) :
+
+                <Dialog open={open} onClose={() => { setOpen(false) }}>
+                    <DialogTitle>Sucesso: </DialogTitle>
+                    <DialogContent>
+                        <Typography sx={{ px: 3 }} textAlign="center">
+                            {mensagem}
+                        </Typography>
+                    </DialogContent>
+                    <DialogActions>
+                        <Button onClick={() => { setOpen(false) }}>Fechar</Button>
+                    </DialogActions>
+                </Dialog>}
 
       <Nav></Nav>
       <Paper sx={{ mt: 10, width: {xs:'100%', sm:'100%',xl:'70%',lg:'70%'}, height: '100%', overflow: 'auto' }}>

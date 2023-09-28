@@ -1,5 +1,6 @@
 import Paper from '@mui/material/Paper';
 import { Nav } from "../componentes/Nav";
+import { useNavigate } from 'react-router-dom';
 import Table from '@mui/material/Table';
 import TableHead from '@mui/material/TableHead';
 import TableBody from '@mui/material/TableBody';
@@ -47,6 +48,8 @@ const PlusIcon = createSvgIcon(
 );
 
 export function Agenda() {
+    const navigate = useNavigate()
+
     const estrutura = {
         CPF_Paciente: "",
         CRM_Medico: "",
@@ -57,6 +60,7 @@ export function Agenda() {
         dia: "",
     }
     const [erro, setErro] = useState()
+    const [mensagem, setMensagem] = useState()
     const [open, setOpen] = useState(false)
     const [medicos, setMedicos] = useState([])
     const [medico, setMedico] = useState({})
@@ -90,7 +94,8 @@ export function Agenda() {
 
         } catch (error) {
             setOpen(true);
-            setErro(error.response.data.error)
+            alert(error.response.data.error)
+            navigate('/')
         }
 
     }
@@ -100,7 +105,8 @@ export function Agenda() {
         try {
             await deleteConsulta(id);
             await findConsultas();
-
+            setOpen(true);
+            setMensagem('atendimento deletado com sucesso')
         } catch (error) {
             setOpen(true);
             setErro(error.response.data.error)
@@ -113,7 +119,8 @@ export function Agenda() {
 
         } catch (error) {
             setOpen(true);
-            setErro(error.response.data.error)
+            alert(error.response.data.error)
+            navigate('/')
         }
     }
 
@@ -124,13 +131,16 @@ export function Agenda() {
 
         } catch (error) {
             setOpen(true);
-            setErro(error.response.data.error)
+            alert(error.response.data.error)
+            navigate('/')
         }
     }
     async function addConsulta(data) {
         try {
             await createConsulta(data);
             await findConsultas();
+            setOpen(true);
+            setMensagem('atendimento adicionado com sucesso')
         } catch (error) {
             setOpen(true);
             setErro(error.response.data.error)
@@ -150,6 +160,8 @@ export function Agenda() {
                 observação: data.observação
             });
             await findConsultas();
+            setOpen(true);
+            setMensagem('atendimento atualizado com sucesso')
         } catch (error) {
             setOpen(true);
             setErro(error.response.data.error)
@@ -191,19 +203,33 @@ export function Agenda() {
     }
     return (
         <>
-            {erro && (<Dialog open={open} onClose={() => { setOpen(false) }}>
-                <DialogTitle>Erro: </DialogTitle>
-                <DialogContent>
-                    <Typography sx={{ px: 3 }} textAlign="center">
-                        {erro}
-                    </Typography>
-                </DialogContent>
-                <DialogActions>
-                    <Button onClick={() => { setOpen(false) }}>Fechar</Button>
-                </DialogActions>
-            </Dialog>)}
+            {erro ?
+                (<Dialog open={open} onClose={() => { setOpen(false) }}>
+                    <DialogTitle>ERRO: </DialogTitle>
+                    <DialogContent>
+                        <Typography sx={{ px: 3 }} textAlign="center">
+                            {erro}
+                        </Typography>
+                    </DialogContent>
+                    <DialogActions>
+                        <Button onClick={() => { setOpen(false) }}>Fechar</Button>
+                    </DialogActions>
+                </Dialog>) :
+
+                <Dialog open={open} onClose={() => { setOpen(false) }}>
+                    <DialogTitle>Sucesso: </DialogTitle>
+                    <DialogContent>
+                        <Typography sx={{ px: 3 }} textAlign="center">
+                            {mensagem}
+                        </Typography>
+                    </DialogContent>
+                    <DialogActions>
+                        <Button onClick={() => { setOpen(false) }}>Fechar</Button>
+                    </DialogActions>
+                </Dialog>}
+
             <Nav></Nav>
-            <Paper sx={{ mt: 10,  width: {xs:'100%', sm:'100%',xl:'70%',lg:'70%'}, height: '100%', overflow: 'scroll', maxWidth: 1200 }}>
+            <Paper sx={{ mt: 10, width: { xs: '100%', sm: '100%', xl: '70%', lg: '70%' }, height: '100%', overflow: 'scroll', maxWidth: 1200 }}>
 
                 <Grid
                     sx={{ ml: 2, gap: 2 }}

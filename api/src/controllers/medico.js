@@ -19,12 +19,12 @@ class MedicoController {
             if (!naturalidade) return httpHelper.badRequest('Naturalidade inválida!');
 
             if (!email) return httpHelper.badRequest('Email inválido!');
-            const repeteUnique = MedicoModel.findOne({
+/*             const repeteUnique = MedicoModel.findOne({
                 where: {
                     [Op.or]: [{ CPF: CPF }, { CRM: CRM }, { email: email }]
                 }
             })
-            if (repeteUnique) return httpHelper.badRequest('Há outro Medico com este CRM, CPF ou Email, verifique os dados antes de cadastrar')
+            if (repeteUnique) return httpHelper.badRequest('Há outro Medico com este CRM, CPF ou Email, verifique os dados antes de cadastrar') */
 
             const medico = await MedicoModel.create({
                 CPF, CRM, nascimento, nome, email, naturalidade

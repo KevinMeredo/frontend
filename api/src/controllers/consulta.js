@@ -9,19 +9,17 @@ class ConsultaController {
             const { CPF_Paciente, CRM_Medico, dia, tipo, status, urgencia, observação } = request.body;
             if (!CPF_Paciente) return httpHelper.badRequest('CPF inválido!');
 
-            if (!CRM_Medico)  return httpHelper.badRequest('CRM inválido!');
+            if (!CRM_Medico) return httpHelper.badRequest('CRM inválido!');
 
-            if (!dia)  return httpHelper.badRequest('Dia inválido!');
+            if (!dia) return httpHelper.badRequest('Dia inválido!');
 
-            if (!tipo)  return httpHelper.badRequest('Tipo inválido');
+            if (!tipo) return httpHelper.badRequest('Tipo inválido');
 
-            if (!status)  return httpHelper.badRequest('status inválidos!');
+            if (!status) return httpHelper.badRequest('status inválidos!');
 
-            if (!urgencia)  return httpHelper.badRequest('urgencia inválida!');
+            if (!urgencia) return httpHelper.badRequest('urgencia inválida!');
 
-            if (!observação)  return httpHelper.badRequest('Observação inválida!');
-            const pacienteExiste = await PacienteModel.findOne({where: {CPF: CPF_Paciente}})
-            if(!pacienteExiste) return httpHelper.notFound(`Paciente com CPF: ${CPF_Paciente} não encontrado`)
+            if (!observação) return httpHelper.badRequest('Observação inválida!');
             const consulta = await ConsultaModel.create({
                 CPF_Paciente, CRM_Medico, dia, tipo, status, urgencia, observação
             });
@@ -46,6 +44,7 @@ class ConsultaController {
         try {
             const { id } = request.params;
             if (!id) return httpHelper.badRequest('Parâmetros inválidos!');
+
             const consultaExiste = await ConsultaModel.findOne({ where: { id } });
             if (!consultaExiste) return httpHelper.notFound('Consulta não encontrada!');
             await ConsultaModel.destroy({ where: { id } });
@@ -63,11 +62,14 @@ class ConsultaController {
             const { id } = request.params;
             const { CPF_Paciente, CRM_Medico, dia, tipo, status, urgencia, observação } = request.body;
             if (!id) return httpHelper.badRequest('Parâmetros inválidos!');
-            
+
             const consultaExiste = await ConsultaModel.findByPk(id);
             if (!consultaExiste) return httpHelper.notFound('consulta não encontrado!');
-            const pacienteExiste = await PacienteModel.findOne({where: {CPF: CPF_Paciente}})
-            if(!pacienteExiste) return httpHelper.notFound(`Paciente com CPF: ${CPF_Paciente} não encontrado`)
+            if (CPF_Paciente) {
+                const pacienteExiste = await PacienteModel.findOne({ where: { CPF: CPF_Paciente } })
+                if (!pacienteExiste) return httpHelper.notFound(`Paciente com CPF: ${CPF_Paciente} não encontrado`)
+            }
+
             await ConsultaModel.update({
                 CPF_Paciente, CRM_Medico, dia, tipo, status, urgencia, observação
             }, {

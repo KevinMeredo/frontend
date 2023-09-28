@@ -1,5 +1,6 @@
 import * as React from 'react';
 import '../App.css'
+import { useNavigate } from 'react-router-dom';
 import Table from '@mui/material/Table';
 import TableHead from '@mui/material/TableHead';
 import TableBody from '@mui/material/TableBody';
@@ -41,6 +42,7 @@ const PlusIcon = createSvgIcon(
 
 
 export function MedicosMui() {
+  const navigate=useNavigate()
   const estrutura = {
     nome: "",
     CPF: "",
@@ -79,6 +81,7 @@ export function MedicosMui() {
       format: (value) => value.toFixed(2),
     },
   ];
+  const [mensagem, setMensagem] = React.useState()
   const [erro, setErro] = React.useState()
   const [open, setOpen] = React.useState(false)
   const [rows, setRows] = React.useState([''])
@@ -86,14 +89,15 @@ export function MedicosMui() {
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
   async function findMedicos() {
+    
     try {
       const result = await getMedicos();
       setRows(result.data)
       console.log(rows)
 
     } catch (error) {
-      setOpen(true);
-      setErro(error.response.data.error)
+      alert(error.response.data.error)
+      navigate('/')
     }
   }
   async function findByCRM(CRM) {
@@ -109,10 +113,11 @@ export function MedicosMui() {
   }
 
   async function addMedico(data) {
-    console.log(data)
     try {
       await createMedico(data);
       await findMedicos();
+      setMensagem('Médico criado com sucesso')
+      setOpen(true)
     } catch (error) {
       setOpen(true);
       setErro(error.response.data.error)
@@ -130,6 +135,8 @@ export function MedicosMui() {
         email: data.email
       });
       await findMedicos();
+      setMensagem('Médico atualizado com sucesso')
+      setOpen(true)
     } catch (error) {
       setOpen(true);
       setErro(error.response.data.error)
@@ -139,6 +146,8 @@ export function MedicosMui() {
     try {
       await deleteMedico(id);
       await findMedicos();
+      setMensagem('Médico deletado com sucesso')
+      setOpen(true)
     } catch (error) {
       setOpen(true);
       setErro(error.response.data.error)
@@ -156,17 +165,30 @@ export function MedicosMui() {
 
   return (
     <>
-      {erro && (<Dialog open={open} onClose={() => { setOpen(false) }}>
-        <DialogTitle>Erro: </DialogTitle>
-        <DialogContent>
-          <Typography sx={{ px: 3 }} textAlign="center">
-            {erro}
-          </Typography>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={() => { setOpen(false) }}>Fechar</Button>
-        </DialogActions>
-      </Dialog>)}
+      {erro ?
+                (<Dialog open={open} onClose={() => { setOpen(false) }}>
+                    <DialogTitle>ERRO: </DialogTitle>
+                    <DialogContent>
+                        <Typography sx={{ px: 3 }} textAlign="center">
+                            {erro}
+                        </Typography>
+                    </DialogContent>
+                    <DialogActions>
+                        <Button onClick={() => { setOpen(false) }}>Fechar</Button>
+                    </DialogActions>
+                </Dialog>) :
+
+                <Dialog open={open} onClose={() => { setOpen(false) }}>
+                    <DialogTitle>Sucesso: </DialogTitle>
+                    <DialogContent>
+                        <Typography sx={{ px: 3 }} textAlign="center">
+                            {mensagem}
+                        </Typography>
+                    </DialogContent>
+                    <DialogActions>
+                        <Button onClick={() => { setOpen(false) }}>Fechar</Button>
+                    </DialogActions>
+                </Dialog>}
       <Nav></Nav>
       <Paper sx={{ mt: 10,  width: {xs:'100%', sm:'100%',xl:'70%',lg:'70%'}, height: '100%', overflow: 'scroll' }}>
 
