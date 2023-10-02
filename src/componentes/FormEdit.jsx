@@ -8,7 +8,6 @@ import DialogTitle from '@mui/material/DialogTitle';
 import ModalConfirmacao from '../componentes/ModalConfirmacao'
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
-import Typography from '@mui/material/Typography';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
@@ -214,7 +213,7 @@ export default function FormEdit(props) {
                   <>
                     <TextField
 
-                      key={key}
+                      key={`${key} 12`}
                       InputProps={{
                         inputProps: {
                           pattern: '[0-9]*',
@@ -241,11 +240,12 @@ export default function FormEdit(props) {
                 return (<>
                   {props.medicos &&
                     <FormControl key={-1} sx={{ m: 1, minWidth: 100 }} >
-                      <InputLabel >Medico</InputLabel>
+                      <InputLabel id="demo-simple-select-autowidth-label" >Medico</InputLabel>
                       <Select
                         labelId="demo-simple-select-autowidth-label"
                         id="demo-simple-select-autowidth"
                         autoWidth
+                        defaultValue={padrao.CRM_Medico ? padrao.CRM_Medico : ""}
                         onChange={(event) => {
                           mudaDado(event.target.value, key, padrao[props.ignore]);
                         }}

@@ -1,17 +1,13 @@
 import * as React from 'react';
 import Box from '@mui/material/Box';
-import ListItem from '@mui/material/ListItem';
-import ListItemButton from '@mui/material/ListItemButton';
 import FormEdit from './FormEdit';
 import { Paper, Typography } from '@mui/material';
-import { FixedSizeList } from 'react-window';
 import { getConsultas, updateConsulta, deleteConsulta } from '../services/consulta-service';
 
 import { getPacientes } from '../services/paciente-service';
 
 export default function Lista(props) {
     const [Dados, setDados] = React.useState([''])
-    const [paciente, setPaciente] = React.useState({ CPF: '' })
     React.useEffect(() => {
         findPacientes()
     }, [])
@@ -23,7 +19,7 @@ export default function Lista(props) {
             let pacienteFiltrado = result.data.filter(
                 (paciente) => {
                     console.log(paciente)
-                    return (paciente.nome.toLowerCase() === props.nome.toLowerCase())
+                    if (paciente.nome.toLowerCase().indexOf(props.nome.toLowerCase()) !== -1) return true
                 }
             )
 
@@ -34,16 +30,28 @@ export default function Lista(props) {
                     (consulta) => {
                         resposta = false
                         console.log(pacienteFiltrado, consulta)
-  
-                       pacienteFiltrado.forEach((paciente) => {
+
+                        pacienteFiltrado.forEach((paciente) => {
                             console.log(paciente)
-                            if(paciente.CPF === consulta.CPF_Paciente){resposta = true} 
+                            if (paciente.CPF === consulta.CPF_Paciente) {
+                                console.log(paciente.nome)
+                                consulta.nome = paciente.nome
+                                console.log(consulta)
+                                resposta = true
+                            }
                         })
                         return resposta
                     }
 
                 )
                 console.log("Antes do set", DadoFiltrado);
+                DadoFiltrado.sort((a, b) => {
+
+                    if (a.dia > b.dia) return 1
+                    if (b.dia > a.dia) return -1
+
+                    return 0;
+                })
                 setDados(DadoFiltrado)
                 console.log(Dados)
 
@@ -95,11 +103,15 @@ export default function Lista(props) {
                     {Dados.map((consulta) => {
                         console.log(Dados)
                         return (
-                            <Paper sx={{ maxWidth: 200 }} elevation={0}
-                                key={`${consulta.id}` + '1'}
-                            >
-                                {<FormEdit key={consulta.id} getAll={findPacientes} deletar={async () => removeConsulta(consulta.id)} funcao={editConsulta} ignore='id' obj={consulta} chaves={Object.keys(consulta)} texto={consulta.dia}></FormEdit>}
+                            <Paper key={`${consulta.id} + '3'`} className='linha' sx={{ m:2, gap: 2, display: 'flex' }}>
+                                {consulta.nome + '  '}<br />CPF do Paciente: {consulta.CPF_Paciente}    <br />
+                                <Paper sx={{ maxWidth: 200 }} elevation={0}
+                                    key={`${consulta.id}` + '1'}
+                                >
+                                    {<FormEdit key={consulta.id} getAll={findPacientes} deletar={async () => removeConsulta(consulta.id)} funcao={editConsulta} ignore='id' obj={consulta} chaves={Object.keys(consulta)} texto={consulta.dia}></FormEdit>}
+                                </Paper>
                             </Paper>
+
                         )
                     })}
 
