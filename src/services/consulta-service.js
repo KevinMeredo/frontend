@@ -37,7 +37,6 @@ export async function updateConsulta(data) {
     });
     return result;
 }
-
 export async function createConsulta(data) {
     const accessToken = sessionStorage.getItem('token');
     const result = await api.post('/consulta', {

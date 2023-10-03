@@ -4,7 +4,6 @@ import InputBase from '@mui/material/InputBase';
 import SearchIcon from '@mui/icons-material/Search';
 import FormControl from '@mui/material/FormControl';
 import { FormHelperText } from '@mui/material';
-import FormEdit from './FormEdit';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
@@ -56,5 +55,4 @@ export default function BuscarLista(props) {
       </Dialog>
         </Paper>
     )
-
 }

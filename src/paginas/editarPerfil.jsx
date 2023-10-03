@@ -60,7 +60,6 @@ export function EditarPerfil() {
         return data
     }
     function VerificaCPF(CPF) {
-
         var soma;
         var resto;
         soma = 0;

@@ -161,7 +161,6 @@ export function PacientesMui() {
     setRowsPerPage(+event.target.value);
     setPage(0);
   };
-
   return (
     <>
       {erro ?

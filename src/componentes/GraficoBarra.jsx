@@ -33,6 +33,7 @@ export function GraficoBarra(props) {
         dados[i].push(0)
       }
     }
+    anos.sort()
     anos.forEach((ano, key) => {
       switch (consulta.dia.slice(5, 7)) {
         case '01':

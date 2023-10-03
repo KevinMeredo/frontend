@@ -13,9 +13,9 @@ export async function loginUser(data) {
 
 export async function getUser() {
     const accessToken = sessionStorage.getItem('token');
-    
+
     console.log(JSON.parse(accessToken))
-    const result = await api.get('/user',{
+    const result = await api.get('/user', {
         headers: {
             'Authorization': `Bearer ${JSON.parse(accessToken)}`
         }

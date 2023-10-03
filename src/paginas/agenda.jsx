@@ -169,19 +169,24 @@ export function Agenda() {
     }
 
     async function setConsultasSemana(diasDaSemana) {
-        setDiasDaSemana(diasDaSemana)
-        setConsultas(
-            Dados.filter(
-                function (Dados) {
-                    return (diasDaSemana.includes(Dados.dia))
-                }
-            ))
+        if (diasDaSemana) {
+            console.log(diasDaSemana)
+            setDiasDaSemana(diasDaSemana)
+            setConsultas(
+                Dados.filter(
+                    function (Dados) {
+                        return (diasDaSemana.includes(Dados.dia))
+                    }
+                ))
+        }
+
     };
     function getSemana(data) {
         findConsultas()
         let mes
         let dia
-        const diasDaSemana = []
+        let ano
+        const Semana = []
         let diaDaSemana = data.$d.getDay()
         data.$d.setDate(data.$d.getDate() - diaDaSemana - 1)
         for (let i = 0; i < 7; i++) {
@@ -197,9 +202,16 @@ export function Agenda() {
             if (data.$d.getMonth() < 9) {
                 mes = `0${mes}`;
             }
-            diasDaSemana.push(`${data.$d.getFullYear()}-${mes}-${dia}`)
+            ano = data.$d.getFullYear()
+            if (!isNaN(mes) && !isNaN(dia) && !isNaN(ano) && ano>=1000) {
+                console.log(Semana)
+                Semana.push(`${ano}-${mes}-${dia}`)
+            }
         }
-        setConsultasSemana(diasDaSemana)
+
+        setConsultasSemana(Semana)
+
+
     }
     return (
         <>
@@ -259,32 +271,94 @@ export function Agenda() {
                         <Table stickyHeader aria-label="sticky table" >
                             <TableHead>
                                 <TableRow>
-                                    <TableCell align='center'> Domingo</TableCell>
-                                    <TableCell align='center'> Segunda</TableCell>
-                                    <TableCell align='center'> Terça</TableCell>
-                                    <TableCell align='center'> Quarta</TableCell>
-                                    <TableCell align='center'> Quinta</TableCell>
-                                    <TableCell align='center'> Sexta</TableCell>
-                                    <TableCell align='center'> Sábado</TableCell>
+                                    <TableCell key={'Domingo'} align='center'> Domingo</TableCell>
+                                    <TableCell key={'Segunda'} align='center'> Segunda</TableCell>
+                                    <TableCell key={'Terca'} align='center'> Terça</TableCell>
+                                    <TableCell key={'Quarta'} align='center'> Quarta</TableCell>
+                                    <TableCell key={'Quinta'} align='center'> Quinta</TableCell>
+                                    <TableCell key={'Sexta'} align='center'> Sexta</TableCell>
+                                    <TableCell key={'Sabado'} align='center'> Sábado</TableCell>
                                 </TableRow>
                             </TableHead>
                             <TableBody>
                                 <TableRow>
-                                    {diasDaSemana.map((dia) => {
-                                        return (
-                                            <TableCell sx={{ maxWidth: 100 }} key={dia} align='center'>
-                                                {consultas.map((consulta) => {
-                                                    return (
-                                                        <Paper sx={{ maxWidth: 200 }} elevation={0}
-                                                            key={consulta.id}
-                                                        >
-                                                            {(consulta.dia === dia && (consulta.CRM_Medico === medico.CRM || !medico.CRM)) && <FormEdit medicos={medicos} getAll={findConsultas} deletar={async () => removeConsulta(consulta.id)} funcao={editConsulta} ignore='id' obj={consulta} chaves={Object.keys(consulta)} texto={consulta.NomePaciente}></FormEdit>}
-                                                        </Paper>
-                                                    )
-                                                })}
-                                            </TableCell>
-                                        )
-                                    })}
+                                    <TableCell sx={{ maxWidth: 100 }} key={diasDaSemana[0]} align='center'>
+                                        {consultas.map((consulta) => {
+                                            return (
+                                                <Paper sx={{ maxWidth: 200 }} elevation={0}
+                                                    key={consulta.id}
+                                                >
+                                                    {(consulta.dia === diasDaSemana[0] && (consulta.CRM_Medico === medico.CRM || !medico.CRM)) && <FormEdit medicos={medicos} getAll={findConsultas} deletar={async () => removeConsulta(consulta.id)} funcao={editConsulta} ignore='id' obj={consulta} chaves={Object.keys(consulta)} texto={consulta.NomePaciente}></FormEdit>}
+                                                </Paper>
+                                            )
+                                        })}
+                                    </TableCell>
+                                    <TableCell sx={{ maxWidth: 100 }} key={diasDaSemana[1]} align='center'>
+                                        {consultas.map((consulta) => {
+                                            return (
+                                                <Paper sx={{ maxWidth: 200 }} elevation={0}
+                                                    key={consulta.id}
+                                                >
+                                                    {(consulta.dia === diasDaSemana[1] && (consulta.CRM_Medico === medico.CRM || !medico.CRM)) && <FormEdit medicos={medicos} getAll={findConsultas} deletar={async () => removeConsulta(consulta.id)} funcao={editConsulta} ignore='id' obj={consulta} chaves={Object.keys(consulta)} texto={consulta.NomePaciente}></FormEdit>}
+                                                </Paper>
+                                            )
+                                        })}
+                                    </TableCell>
+                                    <TableCell sx={{ maxWidth: 100 }} key={diasDaSemana[2]} align='center'>
+                                        {consultas.map((consulta) => {
+                                            return (
+                                                <Paper sx={{ maxWidth: 200 }} elevation={0}
+                                                    key={consulta.id}
+                                                >
+                                                    {(consulta.dia === diasDaSemana[2] && (consulta.CRM_Medico === medico.CRM || !medico.CRM)) && <FormEdit medicos={medicos} getAll={findConsultas} deletar={async () => removeConsulta(consulta.id)} funcao={editConsulta} ignore='id' obj={consulta} chaves={Object.keys(consulta)} texto={consulta.NomePaciente}></FormEdit>}
+                                                </Paper>
+                                            )
+                                        })}
+                                    </TableCell>
+                                    <TableCell sx={{ maxWidth: 100 }} key={diasDaSemana[3]} align='center'>
+                                        {consultas.map((consulta) => {
+                                            return (
+                                                <Paper sx={{ maxWidth: 200 }} elevation={0}
+                                                    key={consulta.id}
+                                                >
+                                                    {(consulta.dia === diasDaSemana[3] && (consulta.CRM_Medico === medico.CRM || !medico.CRM)) && <FormEdit medicos={medicos} getAll={findConsultas} deletar={async () => removeConsulta(consulta.id)} funcao={editConsulta} ignore='id' obj={consulta} chaves={Object.keys(consulta)} texto={consulta.NomePaciente}></FormEdit>}
+                                                </Paper>
+                                            )
+                                        })}
+                                    </TableCell>
+                                    <TableCell sx={{ maxWidth: 100 }} key={diasDaSemana[4]} align='center'>
+                                        {consultas.map((consulta) => {
+                                            return (
+                                                <Paper sx={{ maxWidth: 200 }} elevation={0}
+                                                    key={consulta.id}
+                                                >
+                                                    {(consulta.dia === diasDaSemana[4] && (consulta.CRM_Medico === medico.CRM || !medico.CRM)) && <FormEdit medicos={medicos} getAll={findConsultas} deletar={async () => removeConsulta(consulta.id)} funcao={editConsulta} ignore='id' obj={consulta} chaves={Object.keys(consulta)} texto={consulta.NomePaciente}></FormEdit>}
+                                                </Paper>
+                                            )
+                                        })}
+                                    </TableCell>
+                                    <TableCell sx={{ maxWidth: 100 }} key={diasDaSemana[5]} align='center'>
+                                        {consultas.map((consulta) => {
+                                            return (
+                                                <Paper sx={{ maxWidth: 200 }} elevation={0}
+                                                    key={consulta.id}
+                                                >
+                                                    {(consulta.dia === diasDaSemana[5] && (consulta.CRM_Medico === medico.CRM || !medico.CRM)) && <FormEdit medicos={medicos} getAll={findConsultas} deletar={async () => removeConsulta(consulta.id)} funcao={editConsulta} ignore='id' obj={consulta} chaves={Object.keys(consulta)} texto={consulta.NomePaciente}></FormEdit>}
+                                                </Paper>
+                                            )
+                                        })}
+                                    </TableCell>
+                                    <TableCell sx={{ maxWidth: 100 }} key={diasDaSemana[6]} align='center'>
+                                        {consultas.map((consulta) => {
+                                            return (
+                                                <Paper sx={{ maxWidth: 200 }} elevation={0}
+                                                    key={consulta.id}
+                                                >
+                                                    {(consulta.dia === diasDaSemana[6] && (consulta.CRM_Medico === medico.CRM || !medico.CRM)) && <FormEdit medicos={medicos} getAll={findConsultas} deletar={async () => removeConsulta(consulta.id)} funcao={editConsulta} ignore='id' obj={consulta} chaves={Object.keys(consulta)} texto={consulta.NomePaciente}></FormEdit>}
+                                                </Paper>
+                                            )
+                                        })}
+                                    </TableCell>
                                 </TableRow>
 
                             </TableBody>
@@ -293,7 +367,5 @@ export function Agenda() {
                 </Grid>
             </Paper>
         </>
-
     )
-
 }

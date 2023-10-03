@@ -56,8 +56,6 @@ export function Painel() {
                 </Paper>
 
             </Grid>
-
         </>
-
     )
 }

@@ -23,11 +23,14 @@ export default function FormEdit(props) {
   const [tabela, setTabela] = React.useState({ id: '' })
   const [error, setError] = React.useState(false); // State to track error
 
+  const opcoes = {tipo: ["Exame","Consulta","Retorno","Vacina","Retirada de Medicamento","Cirurgia","Outros (especificar na observação)" ],
+   status: ["Agendado", "Concluído","Cancelado"],urgencia:["Baixa","Média","Alta"]}
   const numericPattern = /^[0-9]*$/; // Regular expression for numeric input only
   let padrao
   let chaves = ''
   let podeAbrir = true
   const mudaDado = async (mudanca, key, id) => {
+    console.log('muda dado: ',mudanca, key)
     let novoDado = Dados
     novoDado['id'] = id
     if (Object.keys(Dados).length !== 0) {
@@ -169,7 +172,6 @@ export default function FormEdit(props) {
     }
 
   };
-
   const handleClose = async () => {
     setError(false)
     if (props.getAll) {
@@ -198,7 +200,7 @@ export default function FormEdit(props) {
 
   return (
     <div>
-      <Button sx={{ gap: 2 }} variant="contained" disabled={error}onClick={handleClickOpen}>
+      <Button key={'Butao'} sx={{ gap: 2 }} variant="contained" disabled={error} onClick={handleClickOpen}>
         {props.icone && props.icone}
         {props.texto && props.texto}
       </Button>
@@ -217,7 +219,7 @@ export default function FormEdit(props) {
                       InputProps={{
                         inputProps: {
                           pattern: '[0-9]*',
-                          message:'Digite Apenas os 11 números'
+                          message: 'Digite Apenas os 11 números'
                         },
                       }}
                       autoFocus
@@ -236,7 +238,7 @@ export default function FormEdit(props) {
                     {error && <FormHelperText error>CPF invalido, escreva apenas os 11 números  do CPF</FormHelperText>}
                   </>
                 )
-              } else if (key == 'CRM_Medico') {
+              } else if (key === 'CRM_Medico') {
                 return (<>
                   {props.medicos &&
                     <FormControl key={-1} sx={{ m: 1, minWidth: 100 }} >
@@ -258,6 +260,38 @@ export default function FormEdit(props) {
                       </Select>
                     </FormControl>}
                 </>)
+              } else if (key === 'tipo' || key === 'status' || key === 'urgencia') {
+                return (
+                  <FormControl key={key} sx={{ m: 1, minWidth: 100 }} >
+                    <InputLabel id="demo-simple-select-autowidth-label" >{key}</InputLabel>
+                    <Select
+                      labelId="demo-simple-select-autowidth-label"
+                      id="demo-simple-select-autowidth"
+                      autoWidth
+                      defaultValue={padrao[key] ? padrao[key] : ""}
+                      onChange={(event) => {
+                        mudaDado(event.target.value, key, padrao[props.ignore]);
+                      }}
+                      label={key}
+                    >
+                      {opcoes[key].map(
+                          (opcao, key) =>
+                            <MenuItem key={key} value={opcao}>{opcao}</MenuItem>
+                        )}
+                          {/* <MenuItem key="Agendado" value="Agendado">Agendado</MenuItem>
+                          <MenuItem key={2} value='Concluido'>Concluido</MenuItem>
+                          <MenuItem key={3} value="Cancelado">Cancelado</MenuItem>
+
+                          <MenuItem key={4} value="Exame">Exame</MenuItem>
+                          <MenuItem key={5} value="Consulta">Consulta</MenuItem>
+                          <MenuItem key={6} value="Retorno">Retorno</MenuItem>
+                          <MenuItem key={7} value="Vacina">Vacina</MenuItem>
+                          <MenuItem key={8} value="Retirada de Medicamento">Retirada de Medicamento</MenuItem>
+                          <MenuItem key={9} value="Cirurgia">Cirurgia</MenuItem>
+                          <MenuItem key={10} value="Outros (especificar na observação)">Outros (especificar na observação)</MenuItem>
+ */}
+                    </Select>
+                  </FormControl>)
               } else if (key !== props.ignore && key !== 'nascimento' && key !== 'dia' && padrao[key] !== props.texto) {
                 return (
                   <TextField
@@ -280,6 +314,7 @@ export default function FormEdit(props) {
                   <LocalizationProvider key={key + '2'} dateAdapter={AdapterDayjs}>
                     <DemoContainer key={key + '1'} components={['DatePicker']}>
                       <DatePicker
+                        format="DD-MM-YYYY"
                         label={key}
                         key={key}
                         onChange={(value) => {
@@ -291,6 +326,8 @@ export default function FormEdit(props) {
                   </LocalizationProvider>
                 )
 
+              } else {
+                return <></>
               }
 
             })}

@@ -5,11 +5,14 @@ import { Paper, Typography } from '@mui/material';
 import { getConsultas, updateConsulta, deleteConsulta } from '../services/consulta-service';
 
 import { getPacientes } from '../services/paciente-service';
+import { getMedicos } from '../services/medico-service'
 
 export default function Lista(props) {
     const [Dados, setDados] = React.useState([''])
+    const [medicos, setMedicos] = React.useState([])
     React.useEffect(() => {
         findPacientes()
+        findMedicos()
     }, [])
 
     async function findPacientes() {
@@ -20,6 +23,8 @@ export default function Lista(props) {
                 (paciente) => {
                     console.log(paciente)
                     if (paciente.nome.toLowerCase().indexOf(props.nome.toLowerCase()) !== -1) return true
+
+                    return false
                 }
             )
 
@@ -61,7 +66,15 @@ export default function Lista(props) {
             console.error(error);
         }
     }
+    async function findMedicos() {
+        try {
+            const result = await getMedicos();
+            setMedicos(result.data)
 
+        } catch (error) {
+            alert(error.response.data.error)
+        }
+    }
 
     async function editConsulta(data) {
         try {
@@ -90,7 +103,6 @@ export default function Lista(props) {
             console.error(error);
         }
     }
-
     return (
         <>
             {Dados[0] !== "" ?
@@ -106,9 +118,9 @@ export default function Lista(props) {
                             <Paper key={`${consulta.id} + '3'`} className='linha' sx={{ m:2, gap: 2, display: 'flex' }}>
                                 {consulta.nome + '  '}<br />CPF do Paciente: {consulta.CPF_Paciente}    <br />
                                 <Paper sx={{ maxWidth: 200 }} elevation={0}
-                                    key={`${consulta.id}` + '1'}
+                                    key={`${consulta.id}1`}
                                 >
-                                    {<FormEdit key={consulta.id} getAll={findPacientes} deletar={async () => removeConsulta(consulta.id)} funcao={editConsulta} ignore='id' obj={consulta} chaves={Object.keys(consulta)} texto={consulta.dia}></FormEdit>}
+                                    {<FormEdit medicos={medicos} key={consulta.id} getAll={findPacientes} deletar={async () => removeConsulta(consulta.id)} funcao={editConsulta} ignore='id' obj={consulta} chaves={Object.keys(consulta)} texto={consulta.dia}></FormEdit>}
                                 </Paper>
                             </Paper>
 

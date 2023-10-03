@@ -19,7 +19,6 @@ export async function getByCRM(CRM) {
     });
     return result;
 }
-
 export async function deleteMedico(id) {
     const accessToken = sessionStorage.getItem('token');
     const result = await api.delete(`/medico/${id}`, {

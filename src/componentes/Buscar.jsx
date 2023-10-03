@@ -27,10 +27,9 @@ export default function Buscar(props) {
         } catch (error) {
             console.log(error)
             return undefined
-        } 
-
+        }
     }
-
+    
     function mudaValor(valor) {
         console.log(valor)
         console.log(props)

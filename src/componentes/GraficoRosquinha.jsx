@@ -12,12 +12,11 @@ export const options = {
   title: "Medicos em Serviço (quantidade de consultas )",
   pieHole: 0.4
 };
-
 export function GraficoRosquinha(props) {
   const dados = props.opcoes.map((opcao)=>{
     return [opcao.nome,props.quantidade.filter((consulta)=>{
       console.log(opcao,consulta)
-      return opcao.CRM == consulta.CRM_Medico} ).length]
+      return opcao.CRM === consulta.CRM_Medico} ).length]
   })
   dados.unshift( ["Opção", "quantidade"])
   console.log(dados)

@@ -189,7 +189,6 @@ export function Cadastro() {
                             />
 
                             {errors.nascimento && <Form.Control.Feedback type="invalid">{errors.nascimento.message}</Form.Control.Feedback>}
-
                         </Form.Group>
                     </Row>
                     <Row>
