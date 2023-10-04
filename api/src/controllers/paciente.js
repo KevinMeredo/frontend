@@ -45,7 +45,7 @@ class PacienteController {
             if(paciente){
                 return httpHelper.ok(paciente);
             }
-            return httpHelper.notFound("Paciente não encontrado")
+            return httpHelper.notFound("Paciente não encontrado, lembre-se de digitar apenas os números do CPF")
 
         }   catch (error) {
 

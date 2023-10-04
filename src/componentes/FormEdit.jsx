@@ -21,11 +21,12 @@ export default function FormEdit(props) {
   const [open, setOpen] = React.useState(false);
   const [Dados, setDados] = React.useState({ id: '' })
   const [tabela, setTabela] = React.useState({ id: '' })
-  const [error, setError] = React.useState(false); // State to track error
+  const [error, setError] = React.useState(false);
 
-  const opcoes = {tipo: ["Exame","Consulta","Retorno","Vacina","Retirada de Medicamento","Cirurgia","Outros (especificar na observação)" ],
+  const opcoes = {tipo: ["Exame","Consulta","Retorno","Vacina","Retirada de Medicamento","Cirurgia","Outro (especificar na observação)" ],
    status: ["Agendado", "Concluído","Cancelado"],urgencia:["Baixa","Média","Alta"]}
-  const numericPattern = /^[0-9]*$/; // Regular expression for numeric input only
+
+  const numericPattern = /^[0-9]*$/;
   let padrao
   let chaves = ''
   let podeAbrir = true
@@ -45,7 +46,7 @@ export default function FormEdit(props) {
         if (key === 'CPF' || key === 'CPF_Paciente') {
           if ((numericPattern.test(novoDado[key]) && VerificaCPF(novoDado[key])) || novoDado === '') {
             setDados(novoDado)
-            setError(false); // Clear the error if input is valid
+            setError(false); 
           } else {
             setError(true)
           }
@@ -58,7 +59,7 @@ export default function FormEdit(props) {
       if (key === 'CPF' || key === 'CPF_Paciente') {
         if (VerificaCPF(novoDado[key]) || novoDado === '') {
           setDados(novoDado)
-          setError(false); // Clear the error if input is valid
+          setError(false); 
         } else {
           setError(true)
         }
@@ -229,7 +230,7 @@ export default function FormEdit(props) {
                       defaultValue={padrao[key]}
                       fullWidth
                       required
-                      error={error} // Set the error state
+                      error={error} 
                       variant='standard'
                       onChange={(event) => {
                         mudaDado(event.target.value, key, padrao[props.ignore]);
@@ -278,18 +279,7 @@ export default function FormEdit(props) {
                           (opcao, key) =>
                             <MenuItem key={key} value={opcao}>{opcao}</MenuItem>
                         )}
-                          {/* <MenuItem key="Agendado" value="Agendado">Agendado</MenuItem>
-                          <MenuItem key={2} value='Concluido'>Concluido</MenuItem>
-                          <MenuItem key={3} value="Cancelado">Cancelado</MenuItem>
-
-                          <MenuItem key={4} value="Exame">Exame</MenuItem>
-                          <MenuItem key={5} value="Consulta">Consulta</MenuItem>
-                          <MenuItem key={6} value="Retorno">Retorno</MenuItem>
-                          <MenuItem key={7} value="Vacina">Vacina</MenuItem>
-                          <MenuItem key={8} value="Retirada de Medicamento">Retirada de Medicamento</MenuItem>
-                          <MenuItem key={9} value="Cirurgia">Cirurgia</MenuItem>
-                          <MenuItem key={10} value="Outros (especificar na observação)">Outros (especificar na observação)</MenuItem>
- */}
+                        
                     </Select>
                   </FormControl>)
               } else if (key !== props.ignore && key !== 'nascimento' && key !== 'dia' && padrao[key] !== props.texto) {

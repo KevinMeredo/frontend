@@ -252,9 +252,9 @@ export function EditarPerfil() {
                             {errors.senha && <Form.Control.Feedback type="invalid">{errors.senha.message}</Form.Control.Feedback>}
                         </Form.Group>
                     </Row>
-                    <Row className=' display-flex justify-content-center align-items-center  w-100'>
-                        <Button className='w-50 position' type="submit">Cadastrar</Button>
-                        <ModalConfirmacao texto='deletar' funcao={async () => removeUser()} />
+                    <Row className=' display-flex justify-content-around '>
+                        <Button className='w-50 position' type="submit">Atualizar</Button>
+                        <ModalConfirmacao texto='deletar conta' funcao={async () => removeUser()} />
                     </Row>
 
                 </Form>

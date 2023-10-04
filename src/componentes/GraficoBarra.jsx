@@ -99,7 +99,7 @@ export function GraficoBarra(props) {
     <Chart
       sx={{}}
       chartType="Bar"
-      width="100%"
+      width="1200px"
       height="400px"
       data={dados}
       options={options}

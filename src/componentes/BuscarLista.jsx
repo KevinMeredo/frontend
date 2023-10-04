@@ -29,13 +29,13 @@ export default function BuscarLista(props) {
       };
     
     return (
-        <Paper
+        <Paper onSubmit={AbreLista}
             variant="outlined"
             elevation={0}
             component="form"
             sx={{ p: '2px 4px', display: 'flex', boxShadow: 0, alignItems: 'center', maxWidth: 300 }}
         >
-            <FormControl defaultValue="" >
+            <FormControl  defaultValue="" >
                 <InputBase placeholder={`Busca por Paciente`}
                     onChange={
                         (event) => {

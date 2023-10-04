@@ -42,17 +42,17 @@ export function Painel() {
     return (
         <>
             < Nav classname="App-header"></Nav>
-            <Grid sx={{ gap:4, py:6, width: '100%',height:'100%', overflow: 'scroll' }}
+            <Grid sx={{ gap:4, pt:4, width: '100%',height:'100%', overflow: 'scroll' }}
                 container
                 direction="row"
                 justifyContent={'center'}
                 alignItems={'center'}
             >
-                <Paper elevation={0} sx={{width:'30%', height:'auto', minWidth:320}}>
+                <Paper elevation={0} sx={{width:'30%', height:'40%', minWidth:320}}>
                     <GraficoRosquinha opcoes={medicos} quantidade={consultas} ></GraficoRosquinha>
                 </Paper>
-                <Paper elevation={0} sx={{ width:'60%',  height:'auto', overflow: 'scroll'  }}>
-                    <GraficoBarra quantidade={consultas} ></GraficoBarra>
+                <Paper elevation={0} sx={{display: 'flex', justifyContent:'center', width:'100%', height:400, overflow: 'scroll'  }}>
+                    <GraficoBarra sx={{ minWidth:1200}} quantidade={consultas} ></GraficoBarra>
                 </Paper>
 
             </Grid>

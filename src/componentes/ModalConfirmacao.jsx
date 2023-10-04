@@ -22,8 +22,8 @@ export default function AlertDialog(props) {
     handleClose()
   }
   return (
-    <div>
-      <Button color='error' variant="outlined" onClick={handleClickOpen}>
+    <>
+      <Button sx={{maxWidth:180}} color='error' variant="outlined" onClick={handleClickOpen}>
         {props.texto}
       </Button>
       <Dialog
@@ -47,6 +47,6 @@ export default function AlertDialog(props) {
           </Button>
         </DialogActions>
       </Dialog>
-    </div>
+    </>
   );
 }

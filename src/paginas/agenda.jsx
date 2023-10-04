@@ -250,7 +250,7 @@ export function Agenda() {
                     justifyContent="start"
                     alignItems="center"
                 >
-                    <BuscarLista  ></BuscarLista>
+                    <BuscarLista></BuscarLista>
                     <DropBox medicos={medicos} setMedico={setMedico}></DropBox>
                     <LocalizationProvider dateAdapter={AdapterDayjs}>
                         <DemoContainer components={['DatePicker']}>
